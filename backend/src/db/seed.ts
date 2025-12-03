@@ -1,24 +1,27 @@
-// import { PrismaClient } from "@prisma/client";
-// const prisma = new PrismaClient();
+import { PrismaClient } from "../../prisma/generated/client";
+import { PrismaPg } from '@prisma/adapter-pg';
 
-// async function main() {
-//   // Tworzymy przykładowych użytkowników
-//   await prisma.user.createMany({
-//     data: [
-//       { email: "admin@example.com", password: "hashedPassword", role: "admin" },
-//       { email: "teacher@example.com", password: "hashedPassword", role: "teacher" },
-//       { email: "student@example.com", password: "hashedPassword", role: "student" },
-//     ],
-//     skipDuplicates: true,
-//   });
-//   console.log("Seed data created");
-// }
+const adapter = new PrismaPg({ 
+  connectionString: process.env.DATABASE_URL 
+});
+const prisma = new PrismaClient({ adapter });
 
-// main()
-//   .catch((e) => {
-//     console.error(e);
-//     process.exit(1);
-//   })
-//   .finally(async () => {
-//     await prisma.$disconnect();
-//   });
+async function main() {
+  await prisma.user.createMany({
+    data: [
+      { email: "admin@example.com", password: "hashedPassword", role: "admin" },
+      { email: "abc@example.com", password: "hashedPassword", role: "test" },
+    ],
+    skipDuplicates: true,
+  });
+
+}
+
+main()
+  .catch((e) => {
+    console.error(e);
+    throw e;
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });
