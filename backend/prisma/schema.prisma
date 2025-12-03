@@ -50,7 +50,7 @@ model Appointment_details {
   appointment_id Int @unique
   diagnosis String
   recommendations String
-  prescription Bool
+  prescription Boolean
 }
 
 model Schedule {
