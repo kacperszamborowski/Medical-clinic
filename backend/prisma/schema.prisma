@@ -14,3 +14,50 @@ model User {
   role String
   createdAt DateTime @default(now())
 }
+
+model Patient {
+  id Int @id @default(autoincrement())
+  firstname String
+  lastname String
+  birth_date DateTime
+  phone String
+  email String
+  registration_date @default(now()) @db.Date
+}
+
+model Doctor {
+  id Int @id @default(autoincrement())
+  firstname String
+  lastname String
+  specialization String
+  license_number String @unique
+}
+
+model Appointment {
+  id Int @id @default(autoincrement())
+  patient Patient @relation(fields: [patient_id], references: [id])
+  patient_id Int
+  doctor Doctor @relation(fields: [doctor_id], references: [id])
+  doctor_id Int
+  date DateTime @db.Date
+  time DateTime @db.Time
+  status String
+}
+
+model Appointment_details {
+  id Int @id @default(autoincrement())
+  appointment Appointment @relation(fields: [appointment_id], references: [id])
+  appointment_id Int @unique
+  diagnosis String
+  recommendations String
+  prescription Bool
+}
+
+model Schedule {
+  id Int @id @default(autoincrement())
+  doctor Doctor @relation(fields: [doctor_id], references: [id])
+  doctor_id Int
+  day_of_the_week Int
+  hour_from DateTime @db.Time
+  hour_to DateTime @db.Time
+}
