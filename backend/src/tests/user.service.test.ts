@@ -1,9 +1,7 @@
 import { UserService } from '../services/user.service';
 
-const userService = new UserService();
-
 test('createUser should create a new user', async () => {
-  const user = await userService.createUser({
+  const user = await UserService.createUser({
     email: 'testuser@example.com',
     password: 'secret',
     role: 'user',
@@ -14,7 +12,7 @@ test('createUser should create a new user', async () => {
 });
 
 test('getAllUsers should return an array', async () => {
-  const users = await userService.getAllUsers();
+  const users = await UserService.getAllUsers();
   expect(Array.isArray(users)).toBe(true);
   expect(users[0].role).toBe("admin");
   expect(users[1].email).toBe("abc@example.com");
