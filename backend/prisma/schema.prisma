@@ -1,64 +1,68 @@
+generator client {
+  provider   = "prisma-client-js"
+  output     = "./generated"
+  engineType = "client"
+}
+
 datasource db {
   provider = "postgresql"
 }
 
-generator client {
-  provider = "prisma-client-js"
-  output = "./generated"
-  engineType = "client"
-}
-
 model User {
-  id Int @id @default(autoincrement())
-  email String @unique
-  password String
-  role String
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  role      String
   createdAt DateTime @default(now())
 }
 
 model Patient {
-  id Int @id @default(autoincrement())
-  firstname String
-  lastname String
-  birth_date DateTime
-  phone String
-  email String
-  registration_date @default(now()) @db.Date
+  id                Int           @id @default(autoincrement())
+  firstname         String
+  lastname          String
+  birth_date        DateTime      @db.Date
+  phone             String
+  email             String
+  registration_date DateTime      @default(now()) @db.Date
+  appointments      Appointment[]
 }
 
 model Doctor {
-  id Int @id @default(autoincrement())
-  firstname String
-  lastname String
+  id             Int           @id @default(autoincrement())
+  firstname      String
+  lastname       String
   specialization String
-  license_number String @unique
+  license_number String        @unique
+  appointments   Appointment[]
+  schedules      Schedule[]
 }
 
 model Appointment {
-  id Int @id @default(autoincrement())
-  patient Patient @relation(fields: [patient_id], references: [id])
-  patient_id Int
-  doctor Doctor @relation(fields: [doctor_id], references: [id])
-  doctor_id Int
-  date DateTime @db.Date
-  time DateTime @db.Time
-  status String
+  id                 Int                  @id @default(autoincrement())
+  patient_id         Int
+  doctor_id          Int
+  date               DateTime             @db.Date
+  time               DateTime             @db.Time(6)
+  status             String
+  doctor             Doctor               @relation(fields: [doctor_id], references: [id])
+  patient            Patient              @relation(fields: [patient_id], references: [id])
+  appointmentDetails Appointment_details?
 }
 
 model Appointment_details {
-  id Int @id @default(autoincrement())
-  appointment Appointment @relation(fields: [appointment_id], references: [id])
-  appointment_id Int @unique
-  diagnosis String
+  id              Int         @id @default(autoincrement())
+  appointment_id  Int         @unique
+  diagnosis       String
   recommendations String
-  prescription Boolean
+  prescription    Boolean
+  appointment     Appointment @relation(fields: [appointment_id], references: [id])
 }
 
 model Schedule {
-  id Int @id @default(autoincrement())
-  doctor Doctor @relation(fields: [doctor_id], references: [id])
-  doctor_id Int
+  id              Int      @id @default(autoincrement())
+  doctor_id       Int
   day_of_the_week Int
-  hour_from DateTime @db.Time
-  hour_to DateTime @db.Time
+  hour_from       DateTime @db.Time(6)
+  hour_to         DateTime @db.Time(6)
+  doctor          Doctor   @relation(fields: [doctor_id], references: [id])
 }
