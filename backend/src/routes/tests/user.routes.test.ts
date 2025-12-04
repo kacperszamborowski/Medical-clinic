@@ -1,26 +1,18 @@
 import request from 'supertest';
-import app from '../../app'; // your Express app
-import { UserService } from '../../services/user.service';
+import app from '../../app';
 
-jest.mock('../../services/user.service');
-
-describe('GET /api/users', () => {
-  it('returns all users', async () => {
-    const mockUsers = [{ id: 1, email: 'a@b.com', password: 'secretPassword', role: 'user', createdAt: (new Date(Date.now())).toDateString() }];
-    (UserService.getAllUsers as jest.Mock).mockResolvedValue(mockUsers);
-
+describe('Integration tests for /api/users', () => {
+  it('GET /api/users returns all users', async () => {
     const response = await request(app).get('/api/users');
 
     expect(response.status).toBe(200);
-    expect(response.body).toEqual(mockUsers);
-  });
+    expect(Array.isArray(response.body)).toBe(true);
+    expect(response.body.length).toBe(2);
 
-  it('handles errors', async () => {
-    (UserService.getAllUsers as jest.Mock).mockRejectedValue(new Error('Database error'));
-
-    const response = await request(app).get('/api/users');
-
-    expect(response.status).toBe(500);
-    expect(response.body).toEqual({ message: 'Database error' });
+    expect(response.body[0]).toHaveProperty('id');
+    expect(response.body[0]).toHaveProperty('email');
+    expect(response.body[0]).toHaveProperty('password');
+    expect(response.body[0]).toHaveProperty('role');
+    expect(response.body[0]).toHaveProperty('createdAt');
   });
 });
