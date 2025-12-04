@@ -1,5 +1,6 @@
 import { PrismaClient } from "../../prisma/generated/client";
 import { PrismaPg } from '@prisma/adapter-pg';
+import { hash } from "bcrypt";
 
 const adapter = new PrismaPg({ 
   connectionString: process.env.DATABASE_URL 
@@ -7,10 +8,12 @@ const adapter = new PrismaPg({
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
+  const passwordHash = await hash("!Test123", 10);
+
   await prisma.user.createMany({
     data: [
-      { email: "admin@example.com", password: "hashedPassword", role: "admin" },
-      { email: "abc@example.com", password: "hashedPassword", role: "test" },
+      { email: "admin@example.com", password: passwordHash, role: "admin" },
+      { email: "patient@example.com", password: passwordHash, role: "patient" },
     ],
     skipDuplicates: true,
   });
