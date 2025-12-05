@@ -1,6 +1,6 @@
 import request from 'supertest';
 import app from '../../app';
-import { prisma } from '../../db/seed';
+import { prisma } from '../../db/prisma';
 
 describe('Auth Endpoints', () => {
   let token: string;

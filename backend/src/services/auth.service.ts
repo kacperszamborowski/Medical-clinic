@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import { signAccessToken } from "../utils/jwt";
-import { prisma } from '../db/seed';
+import { prisma } from '../db/prisma';
 
 class AuthService {
   async login(email: string, password: string) {
