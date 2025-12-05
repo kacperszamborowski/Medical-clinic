@@ -9,17 +9,17 @@ const adapter = new PrismaPg({
 export const prisma = new PrismaClient({ adapter });
 
 async function main() {
-  const passwordHash = await hash("!Test123", 10);
+  const passwordHash = await hash("pass123", 10);
 
   if (await prisma.user.count() === 0) {
     // Create users
     await prisma.user.createMany({
     data: [
-      { firstname: "Jan", lastname: "Kowalski", birth_date: new Date("1985-03-25"), email: "jan.kowalski@example.com", password: "pass123", role: "patient", verified: true, createdAt: new Date() },
-      { firstname: "Anna", lastname: "Nowak", birth_date: new Date("1990-07-12"), email: "anna.nowak@example.com", password: "pass123", role: "doctor", verified: true, createdAt: new Date() },
-      { firstname: "Piotr", lastname: "Wiśniewski", birth_date: new Date("1978-11-02"), email: "piotr.wisniewski@example.com", password: "pass123", role: "patient", verified: true, createdAt: new Date() },
-      { firstname: "Katarzyna", lastname: "Wójcik", birth_date: new Date("1992-01-15"), email: "katarzyna.wojcik@example.com", password: "pass123", role: "patient", verified: true, createdAt: new Date() },
-      { firstname: "Michał", lastname: "Kamiński", birth_date: new Date("1982-06-08"), email: "michal.kaminski@example.com", password: "pass123", role: "doctor", verified: true, createdAt: new Date() },
+      { firstname: "Jan", lastname: "Kowalski", birth_date: new Date("1985-03-25"), email: "jan.kowalski@example.com", password: passwordHash, role: "patient", verified: true, created_at: new Date() },
+      { firstname: "Anna", lastname: "Nowak", birth_date: new Date("1990-07-12"), email: "anna.nowak@example.com", password: passwordHash, role: "doctor", verified: true, created_at: new Date() },
+      { firstname: "Piotr", lastname: "Wiśniewski", birth_date: new Date("1978-11-02"), email: "piotr.wisniewski@example.com", password: passwordHash, role: "patient", verified: true, created_at: new Date() },
+      { firstname: "Katarzyna", lastname: "Wójcik", birth_date: new Date("1992-01-15"), email: "katarzyna.wojcik@example.com", password: passwordHash, role: "patient", verified: true, created_at: new Date() },
+      { firstname: "Michał", lastname: "Kamiński", birth_date: new Date("1982-06-08"), email: "michal.kaminski@example.com", password: passwordHash, role: "doctor", verified: true, created_at: new Date() },
     ],
     skipDuplicates: true,
   });

@@ -16,7 +16,7 @@ model User {
   email        String        @unique
   password     String
   role         String
-  createdAt    DateTime      @default(now())
+  created_at   DateTime      @default(now())
   verified     Boolean       @default(false)
   doctor       Doctor?
   appointments Appointment[]

@@ -1,12 +1,6 @@
-import { PrismaClient } from "../../prisma/generated/client";
-import { PrismaPg } from '@prisma/adapter-pg';
 import bcrypt from "bcrypt";
 import { signAccessToken } from "../utils/jwt";
-
-const adapter = new PrismaPg({ 
-  connectionString: process.env.DATABASE_URL 
-});
-const prisma = new PrismaClient({ adapter });
+import { prisma } from '../db/seed';
 
 class AuthService {
   async login(email: string, password: string) {
@@ -22,11 +16,17 @@ class AuthService {
     return { token, user };
   }
 
-  async register(email: string, password: string, role: string) {
+  async register(
+    firstname: string,
+    lastname: string,
+    birth_date: string,
+    email: string, 
+    password: string, 
+    role: string) {
     const hashed = await bcrypt.hash(password, 10);
 
     const user = await prisma.user.create({
-      data: { email, password: hashed, role }
+      data: { firstname, lastname, birth_date, email, password: hashed, role }
     });
 
     return user;
