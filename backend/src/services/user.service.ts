@@ -1,4 +1,4 @@
-import { prisma } from "../db/seed";
+import { prisma } from "../db/prisma";
 
 export class UserService {
     static async createUser(
