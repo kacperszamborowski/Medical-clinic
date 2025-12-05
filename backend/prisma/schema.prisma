@@ -9,30 +9,25 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  password  String
-  role      String
-  createdAt DateTime @default(now())
-}
-
-model Patient {
-  id                Int           @id @default(autoincrement())
-  firstname         String
-  lastname          String
-  birth_date        DateTime      @db.Date
-  phone             String
-  email             String
-  registration_date DateTime      @default(now()) @db.Date
-  appointments      Appointment[]
+  id           Int           @id @default(autoincrement())
+  firstname    String
+  lastname     String
+  birth_date   DateTime      @db.Date
+  email        String        @unique
+  password     String
+  role         String
+  createdAt    DateTime      @default(now())
+  verified     Boolean       @default(false)
+  doctor       Doctor?
+  appointments Appointment[]
 }
 
 model Doctor {
   id             Int           @id @default(autoincrement())
-  firstname      String
-  lastname       String
+  user_id        Int           @unique
   specialization String
   license_number String        @unique
+  user           User          @relation(fields: [user_id], references: [id])
   appointments   Appointment[]
   schedules      Schedule[]
 }
@@ -45,7 +40,7 @@ model Appointment {
   time               DateTime             @db.Time(6)
   status             String
   doctor             Doctor               @relation(fields: [doctor_id], references: [id])
-  patient            Patient              @relation(fields: [patient_id], references: [id])
+  patient            User                 @relation(fields: [patient_id], references: [id])
   appointmentDetails Appointment_details?
 }
 
