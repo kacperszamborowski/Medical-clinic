@@ -1,8 +1,9 @@
 import express from "express";
 import cors from "cors";
+import authRoutes from "./routes/auth.routes";
 import userRoutes from "./routes/user.routes"
 import doctorRoutes from "./routes/doctor.routes"
-import authRoutes from "./routes/auth.routes";
+import patientRoutes from "./routes/patient.routes"
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -15,5 +16,6 @@ app.use(express.json());
 app.use("/auth", authRoutes);
 app.use("/api/users", userRoutes)
 app.use("/api/doctors", doctorRoutes)
+app.use("/api/patients", patientRoutes)
 
 export default app;
