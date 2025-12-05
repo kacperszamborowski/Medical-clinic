@@ -1,19 +1,13 @@
 import request from 'supertest';
 import app from '../../app';
-import { PrismaClient } from "../../../prisma/generated/client";
-import { PrismaPg } from '@prisma/adapter-pg';
-
-const adapter = new PrismaPg({ 
-  connectionString: process.env.DATABASE_URL 
-});
-const prisma = new PrismaClient({ adapter });
+import { prisma } from '../../db/seed';
 
 describe('Auth Endpoints', () => {
   let token: string;
 
     afterAll(async () => {
       await prisma.user.delete({
-        where: {email: 'test1@example.com' },
+        where: { email: 'test1@example.com' },
       });
     });
 
@@ -21,6 +15,9 @@ describe('Auth Endpoints', () => {
     const res = await request(app)
       .post('/auth/register')
       .send({
+        firstname: 'test',
+        lastname: 'example',
+        birth_date: (new Date('1990-07-16')).toISOString(),
         email: 'test1@example.com',
         password: '!password123',
         role: 'patient'
@@ -34,8 +31,8 @@ describe('Auth Endpoints', () => {
     const res = await request(app)
       .post('/auth/login')
       .send({
-        email: 'test1@example.com',
-        password: '!password123'
+        email: 'jan.kowalski@example.com',
+        password: 'pass123'
       });
 
     expect(res.statusCode).toEqual(200);
