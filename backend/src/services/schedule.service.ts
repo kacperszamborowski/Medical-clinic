@@ -9,7 +9,18 @@ export class ScheduleService {
             select: {
                 day_of_the_week: true,
                 hour_from: true,
-                hour_to: true
+                hour_to: true,
+                doctor: {
+                    select: {
+                        specialization: true,
+                        user: {
+                            select: {
+                                firstname: true,
+                                lastname: true
+                            }
+                        }
+                    }
+                }
             }
         });
     }
