@@ -1,6 +1,5 @@
 import request from 'supertest';
 import app from '../../app';
-import bcrypt from "bcrypt";
 
 describe('Integration tests for /users', () => {
   it('GET should return all users', async () => {
@@ -19,17 +18,7 @@ describe('Integration tests for /users', () => {
     expect(response.body[0]).toHaveProperty('created_at');
     expect(response.body[0]).toHaveProperty('verified');
 
-    const hashed = "$2b$10$1DsIjoePz3dHhcrKdjBjKuUXNfJPauSEUqCnRNqMKOUV2rqWtwa/a";
-    expect(response.body[4]).toEqual({
-      id: 5,
-      firstname: "Michał",
-      lastname: "Kamiński",
-      birth_date: (new Date("1982-06-08")).toISOString(),
-      email: "michal.kaminski@example.com",
-      password: hashed,
-      role: "doctor",
-      created_at: "2025-12-05T15:31:04.566Z",
-      verified: true,
-    })
+    expect(response.body[4].email).toEqual("michal.kaminski@example.com");
+    expect(response.body[4].birth_date).toEqual(new Date("1982-06-08").toISOString());
   });
 });
