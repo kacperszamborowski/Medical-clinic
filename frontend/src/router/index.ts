@@ -2,29 +2,55 @@ import { createRouter, createWebHistory } from "vue-router";
 import { useAuthStore } from "../stores/auth";
 
 import LoginForm from "../views/LoginForm.vue";
-import PatientDashboard from "../views/PatientDashboard.vue";
-import DoctorDashboard from "../views/DoctorDashboard.vue";
-import AdminDashboard from "../views/AdminDashboard.vue";
+import PatientLayoutView from "../views/PatientLayoutView.vue";
+import DoctorLayoutView from "../views/DoctorLayoutView.vue";
+import AdminLayoutView from "../views/AdminLayoutView.vue";
+import PatientDashboard from "../components/patient/PatientDashboard.vue";
+import PatientProfile from "../components/patient/PatientProfile.vue";
+import PatientAppointments from "../components/patient/PatientAppointments.vue";
+import DoctorDashboard from "../components/doctor/DoctorDashboard.vue";
+import DoctorPatients from "../components/doctor/DoctorPatients.vue";
+import DoctorProfile from "../components/doctor/DoctorProfile.vue";
+import DoctorSchedule from "../components/doctor/DoctorSchedule.vue";
+import AdminDashboard from "../components/admin/AdminDashboard.vue";
+import AdminSettings from "../components/admin/AdminSettings.vue";
+import AdminTables from "../components/admin/AdminTables.vue";
 
 const routes = [
   { path: "/", name: "login", component: LoginForm },
 
   {
-    path: "/patient/dashboard",
-    component: PatientDashboard,
+    path: "/patient",
+    component: PatientLayoutView,
     meta: { requiresAuth: true, role: "patient" },
+    children: [
+      { path: "dashboard", component: () => PatientDashboard },
+      { path: "profile", component: () => PatientProfile },
+      { path: "appointments", component: () => PatientAppointments },
+    ]
   },
 
   {
-    path: "/doctor/dashboard",
-    component: DoctorDashboard,
+    path: "/doctor",
+    component: DoctorLayoutView,
     meta: { requiresAuth: true, role: "doctor" },
+    children: [
+      { path: "dashboard", component: () => DoctorDashboard },
+      { path: "patients", component: () => DoctorPatients },
+      { path: "profile", component: () => DoctorProfile },
+      { path: "schedule", component: () => DoctorSchedule },
+    ]
   },
 
   {
-    path: "/admin/dashboard",
-    component: AdminDashboard,
+    path: "/admin",
+    component: AdminLayoutView,
     meta: { requiresAuth: true, role: "admin" },
+    children: [
+      { path: "dashboard", component: () => AdminDashboard },
+      { path: "settings", component: () => AdminSettings },
+      { path: "tables", component: () => AdminTables },
+    ]
   },
 ];
 
