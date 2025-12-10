@@ -40,3 +40,75 @@ const onSubmit = async () => {
   }
 };
 </script>
+
+<style scoped>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: system-ui, sans-serif;
+}
+
+.login {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #f6f9fc;
+}
+
+.login h1 {
+  margin-bottom: 28px;
+  color: #0f172a;
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.login form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 360px;
+  padding: 28px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+
+.login input {
+  padding: 12px 18px;
+  border: 1px solid #cfd6e0;
+  border-radius: 8px;
+  font-size: 18px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.login input:focus {
+  border-color: #0f172a;
+}
+
+.login button {
+  padding: 12px 18px;
+  border: none;
+  border-radius: 8px;
+  background: #0f172a;
+  color: #e6eef8;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.login button:hover {
+  background: #1e2a45;
+}
+
+.login p {
+  margin-top: 14px;
+  color: #ef4444;
+  text-align: center;
+  font-size: 18px;
+}
+</style>
