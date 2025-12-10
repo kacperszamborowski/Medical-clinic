@@ -1,3 +1,4 @@
+import { AppointmentStatus } from "@prisma/client";
 import { prisma } from "../db/prisma";
 
 export class AppointmentService {
@@ -28,5 +29,12 @@ export class AppointmentService {
                 }
             }
         });
+    }
+
+    static async setAppointmentStatus(appointmentId: number, newStatus: AppointmentStatus) {
+        return prisma.appointment.update({
+            where: { id: appointmentId },
+            data: { status: newStatus }
+        }); 
     }
 }

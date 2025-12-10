@@ -1,5 +1,6 @@
 import { prisma } from "./prisma";
 import { hash } from "bcrypt";
+import { AppointmentStatus } from "@prisma/client";
 
 async function main() {
   const passwordHash = await hash("pass123", 10);
@@ -45,9 +46,9 @@ async function main() {
   if (await prisma.appointment.count() === 0) {
     await prisma.appointment.createMany({ 
       data: [
-        { patient_id: 1, doctor_id: 1, date: new Date("2025-12-10"), time: new Date("1970-01-01T10:30:00Z"), status: "zaplanowana" },
-        { patient_id: 3, doctor_id: 1, date: new Date("2025-12-11"), time: new Date("1970-01-01T11:30:00Z"), status: "odbyta" },
-        { patient_id: 4, doctor_id: 2, date: new Date("2025-12-12"), time: new Date("1970-01-01T09:00:00Z"), status: "zaplanowana" },
+        { patient_id: 1, doctor_id: 1, date: new Date("2025-12-10"), time: new Date("1970-01-01T10:30:00Z"), status: AppointmentStatus.zarezerwowana },
+        { patient_id: 3, doctor_id: 1, date: new Date("2025-12-11"), time: new Date("1970-01-01T11:30:00Z"), status: AppointmentStatus.zrealizowana },
+        { patient_id: 4, doctor_id: 2, date: new Date("2025-12-12"), time: new Date("1970-01-01T09:00:00Z"), status: AppointmentStatus.zarezerwowana },
       ], skipDuplicates: true 
     });
   }
