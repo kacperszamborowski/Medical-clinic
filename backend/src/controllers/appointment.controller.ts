@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import { AppointmentService } from "../services/appointment.service";
+import { AppointmentStatus } from "@prisma/client";
 
 export class AppointmentController {
     static async getPatientHistory(req: Request, res: Response) {
@@ -7,6 +8,18 @@ export class AppointmentController {
             const patientId = Number(req.query.patientId)
             const history = await AppointmentService.getPatientHistory(patientId);
             res.json(history);
+        }
+        catch (error: any) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+
+    static async setAppointmentStatus(req: Request, res: Response) {
+        try {
+            const appointmentId = Number(req.query.appointmentId);
+            const newStatus = req.query.newStatus as AppointmentStatus;
+            const updatedAppointment = await AppointmentService.setAppointmentStatus(appointmentId, newStatus);
+            res.json(updatedAppointment);
         }
         catch (error: any) {
             res.status(500).json({ message: error.message });

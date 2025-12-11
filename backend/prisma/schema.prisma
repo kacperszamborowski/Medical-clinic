@@ -6,6 +6,12 @@ datasource db {
   provider = "postgresql"
 }
 
+enum AppointmentStatus {
+  zarezerwowana
+  zrealizowana
+  odwołana
+}
+
 model User {
   id           Int           @id @default(autoincrement())
   firstname    String
@@ -36,7 +42,7 @@ model Appointment {
   doctor_id          Int
   date               DateTime             @db.Date
   time               DateTime             @db.Time(6)
-  status             String
+  status             AppointmentStatus    @default(zarezerwowana)
   doctor             Doctor               @relation(fields: [doctor_id], references: [id])
   patient            User                 @relation(fields: [patient_id], references: [id])
   appointmentDetails Appointment_details?
