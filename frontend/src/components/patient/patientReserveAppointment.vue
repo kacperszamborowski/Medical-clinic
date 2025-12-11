@@ -43,11 +43,7 @@ onMounted(() => {
 });
 
 function dayName(n: number) {
-  const days = [
-    "Poniedziałek", "Wtorek", "Środa",
-    "Czwartek", "Piątek", "Sobota", "Niedziela"
-  ];
-  return days[n - 1] ?? "???";
+  return store.days[n - 1] ?? "???";
 }
 
 function formatTime(t: string) {

@@ -12,6 +12,7 @@ export const useScheduleStore = defineStore("schedule", {
     }>,
     loading: false,
     error: "",
+    days: ["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota", "Niedziela"],
   }),
 
   actions: {
@@ -26,6 +27,7 @@ export const useScheduleStore = defineStore("schedule", {
         });
 
         this.schedule = res.data;
+        this.schedule.sort((a, b) => a.day_of_the_week - b.day_of_the_week);
       } catch (err: any) {
         this.error = err.response?.data?.message || "Błąd pobierania harmonogramu";
       } finally {
@@ -43,11 +45,27 @@ export const useScheduleStore = defineStore("schedule", {
         });
 
         this.schedule = res.data;
+        this.schedule.sort((a, b) => a.day_of_the_week - b.day_of_the_week);
       } catch (err: any) {
         this.error = err.response?.data?.message || "Błąd pobierania harmonogramu";
       } finally {
         this.loading = false;
       }
-    }
-  }
+    },
+
+    async createSchedule(dayOfTheWeek: number, hourFrom: string, hourTo: string) {
+      this.error = "";
+      try {
+        const token = localStorage.getItem("token");
+        await axios.post(
+          "http://localhost:3000/schedule/my/create",
+          { dayOfTheWeek, hourFrom, hourTo },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        await this.fetchMySchedule();
+      } catch (err: any) {
+        this.error = err.response?.data?.message || "Błąd dodawania wpisu";
+      }
+    },
+  },
 });
