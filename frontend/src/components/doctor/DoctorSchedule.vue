@@ -5,7 +5,7 @@
 
     <div v-if="scheduleStore.error" class="error">{{ scheduleStore.error }}</div>
 
-    <form v-if="availableDays.length > 0" @submit.prevent="onSubmit" class="schedule-form">
+    <form v-if="availableDays.length > 0 && dayOfTheWeek != 0" @submit.prevent="onSubmit" class="schedule-form">
       <label>
         Dzień tygodnia:
         <select v-model.number="dayOfTheWeek">
@@ -48,7 +48,7 @@
           <td>{{ formatTime(row.hour_from) }}</td>
           <td>{{ formatTime(row.hour_to) }}</td>
           <td>
-            <button class="edit" @click="console.log('Edytuj', row.id)">Edytuj</button>
+            <button @click="openEditModal(row)" class="edit">Edytuj</button>
           </td>
           <td>
             <button class="delete" @click="console.log('Usuń', row.id)">Usuń</button>
@@ -61,17 +61,41 @@
       Brak ustawionego harmonogramu.
     </p>
   </div>
+  <div v-if="showModal" class="modal-backdrop">
+    <div class="modal">
+      <h3>Edytuj slot</h3>
+      <label>Dzień tygodnia:
+        <select v-model.number="editDay">
+          <option v-for="d in modalDays" :key="d.index" :value="d.index">
+            {{ d.day }}
+          </option>
+        </select>
+      </label>
+      <label>Godzina od:
+        <select v-model="editFrom">
+          <option v-for="hour in hoursFrom" :key="hour" :value="hour">{{ hour }}</option>
+        </select>
+      </label>
+      <label>Godzina do:
+        <select v-model="editTo">
+          <option v-for="hour in hoursTo" :key="hour" :value="hour">{{ hour }}</option>
+        </select>
+      </label>
+      <button class = "save" @click="saveEdit">Zapisz</button>
+      <button class = "abort" @click="showModal=false">Anuluj</button>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, watch } from "vue";
 import { useScheduleStore } from "../../stores/schedule";
 
 const scheduleStore = useScheduleStore();
 
-const dayOfTheWeek = ref(1);
-const hourFrom = ref("08:00");
-const hourTo = ref("16:00");
+const dayOfTheWeek = ref<number>(0);
+const hourFrom = ref<string>("08:00");
+const hourTo = ref<string>("16:00");
 
 const availableDays = computed(() => {
   const usedDays = scheduleStore.schedule.map(s => s.day_of_the_week);
@@ -79,6 +103,18 @@ const availableDays = computed(() => {
     .map((day, index) => ({ day, index: index + 1 }))
     .filter(d => !usedDays.includes(d.index));
 });
+
+watch(availableDays, (newDays) => {
+  if (!newDays || newDays.length === 0) return;
+
+  const first = newDays[0];
+  if (!first) return;
+
+  if (!newDays.some(d => d.index === dayOfTheWeek.value)) {
+    dayOfTheWeek.value = first.index;
+  }
+});
+
 
 const hoursFrom = ["06:00","07:00","08:00","09:00","10:00","11:00","12:00","13:00","14:00"];
 const hoursTo   = ["14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"];
@@ -98,14 +134,39 @@ function formatTime(t: string) {
 async function onSubmit() {
   if(scheduleStore.loading) return;
   await scheduleStore.createSchedule(dayOfTheWeek.value, hourFrom.value, hourTo.value);
-
-  if (availableDays.value?.length) {
-    const firstDay = availableDays.value[0];
-    if (firstDay) {
-      dayOfTheWeek.value = firstDay.index;
-    }
-  }
 }
+
+const editingRow = ref<any | null>(null);
+const editDay = ref<number>(0);
+const editFrom = ref<string>("08:00");
+const editTo = ref<string>("16:00");
+const showModal = ref(false);
+
+const modalDays = ref<{ day: string; index: number }[]>([]);
+
+function openEditModal(row: any) {
+  editingRow.value = row;
+  editDay.value = row.day_of_the_week;
+  editFrom.value = row.hour_from.slice(0,5);
+  editTo.value = row.hour_to.slice(0,5);
+  modalDays.value = [...availableDays.value];
+
+  if (!modalDays.value.some(d => d.index === editDay.value)) {
+    modalDays.value.push({ day: dayName(editDay.value), index: editDay.value });
+  }
+  modalDays.value.sort((a,b) => a.index - b.index);
+
+  showModal.value = true;
+}
+
+async function saveEdit() {
+  if (!editingRow.value) return;
+  await scheduleStore.updateSchedule(editingRow.value.id, editDay.value, editFrom.value, editTo.value);
+  showModal.value = false;
+  editingRow.value = null;
+}
+
+
 </script>
 
 <style scoped>
@@ -137,7 +198,7 @@ async function onSubmit() {
   font-weight: 600;
 }
 
-.schedule-table button {
+.schedule-table button, .modal button {
   padding: 4px 10px;
   border-radius: 6px;
   border: none;
@@ -146,21 +207,21 @@ async function onSubmit() {
   transition: background 0.2s;
 }
 
-.schedule-table button.edit {
+.schedule-table button.edit, .modal button.save {
   background: #2563eb;
   color: white;
 }
 
-.schedule-table button.edit:hover {
+.schedule-table button.edit:hover, .modal button.save:hover {
   background: #1e40af;
 }
 
-.schedule-table button.delete {
+.schedule-table button.delete, .modal button.abort{
   background: #dc2626;
   color: white;
 }
 
-.schedule-table button.delete:hover {
+.schedule-table button.delete:hover, .modal button.abort:hover {
   background: #991b1b;
 }
 
@@ -173,7 +234,7 @@ async function onSubmit() {
   align-items: flex-end;
 }
 
-.schedule-form label {
+.schedule-form label, .modal label {
   display: flex;
   flex-direction: column;
   font-weight: 500;
@@ -181,7 +242,7 @@ async function onSubmit() {
   color: #0f172a;
 }
 
-.schedule-form select {
+.schedule-form select, .modal select {
   margin-top: 4px;
   padding: 6px 8px;
   border: 1px solid #cbd5e1;
@@ -192,7 +253,7 @@ async function onSubmit() {
   transition: border 0.2s, box-shadow 0.2s;
 }
 
-.schedule-form select:focus {
+.schedule-form select:focus, .modal select:focus {
   outline: none;
   border-color: #3b82f6;
   box-shadow: 0 0 0 2px rgba(59,130,246,0.2);
@@ -217,5 +278,24 @@ async function onSubmit() {
   margin-top: 10px;
   font-size: 14px;
   color :red 
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 </style>

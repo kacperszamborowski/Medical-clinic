@@ -68,5 +68,21 @@ export const useScheduleStore = defineStore("schedule", {
         this.error = err.response?.data?.message || "Błąd dodawania wpisu";
       }
     },
+
+    async updateSchedule(scheduleId: number, dayOfTheWeek: number, hourFrom: string, hourTo: string) {
+      this.error = "";
+      try {
+        const token = localStorage.getItem("token");
+        await axios.put(
+          `${API_URL}/schedule/my/edit`,
+          { scheduleId, dayOfTheWeek, hourFrom, hourTo },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        await this.fetchMySchedule();
+      } catch (err: any) {
+        this.error = err.response?.data?.message || "Błąd aktualizacji wpisu";
+      }
+    },
+
   },
 });
