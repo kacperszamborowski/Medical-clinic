@@ -8,4 +8,5 @@ router.get("/", ScheduleController.getSchedule);
 router.get("/my", authMiddleware, ScheduleController.getMySchedule);
 router.post("/my/create", authMiddleware, ScheduleController.createSchedule);
 router.put("/my/edit", authMiddleware, ScheduleController.updateSchedule);
+router.delete("/my/delete", authMiddleware, ScheduleController.deleteSchedule);
 export default router;
