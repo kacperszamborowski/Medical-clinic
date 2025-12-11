@@ -7,6 +7,7 @@ export class ScheduleService {
                 doctor_id: doctorId
             },
             select: {
+                id: true,
                 day_of_the_week: true,
                 hour_from: true,
                 hour_to: true,
@@ -26,13 +27,43 @@ export class ScheduleService {
     }
 
     static async createSchedule(doctorId: number, dayOfTheWeek: number, hourFrom: string, hourTo: string) {
-        return await prisma.schedule.create({
-            data: {
-                doctor_id: doctorId,
-                day_of_the_week: dayOfTheWeek,
-                hour_from: (new Date("1970-01-01 " + hourFrom + " UTC")).toISOString(),
-                hour_to: (new Date("1970-01-01 " + hourTo + " UTC")).toISOString(),
-            }
-        })
+        try {
+            return await prisma.schedule.create({
+                data: {
+                    doctor_id: doctorId,
+                    day_of_the_week: dayOfTheWeek,
+                    hour_from: (new Date("1970-01-01 " + hourFrom + " UTC")).toISOString(),
+                    hour_to: (new Date("1970-01-01 " + hourTo + " UTC")).toISOString(),
+                }
+            });
+        }
+        catch (error: any) {
+            throw error;
+        }
+    }
+
+    static async updateSchedule(scheduleId: number, doctorId: number, dayOfTheWeek?: number, hourFrom?: string, hourTo?: string) {
+        const updatedData: {
+            day_of_the_week?: number,
+            hour_from?: string,
+            hour_to?: string
+        } = {};
+
+        if (dayOfTheWeek != undefined) {
+            updatedData.day_of_the_week = dayOfTheWeek;
+        }
+        
+        if (hourFrom != undefined) {
+            updatedData.hour_from = (new Date("1970-01-01 " + hourFrom + " UTC")).toISOString();
+        }
+
+        if (hourTo != undefined) {
+            updatedData.hour_to = (new Date("1970-01-01 " + hourTo + " UTC")).toISOString();
+        }
+        
+        return await prisma.schedule.update({
+            where: { id: scheduleId },
+            data: updatedData
+        });
     }
 }

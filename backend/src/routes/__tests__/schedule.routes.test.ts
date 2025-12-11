@@ -24,7 +24,6 @@ describe("Integration tests for /schedule", () => {
     });
 
     let scheduleId: number;
-    let authToken: string;
 
     it("POST /schedule/my/create should create a schedule for logged in doctor", async () => {
         const auth = await request(app)
@@ -37,7 +36,7 @@ describe("Integration tests for /schedule", () => {
         const response = await request(app)
         .post("/schedule/my/create")
         .send({
-            dayOfTheWeek: 3,
+            dayOfTheWeek: 4,
             hourFrom: "07:30",
             hourTo: "15:30"
         })
@@ -46,11 +45,36 @@ describe("Integration tests for /schedule", () => {
 
         expect(response.body.doctor_id).toBe(1);
         expect(response.body.hour_to).toBe((new Date("1970-01-01 15:30 UTC")).toISOString());
-    });
 
-    afterAll(async () => {
-        prisma.schedule.delete({
+        await prisma.schedule.delete({
             where: { id: scheduleId }
         });
     });
+
+    it("PUT /schedule/my/edit should update existing schedule for logged in doctor", async () => {
+        const auth = await request(app)
+        .post('/auth/login')
+        .send({
+            email: 'anna.nowak@example.com',
+            password: 'pass123'
+        });
+
+        const response = await request(app)
+        .put("/schedule/my/edit")
+        .send({
+            scheduleId: 1,
+            hourFrom: "06:45",
+        })
+        .set("Authorization", "Bearer " + auth.body.token);
+        scheduleId = response.body.id;
+
+        expect(response.body.id).toBe(1);
+        expect(response.body.doctor_id).toBe(1);
+        expect(response.body.hour_from).toBe((new Date("1970-01-01 06:45 UTC")).toISOString());
+        
+        await prisma.schedule.update({
+            where: { id: scheduleId },
+            data: { hour_from: (new Date("1970-01-01 09:00 UTC")).toISOString()}
+        });
+    })
 })

@@ -64,4 +64,5 @@ model Schedule {
   hour_from       DateTime @db.Time(6)
   hour_to         DateTime @db.Time(6)
   doctor          Doctor   @relation(fields: [doctor_id], references: [id])
+  @@unique([doctor_id, day_of_the_week])
 }
