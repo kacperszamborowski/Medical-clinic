@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import axios from "axios";
 import { API_URL } from "../api";
 
 export interface Doctor {
@@ -8,17 +8,30 @@ export interface Doctor {
   specialization: string;
 }
 
-export const useDoctorsStore = defineStore("doctors", () => {
-  const doctors = ref<Doctor[]>([]);
+export const useDoctorsStore = defineStore("doctors", {
+  state: () => ({
+    doctors: [] as Doctor[],
+    error: "",
+  }),
 
-  async function fetchDoctors() {
-    // przykladowe dane, brak backendu
-    doctors.value = [
-      { id: 1, name: "Dr. Jan Kowalski", specialization: "Pediatra" },
-      { id: 2, name: "Dr. Anna Nowak", specialization: "Kardiolog" },
-      { id: 3, name: "Dr. Piotr Wiśniewski", specialization: "Dermatolog" },
-    ];
-  }
+  actions: {
+    async fetchDoctors() {
+      this.error = "";
 
-  return { doctors, fetchDoctors };
+      try {
+        const token = localStorage.getItem("token");
+
+        const res = await axios.get(`${API_URL}/doctors`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        this.doctors = res.data;
+      } catch (err: any) {
+        this.error =
+          err.response?.data?.message || "Błąd pobierania listy lekarzy";
+      }
+    },
+  },
 });

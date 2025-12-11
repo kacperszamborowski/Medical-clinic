@@ -1,7 +1,10 @@
 <template>
+  <button class="back-btn" @click="goBack">
+    Wróć
+  </button>
+
   <div class="doctor-schedule">
     <h2>Harmonogram lekarza</h2>
-    <p>Wybrany lekarz ID: {{ doctorId }}</p>
 
     <div v-if="store.loading" class="loading">Ładowanie…</div>
     <div v-if="store.error" class="error">{{ store.error }}</div>
@@ -31,12 +34,17 @@
 
 <script setup lang="ts">
 import { onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useScheduleStore } from "../../stores/schedule";
 
 const route = useRoute();
+const router = useRouter();
 const doctorId = Number(route.params.id);
 const store = useScheduleStore();
+
+function goBack() {
+  router.back();
+}
 
 onMounted(() => {
   store.fetchDoctorSchedule(doctorId);
@@ -52,6 +60,27 @@ function formatTime(t: string) {
 </script>
 
 <style scoped>
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+
+  background: #fcf9f9;
+  border: 1px solid #e0e0e0;
+  padding: 8px 12px;
+  border-radius: 8px;
+
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.back-btn:hover {
+  background: #e0ebf5;
+  border-color: #c4d4e3;
+}
+
 .doctor-schedule {
   max-width: 800px;
   margin: 20px;
