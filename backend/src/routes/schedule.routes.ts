@@ -7,4 +7,5 @@ const router: Router = Router();
 router.get("/", ScheduleController.getSchedule);
 router.get("/my", authMiddleware, ScheduleController.getMySchedule);
 router.post("/my/create", authMiddleware, ScheduleController.createSchedule);
+router.put("/my/edit", authMiddleware, ScheduleController.updateSchedule);
 export default router;
