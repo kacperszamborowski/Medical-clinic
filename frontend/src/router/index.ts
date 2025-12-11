@@ -7,7 +7,8 @@ import DoctorLayoutView from "../views/DoctorLayoutView.vue";
 import AdminLayoutView from "../views/AdminLayoutView.vue";
 import PatientDashboard from "../components/patient/PatientDashboard.vue";
 import PatientProfile from "../components/patient/PatientProfile.vue";
-import PatientAppointments from "../components/patient/PatientAppointments.vue";
+import PatientDoctorList from "../components/patient/PatientDoctorList.vue";
+import PatientReserveAppointment from "../components/patient/PatientReserveAppointment.vue";
 import DoctorDashboard from "../components/doctor/DoctorDashboard.vue";
 import DoctorPatients from "../components/doctor/DoctorPatients.vue";
 import DoctorProfile from "../components/doctor/DoctorProfile.vue";
@@ -26,7 +27,8 @@ const routes = [
     children: [
       { path: "dashboard", component: () => PatientDashboard },
       { path: "profile", component: () => PatientProfile },
-      { path: "appointments", component: () => PatientAppointments },
+      { path: "doctor-list", component: () => PatientDoctorList },
+      { path: "doctor-list/:id", component: () => PatientReserveAppointment },
     ]
   },
 
