@@ -51,7 +51,7 @@
             <button @click="openEditModal(row)" class="edit">Edytuj</button>
           </td>
           <td>
-            <button class="delete" @click="console.log('Usuń', row.id)">Usuń</button>
+            <button class="delete" @click="deleteSlot(row.id)">Usuń</button>
           </td>
         </tr>
       </tbody>
@@ -166,7 +166,10 @@ async function saveEdit() {
   editingRow.value = null;
 }
 
-
+async function deleteSlot(id: number) {
+  if (!confirm("Czy na pewno chcesz usunąć ten slot?")) return;
+  await scheduleStore.deleteSchedule(id);
+}
 </script>
 
 <style scoped>

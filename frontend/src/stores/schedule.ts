@@ -84,5 +84,22 @@ export const useScheduleStore = defineStore("schedule", {
       }
     },
 
+    async deleteSchedule(scheduleId: number) {
+      this.error = "";
+      try {
+        const token = localStorage.getItem("token");
+        await axios.delete(
+          `${API_URL}/schedule/my/delete`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+            data: { scheduleId }
+          }
+        );
+        await this.fetchMySchedule();
+      } catch (err: any) {
+        this.error = err.response?.data?.message || "Błąd usuwania wpisu";
+      }
+    }
+
   },
 });
