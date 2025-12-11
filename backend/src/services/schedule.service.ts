@@ -66,4 +66,10 @@ export class ScheduleService {
             data: updatedData
         });
     }
+
+    static async deleteSchedule(scheduleId: number) {
+        return await prisma.schedule.delete({
+            where: { id: scheduleId }
+        });
+    }
 }

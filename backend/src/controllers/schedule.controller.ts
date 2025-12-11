@@ -109,4 +109,15 @@ export class ScheduleController {
             res.status(500).json({ message: error.message });
         }
     }
+
+    static async deleteSchedule(req: AuthRequest, res: Response) {
+        const scheduleId = req.body.scheduleId;
+        try {
+            const deleted = await ScheduleService.deleteSchedule(scheduleId);
+            return res.json(deleted);
+        }
+        catch (error: any) {
+            res.status(500).json({ message: error.message });
+        }
+    }
 }
