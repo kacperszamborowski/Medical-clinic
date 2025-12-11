@@ -1,7 +1,7 @@
 <template>
   <div class="doctor-schedule">
-    <h2>Harmonogram pracy</h2>
-    <p>Twoje stałe godziny pracy.</p>
+    <h2>Harmonogram lekarza</h2>
+    <p>Wybrany lekarz ID: {{ doctorId }}</p>
 
     <div v-if="store.loading" class="loading">Ładowanie…</div>
     <div v-if="store.error" class="error">{{ store.error }}</div>
@@ -31,12 +31,15 @@
 
 <script setup lang="ts">
 import { onMounted } from "vue";
+import { useRoute } from "vue-router";
 import { useScheduleStore } from "../../stores/schedule";
 
+const route = useRoute();
+const doctorId = Number(route.params.id);
 const store = useScheduleStore();
 
 onMounted(() => {
-  store.fetchMySchedule();
+  store.fetchDoctorSchedule(doctorId);
 });
 
 function dayName(n: number) {
@@ -55,6 +58,8 @@ function formatTime(t: string) {
 <style scoped>
 .doctor-schedule {
   max-width: 800px;
+  margin: 20px;
+  font-family: system-ui, sans-serif;
 }
 
 .schedule-table {
