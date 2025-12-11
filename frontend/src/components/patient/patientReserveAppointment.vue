@@ -6,10 +6,10 @@
   <div class="doctor-schedule">
     <h2>Harmonogram lekarza</h2>
 
-    <div v-if="store.loading" class="loading">Ładowanie…</div>
-    <div v-if="store.error" class="error">{{ store.error }}</div>
+    <div v-if="scheduleStore.loading" class="loading">Ładowanie…</div>
+    <div v-if="scheduleStore.error" class="error">{{ scheduleStore.error }}</div>
 
-    <table v-if="!store.loading && store.schedule.length" class="schedule-table">
+    <table v-if="!scheduleStore.loading && scheduleStore.schedule.length" class="schedule-table">
       <thead>
         <tr>
           <th>Dzień tygodnia</th>
@@ -18,7 +18,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="row in store.schedule" :key="row.id">
+        <tr v-for="row in scheduleStore.schedule" :key="row.id">
           <td>{{ dayName(row.day_of_the_week) }}</td>
           <td>{{ formatTime(row.hour_from) }}</td>
           <td>{{ formatTime(row.hour_to) }}</td>
@@ -26,7 +26,7 @@
       </tbody>
     </table>
 
-    <p v-if="!store.loading && store.schedule.length === 0">
+    <p v-if="!scheduleStore.loading && scheduleStore.schedule.length === 0">
       Brak ustawionego harmonogramu.
     </p>
   </div>
@@ -40,18 +40,18 @@ import { useScheduleStore } from "../../stores/schedule";
 const route = useRoute();
 const router = useRouter();
 const doctorId = Number(route.params.id);
-const store = useScheduleStore();
+const scheduleStore = useScheduleStore();
 
 function goBack() {
   router.back();
 }
 
 onMounted(() => {
-  store.fetchDoctorSchedule(doctorId);
+  scheduleStore.fetchDoctorSchedule(doctorId);
 });
 
 function dayName(n: number) {
-  return store.days[n - 1] ?? "???";
+  return scheduleStore.days[n - 1] ?? "???";
 }
 
 function formatTime(t: string) {
