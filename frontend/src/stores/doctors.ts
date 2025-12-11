@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
+import { API_URL } from "../api";
 
 export interface Doctor {
   id: number;

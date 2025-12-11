@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import axios from "axios";
+import { API_URL } from "../api";
 
 export const useScheduleStore = defineStore("schedule", {
   state: () => ({
@@ -22,7 +23,7 @@ export const useScheduleStore = defineStore("schedule", {
 
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:3000/schedule/my", {
+        const res = await axios.get(`${API_URL}/schedule/my`, {
           headers: { Authorization: `Bearer ${token}` }
         });
 
@@ -40,7 +41,7 @@ export const useScheduleStore = defineStore("schedule", {
       this.error = "";
 
       try {
-        const res = await axios.get("http://localhost:3000/schedule", {
+        const res = await axios.get(`${API_URL}/schedule`, {
           params: { doctorId }
         });
 
@@ -58,7 +59,7 @@ export const useScheduleStore = defineStore("schedule", {
       try {
         const token = localStorage.getItem("token");
         await axios.post(
-          "http://localhost:3000/schedule/my/create",
+          `${API_URL}/schedule/my/create`,
           { dayOfTheWeek, hourFrom, hourTo },
           { headers: { Authorization: `Bearer ${token}` } }
         );
