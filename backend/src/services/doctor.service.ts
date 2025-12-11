@@ -12,7 +12,7 @@ export class DoctorService {
     // }
 
     static async getAllDoctors() {
-        return await prisma.doctor.findMany({
+        const doctors = await prisma.doctor.findMany({
             select: {
                 id: true,
                 specialization: true,
@@ -24,5 +24,10 @@ export class DoctorService {
                 }
             }
         });
+        return doctors.map(d => ({
+        id: d.id,
+        specialization: d.specialization,
+        name: `${d.user.firstname} ${d.user.lastname}`
+    }));
     }
 }

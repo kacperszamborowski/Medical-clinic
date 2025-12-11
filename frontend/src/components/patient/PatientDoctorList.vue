@@ -1,7 +1,7 @@
-<!-- views/DoctorsList.vue -->
 <template>
   <div class="doctors-list">
     <h2>Wybierz lekarza</h2>
+    <div v-if="doctorsStore.error" class="error">{{ doctorsStore.error }}</div>
     <div class="grid">
       <div
         class="doctor-card"
@@ -9,7 +9,7 @@
         :key="doctor.id"
         @click="selectDoctor(doctor.id)"
       >
-        <strong>{{ doctor.name }}</strong>
+        <b>{{ doctor.name }}</b>
         <p>{{ doctor.specialization }}</p>
       </div>
     </div>
@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useDoctorsStore } from "../../stores/doctors";
 
@@ -32,7 +32,7 @@ function selectDoctor(doctorId: number) {
   router.push(`/patient/doctor-list/${doctorId}`);
 }
 
-const doctors = doctorsStore.doctors;
+const doctors = computed(() => doctorsStore.doctors);
 </script>
 
 <style scoped>
@@ -60,5 +60,10 @@ const doctors = doctorsStore.doctors;
 
 .doctor-card:hover {
   background: #e0ebf5;
+}
+
+.error {
+  margin-top: 10px;
+  color: red;
 }
 </style>
