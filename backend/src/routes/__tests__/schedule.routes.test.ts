@@ -25,7 +25,7 @@ describe("Integration tests for /schedule", () => {
 
     let scheduleId: number;
 
-    it("POST /schedule/my/create should create a schedule for logged in doctor", async () => {
+    it("POST /schedule/my/create should create a schedule", async () => {
         const auth = await request(app)
         .post('/auth/login')
         .send({
@@ -51,7 +51,7 @@ describe("Integration tests for /schedule", () => {
         });
     });
 
-    it("PUT /schedule/my/edit should update existing schedule for logged in doctor", async () => {
+    it("PUT /schedule/my/edit should update existing schedule", async () => {
         const auth = await request(app)
         .post('/auth/login')
         .send({
@@ -76,5 +76,36 @@ describe("Integration tests for /schedule", () => {
             where: { id: scheduleId },
             data: { hour_from: (new Date("1970-01-01 09:00 UTC")).toISOString()}
         });
-    })
+    });
+
+    it("DELETE /schedule/my/delete should delete an existing schedule", async () => {
+        const auth = await request(app)
+        .post('/auth/login')
+        .send({
+            email: 'anna.nowak@example.com',
+            password: 'pass123'
+        });
+
+        const response = await request(app)
+        .delete("/schedule/my/delete")
+        .send({ scheduleId: 1 })
+        .set("Authorization", "Bearer " + auth.body.token);
+
+        expect(response.body).toEqual(response.body);
+
+        const findNull = await prisma.schedule.findUnique({
+            where: { id: 1 }
+        });
+        expect(findNull).toBeNull();
+
+        await prisma.schedule.create({
+            data: { 
+                id: 1,
+                doctor_id: 1, 
+                day_of_the_week: 1,
+                hour_from: new Date("1970-01-01T09:00:00Z"), 
+                hour_to: new Date("1970-01-01T17:00:00Z") 
+            }
+        });
+    });
 })
