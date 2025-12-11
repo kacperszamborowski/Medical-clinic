@@ -57,8 +57,6 @@ export class ScheduleController {
                 hourTo: req.body.hourTo as string
             };
 
-            console.log("CONTROLLER: " + data.hourFrom + " " + data.hourTo);
-
             const newSchedule = await ScheduleService.createSchedule(
                 doctorId,
                 data.dayOfTheWeek,

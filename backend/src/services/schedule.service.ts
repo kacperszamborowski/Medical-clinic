@@ -26,7 +26,6 @@ export class ScheduleService {
     }
 
     static async createSchedule(doctorId: number, dayOfTheWeek: number, hourFrom: string, hourTo: string) {
-        console.log("SERVICE: " + hourFrom + " " + hourTo);
         return await prisma.schedule.create({
             data: {
                 doctor_id: doctorId,

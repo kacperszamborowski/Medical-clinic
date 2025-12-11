@@ -4,7 +4,7 @@ import authRoutes from "./routes/auth.routes";
 import userRoutes from "./routes/user.routes";
 import scheduleRoutes from "./routes/schedule.routes";
 import appointmentRoutes from "./routes/appointment.routes";
-// import doctorRoutes from "./routes/doctor.routes"
+import doctorRoutes from "./routes/doctor.routes";
 // import patientRoutes from "./routes/patient.routes"
 import dotenv from 'dotenv';
 
@@ -19,7 +19,7 @@ app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/schedule", scheduleRoutes);
 app.use("/appointments", appointmentRoutes);
-// app.use("/api/doctors", doctorRoutes)
+app.use("/doctors", doctorRoutes)
 // app.use("/api/patients", patientRoutes)
 
 export default app;
