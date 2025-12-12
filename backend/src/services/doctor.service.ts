@@ -24,6 +24,7 @@ export class DoctorService {
                 }
             }
         });
+        
         return doctors.map(d => ({
         id: d.id,
         specialization: d.specialization,

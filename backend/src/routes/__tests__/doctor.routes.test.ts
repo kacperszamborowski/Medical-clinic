@@ -26,7 +26,7 @@ describe('Integration tests for /doctors', () => {
 
     expect(response.body[0]).toHaveProperty('id');
     expect(response.body[0]).toHaveProperty('specialization');
-    expect(response.body[0]).toHaveProperty('user');
+    expect(response.body[0]).toHaveProperty('name');
   });
 
   // it('POST /api/doctors creates a new doctor', async () => {
