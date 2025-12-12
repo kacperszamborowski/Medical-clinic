@@ -7,4 +7,5 @@ const router: Router = Router();
 router.get("/history", authMiddleware, AppointmentController.getPatientHistory);
 router.put("/status", authMiddleware, AppointmentController.setAppointmentStatus);
 router.post("/create", authMiddleware, AppointmentController.createAppointment);
+router.get("/busy", authMiddleware, AppointmentController.getBusyHours);
 export default router;
