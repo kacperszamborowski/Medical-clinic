@@ -30,7 +30,7 @@ export const useScheduleStore = defineStore("schedule", {
         this.schedule = res.data;
         this.schedule.sort((a, b) => a.day_of_the_week - b.day_of_the_week);
       } catch (err: any) {
-        this.error = err.response?.data?.message || "Błąd pobierania harmonogramu";
+        this.error = "Błąd pobierania harmonogramu";
       } finally {
         this.loading = false;
       }
@@ -48,7 +48,7 @@ export const useScheduleStore = defineStore("schedule", {
         this.schedule = res.data;
         this.schedule.sort((a, b) => a.day_of_the_week - b.day_of_the_week);
       } catch (err: any) {
-        this.error = err.response?.data?.message || "Błąd pobierania harmonogramu";
+        this.error = "Błąd pobierania harmonogramu";
       } finally {
         this.loading = false;
       }
@@ -65,7 +65,7 @@ export const useScheduleStore = defineStore("schedule", {
         );
         await this.fetchMySchedule();
       } catch (err: any) {
-        this.error = err.response?.data?.message || "Błąd dodawania wpisu";
+        this.error = "Błąd dodawania slota";
       }
     },
 
@@ -80,7 +80,7 @@ export const useScheduleStore = defineStore("schedule", {
         );
         await this.fetchMySchedule();
       } catch (err: any) {
-        this.error = err.response?.data?.message || "Błąd aktualizacji wpisu";
+        this.error = "Błąd przy edytowaniu slota";
       }
     },
 
@@ -97,7 +97,7 @@ export const useScheduleStore = defineStore("schedule", {
         );
         await this.fetchMySchedule();
       } catch (err: any) {
-        this.error = err.response?.data?.message || "Błąd usuwania wpisu";
+        this.error = "Błąd usuwania slota";
       }
     }
 

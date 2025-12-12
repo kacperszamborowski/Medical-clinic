@@ -3,6 +3,7 @@
     <h2>Harmonogram pracy</h2>
     <p>Ustal lub edytuj swój harmonogram</p>
 
+    <div v-if="scheduleStore.loading" class="loading">Ładowanie…</div>
     <div v-if="scheduleStore.error" class="error">{{ scheduleStore.error }}</div>
 
     <form v-if="availableDays.length > 0 && dayOfTheWeek != 0" @submit.prevent="onSubmit" class="schedule-form">
@@ -57,9 +58,6 @@
       </tbody>
     </table>
 
-    <p v-if="!scheduleStore.loading && scheduleStore.schedule.length === 0">
-      Brak ustawionego harmonogramu.
-    </p>
   </div>
   <div v-if="showModal" class="modal-backdrop">
     <div class="modal">
@@ -277,9 +275,13 @@ async function deleteSlot(id: number) {
   background: #1e293b;
 }
 
+.loading {
+  margin-top: 10px;
+  color: #555;
+}
+
 .error {
   margin-top: 10px;
-  font-size: 14px;
   color :red 
 }
 

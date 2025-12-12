@@ -26,11 +26,8 @@
       </tbody>
     </table>
 
-    <p v-if="!scheduleStore.loading && scheduleStore.schedule.length === 0">
-      Brak ustawionego harmonogramu.
-    </p>
   </div>
-  <button class="appointment-btn" @click="openModal" :disabled="scheduleStore.loading || scheduleStore.schedule.length === 0">
+  <button v-if="!scheduleStore.error && !scheduleStore.loading" class="appointment-btn" @click="openModal" :disabled="scheduleStore.loading || scheduleStore.schedule.length === 0">
     Umów wizytę
   </button>
   <p v-if="appointmentsStore.success" class="success">
@@ -280,6 +277,7 @@ function createAppointment(date: Date, hour: string) {
 
 .error {
   margin-top: 10px;
+  margin-bottom: 10px;
   color: red;
 }
 
