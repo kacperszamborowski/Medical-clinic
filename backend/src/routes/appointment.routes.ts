@@ -9,4 +9,5 @@ router.get("/visits", authMiddleware, AppointmentController.getDoctorHistory);
 router.put("/status", authMiddleware, AppointmentController.setAppointmentStatus);
 router.post("/create", authMiddleware, AppointmentController.createAppointment);
 router.get("/busy", authMiddleware, AppointmentController.getBusyHours);
+router.get("/isregistered", authMiddleware, AppointmentController.doesPatientHaveAppointment);
 export default router;

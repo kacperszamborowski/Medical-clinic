@@ -21,6 +21,22 @@ export class AppointmentController {
         }
     }
 
+    static async doesPatientHaveAppointment(req: AuthRequest, res: Response) {
+        try {
+            const patientId = Number(req.user?.userId);
+            const doctorId = Number(req.query.doctorId);
+            const date = req.query.date as string;
+
+            const alreadyReserved = await AppointmentService
+            .doesPatientHaveAppointment(patientId, doctorId, date);
+
+            res.json(alreadyReserved);
+        }
+        catch (error: any) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+
     static async getDoctorHistory(req: AuthRequest, res: Response) {
         try {
             const doctorId = await UserService.getDoctorIdByUserId(Number(req.user?.userId));
@@ -80,7 +96,6 @@ export class AppointmentController {
     }
 
     static async createAppointment(req: AuthRequest, res: Response) {
-        console.log("Creating appointment...");
         try {
             const data = {
                 patientId: Number(req.user?.userId),
@@ -95,7 +110,6 @@ export class AppointmentController {
                 data.date,
                 data.time
             );
-
             res.json(newAppointment);
         }
         catch (error: any) {
