@@ -29,7 +29,50 @@ describe("Integration tests for /appointments", () => {
         expect(response.body[0].doctor).toEqual("Michał Kamiński");
     });
 
-    it("GET /appointments/busy should return busy hours for specified date", async () => {
+    it("GET /appointments/visits should return logged in doctor's reserved appointments", async () => {
+        const auth = await request(app)
+        .post('/auth/login')
+        .send({
+            email: 'anna.nowak@example.com',
+            password: 'pass123'
+        });
+        
+        const response = await request(app)
+        .get("/appointments/visits")
+        .query({ status: "zarezerwowana" })
+        .set("Authorization", "Bearer " + auth.body.token);
+
+        expect(response.status).toBe(200);
+        expect(Array.isArray(response.body)).toBe(true);
+
+        expect(response.body[0].date).toEqual("2025-12-10");
+        expect(response.body[0].time).toEqual("10:30");
+        expect(response.body[0].status).toEqual(AppointmentStatus.zarezerwowana);
+    });
+
+    it("GET /appointments/visits should return logged in doctor's realized appointments", async () => {
+        const auth = await request(app)
+        .post('/auth/login')
+        .send({
+            email: 'anna.nowak@example.com',
+            password: 'pass123'
+        });
+        
+        const response = await request(app)
+        .get("/appointments/visits")
+        .query({ status: "zrealizowana" })
+        .set("Authorization", "Bearer " + auth.body.token);
+
+        expect(response.status).toBe(200);
+        expect(Array.isArray(response.body)).toBe(true);
+
+        expect(response.body[0].date).toEqual("2025-12-11");
+        expect(response.body[0].time).toEqual("11:30");
+        expect(response.body[0].status).toEqual(AppointmentStatus.zrealizowana);
+        expect(response.body[0].details.diagnosis).toBe("Nadciśnienie");
+    });
+
+    it("GET /appointments/busy should return busy hours for specified date and specified doctor", async () => {
         const auth = await request(app)
         .post('/auth/login')
         .send({
@@ -39,7 +82,10 @@ describe("Integration tests for /appointments", () => {
 
         const response = await request(app)
         .get("/appointments/busy")
-        .send({ date: "2025-12-12"})
+        .query({ 
+            doctorId: 2, 
+            date: "2025-12-12"
+        })
         .set("Authorization", "Bearer " + auth.body.token);
 
         expect(response.status).toBe(200);

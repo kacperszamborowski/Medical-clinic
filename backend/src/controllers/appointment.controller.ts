@@ -21,10 +21,29 @@ export class AppointmentController {
         }
     }
 
+    static async getDoctorHistory(req: AuthRequest, res: Response) {
+        try {
+            const doctorId = await UserService.getDoctorIdByUserId(Number(req.user?.userId));
+            const status = req.query.status as AppointmentStatus;
+
+            const appointments = await AppointmentService.getDoctorAppointments(doctorId, status);
+            const cleaned = appointments.map(a => ({
+                ...a,
+                date: a.date.toISOString().substring(0, 10),
+                time: a.time.toISOString().substring(11, 16)
+            }));
+            res.json(cleaned);
+        }
+        catch (error: any) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+
     static async getBusyHours(req: AuthRequest, res: Response) {
         try {
-            const date = String(req.query.date);
-            const busyHours = await AppointmentService.getBusyHours(date);
+            const doctorId = Number(req.query.doctorId);
+            const date = req.query.date as string;
+            const busyHours = await AppointmentService.getBusyHours(doctorId, date);
             const cleaned = busyHours.map(h => ({
                 time: h.time.toISOString().substring(11, 16)
             }));

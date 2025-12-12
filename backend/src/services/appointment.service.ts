@@ -8,9 +8,10 @@ export class AppointmentService {
         });
     }
 
-    static async getBusyHours(date: string) {
+    static async getBusyHours(doctorId: number, date: string) {
         return await prisma.appointment.findMany({
             where: { 
+                doctor_id: doctorId,
                 date: (new Date(date)).toISOString(),
                 NOT: { status: AppointmentStatus.odwołana } 
             },
@@ -55,6 +56,43 @@ export class AppointmentService {
             time: a.time,
             doctor: `${a.doctor.user.firstname} ${a.doctor.user.lastname}`,
             specialization: a.doctor.specialization,
+            status: a.status,
+            details: a.appointmentDetails
+        }));
+    }
+
+    static async getDoctorAppointments(doctorId: number, status: AppointmentStatus) {
+        const appointments =  await prisma.appointment.findMany({
+            where: { 
+                doctor_id: doctorId,
+                status: status 
+            },
+            select: {
+                id: true,
+                date: true,
+                time: true,
+                status: true,
+                patient: {
+                    select: {
+                        firstname: true,
+                        lastname: true
+                    }
+                },
+                appointmentDetails: {
+                    select: {
+                        diagnosis: true,
+                        recommendations: true,
+                        prescription: true
+                    }
+                }
+            }
+        });
+        
+        return appointments.map(a => ({
+            id: a.id,
+            date: a.date,
+            time: a.time,
+            patient: `${a.patient.firstname} ${a.patient.lastname}`,
             status: a.status,
             details: a.appointmentDetails
         }));
