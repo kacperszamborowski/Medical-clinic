@@ -23,7 +23,7 @@ export class AppointmentController {
 
     static async getBusyHours(req: AuthRequest, res: Response) {
         try {
-            const date = req.body.date;
+            const date = String(req.query.date);
             const busyHours = await AppointmentService.getBusyHours(date);
             const cleaned = busyHours.map(h => ({
                 time: h.time.toISOString().substring(11, 16)
@@ -61,6 +61,7 @@ export class AppointmentController {
     }
 
     static async createAppointment(req: AuthRequest, res: Response) {
+        console.log("Creating appointment...");
         try {
             const data = {
                 patientId: Number(req.user?.userId),
