@@ -8,9 +8,10 @@ export class AppointmentService {
         });
     }
 
-    static async getBusyHours(date: string) {
+    static async getBusyHours(doctorId: number, date: string) {
         return await prisma.appointment.findMany({
             where: { 
+                doctor_id: doctorId,
                 date: (new Date(date)).toISOString(),
                 NOT: { status: AppointmentStatus.odwołana } 
             },

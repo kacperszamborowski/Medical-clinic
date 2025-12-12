@@ -41,8 +41,9 @@ export class AppointmentController {
 
     static async getBusyHours(req: AuthRequest, res: Response) {
         try {
+            const doctorId = req.body.doctorId;
             const date = req.body.date;
-            const busyHours = await AppointmentService.getBusyHours(date);
+            const busyHours = await AppointmentService.getBusyHours(doctorId, date);
             const cleaned = busyHours.map(h => ({
                 time: h.time.toISOString().substring(11, 16)
             }));

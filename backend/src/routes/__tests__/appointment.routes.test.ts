@@ -72,7 +72,7 @@ describe("Integration tests for /appointments", () => {
         expect(response.body[0].details.diagnosis).toBe("Nadciśnienie");
     });
 
-    it("GET /appointments/busy should return busy hours for specified date", async () => {
+    it("GET /appointments/busy should return busy hours for specified date and specified doctor", async () => {
         const auth = await request(app)
         .post('/auth/login')
         .send({
@@ -82,7 +82,10 @@ describe("Integration tests for /appointments", () => {
 
         const response = await request(app)
         .get("/appointments/busy")
-        .send({ date: "2025-12-12"})
+        .send({ 
+            doctorId: 2, 
+            date: "2025-12-12"
+        })
         .set("Authorization", "Bearer " + auth.body.token);
 
         expect(response.status).toBe(200);
