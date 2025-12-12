@@ -29,6 +29,44 @@ describe("Integration tests for /appointments", () => {
         expect(response.body[0].doctor).toEqual("Michał Kamiński");
     });
 
+    it("GET /appointments/isregistered should return true for existing appointment", async () => {
+        const auth = await request(app)
+        .post('/auth/login')
+        .send({
+            email: 'katarzyna.wojcik@example.com',
+            password: 'pass123'
+        });
+
+        const response = await request(app)
+        .get("/appointments/isregistered")
+        .query({
+            doctorId: 2,
+            date: "2025-12-12"
+        })
+        .set("Authorization", "Bearer " + auth.body.token);
+
+        expect(response.body).toBe(true);
+    });
+
+    it("GET /appointments/isregistered should return false for non-existing appointment", async () => {
+        const auth = await request(app)
+        .post('/auth/login')
+        .send({
+            email: 'katarzyna.wojcik@example.com',
+            password: 'pass123'
+        });
+
+        const response = await request(app)
+        .get("/appointments/isregistered")
+        .query({
+            doctorId: 1,
+            date: "2025-12-11"
+        })
+        .set("Authorization", "Bearer " + auth.body.token);
+
+        expect(response.body).toBe(false);
+    });
+
     it("GET /appointments/visits should return logged in doctor's reserved appointments", async () => {
         const auth = await request(app)
         .post('/auth/login')

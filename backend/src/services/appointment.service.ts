@@ -61,6 +61,18 @@ export class AppointmentService {
         }));
     }
 
+    static async doesPatientHaveAppointment(patientId: number, doctorId: number, date: string) {
+        const appointments = await prisma.appointment.findMany({
+            where: {
+                patient_id: patientId,
+                doctor_id: doctorId,
+                date: (new Date(date)).toISOString(),
+            }
+        });
+
+        return appointments.length > 0;
+    }
+
     static async getDoctorAppointments(doctorId: number, status: AppointmentStatus) {
         const appointments =  await prisma.appointment.findMany({
             where: { 
