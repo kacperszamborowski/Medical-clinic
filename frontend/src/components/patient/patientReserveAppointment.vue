@@ -56,8 +56,14 @@
         <h4>Dostępne godziny:</h4>
 
         <div class="hours-select">
-          <label>
-            {{ freeHours.length > 0 ? "Wybierz godzinę:" : "Brak dostępnych terminów dla wybranej daty." }}
+          <label v-if="appointmentsStore.hasAppointment">
+            Masz już umówioną wizytę tego dnia.
+          </label>
+          <label v-else-if="freeHours.length > 0">
+            Wybierz godzinę:
+          </label>
+          <label v-else>
+            Brak dostępnych terminów dla wybranej daty.
           </label>
 
           <select v-if="freeHours.length > 0" v-model="selectedHour">
@@ -166,6 +172,11 @@ watch(selectedDate, async (date) => {
   let possibleHours = getDoctorHoursForDay(date);
 
   const iso = date.toISOString().substring(0, 10);
+  await appointmentsStore.hasAppointmentF(doctorId, iso);
+  if (appointmentsStore.hasAppointment) {
+    freeHours.value = [];
+    return;
+  }
   await appointmentsStore.getBusyHours(doctorId, iso);
   const busy = appointmentsStore.busyHours;
 
