@@ -39,7 +39,7 @@ describe("Integration tests for /appointments", () => {
         
         const response = await request(app)
         .get("/appointments/visits")
-        .send({ status: "zarezerwowana" })
+        .query({ status: "zarezerwowana" })
         .set("Authorization", "Bearer " + auth.body.token);
 
         expect(response.status).toBe(200);
@@ -60,7 +60,7 @@ describe("Integration tests for /appointments", () => {
         
         const response = await request(app)
         .get("/appointments/visits")
-        .send({ status: "zrealizowana" })
+        .query({ status: "zrealizowana" })
         .set("Authorization", "Bearer " + auth.body.token);
 
         expect(response.status).toBe(200);
@@ -82,7 +82,7 @@ describe("Integration tests for /appointments", () => {
 
         const response = await request(app)
         .get("/appointments/busy")
-        .send({ 
+        .query({ 
             doctorId: 2, 
             date: "2025-12-12"
         })

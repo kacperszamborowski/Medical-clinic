@@ -24,7 +24,7 @@ export class AppointmentController {
     static async getDoctorHistory(req: AuthRequest, res: Response) {
         try {
             const doctorId = await UserService.getDoctorIdByUserId(Number(req.user?.userId));
-            const status = req.body.status as AppointmentStatus;
+            const status = req.query.status as AppointmentStatus;
 
             const appointments = await AppointmentService.getDoctorAppointments(doctorId, status);
             const cleaned = appointments.map(a => ({
@@ -41,8 +41,8 @@ export class AppointmentController {
 
     static async getBusyHours(req: AuthRequest, res: Response) {
         try {
-            const doctorId = req.body.doctorId;
-            const date = req.body.date;
+            const doctorId = Number(req.query.doctorId);
+            const date = req.query.date as string;
             const busyHours = await AppointmentService.getBusyHours(doctorId, date);
             const cleaned = busyHours.map(h => ({
                 time: h.time.toISOString().substring(11, 16)
