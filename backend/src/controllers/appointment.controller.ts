@@ -80,6 +80,7 @@ export class AppointmentController {
     }
 
     static async createAppointment(req: AuthRequest, res: Response) {
+        console.log("Creating appointment...");
         try {
             const data = {
                 patientId: Number(req.user?.userId),
