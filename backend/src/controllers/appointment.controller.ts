@@ -21,6 +21,20 @@ export class AppointmentController {
         }
     }
 
+    static async getBusyHours(req: AuthRequest, res: Response) {
+        try {
+            const date = req.body.date;
+            const busyHours = await AppointmentService.getBusyHours(date);
+            const cleaned = busyHours.map(h => ({
+                time: h.time.toISOString().substring(11, 16)
+            }));
+            res.json(cleaned);
+        }
+        catch (error: any) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+
     static async setAppointmentStatus(req: AuthRequest, res: Response) {
         try {
             const doctorId = await UserService.getDoctorIdByUserId(Number(req.user?.userId));

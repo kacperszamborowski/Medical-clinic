@@ -29,6 +29,23 @@ describe("Integration tests for /appointments", () => {
         expect(response.body[0].doctor).toEqual("Michał Kamiński");
     });
 
+    it("GET /appointments/busy should return busy hours for specified date", async () => {
+        const auth = await request(app)
+        .post('/auth/login')
+        .send({
+            email: 'katarzyna.wojcik@example.com',
+            password: 'pass123'
+        });
+
+        const response = await request(app)
+        .get("/appointments/busy")
+        .send({ date: "2025-12-12"})
+        .set("Authorization", "Bearer " + auth.body.token);
+
+        expect(response.status).toBe(200);
+        expect(response.body[0].time).toBe("09:00");
+    });
+
     it("PUT /appointments/status should update 3rd appointment's status to 'odwołana'", async () => {
         const auth = await request(app)
         .post('/auth/login')
