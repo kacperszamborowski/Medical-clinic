@@ -2,6 +2,12 @@ import { AppointmentStatus } from "@prisma/client";
 import { prisma } from "../db/prisma";
 
 export class AppointmentService {
+    static async getAppointment(appointmentId: number) {
+        return await prisma.appointment.findUnique({
+            where: { id: appointmentId }
+        });
+    }
+
     static async getPatientHistory(patientId: number) {
         const appointments =  await prisma.appointment.findMany({
             where: { patient_id: patientId },
