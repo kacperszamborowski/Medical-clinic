@@ -10,6 +10,7 @@ export class AppointmentController {
             const history = await AppointmentService.getPatientHistory(patientId);
             const cleaned = history.map(h => ({
                 ...h,
+                date: h.date.toISOString().substring(0, 10),
                 time: h.time.toISOString().substring(11, 16)
             }))
             res.json(cleaned);

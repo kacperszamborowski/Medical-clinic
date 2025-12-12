@@ -77,6 +77,28 @@ export class AppointmentService {
             throw new Error("The appointment does not match the doctor's schedule!");
         }
 
+        const currentAppointments = await prisma.appointment.findMany({
+            where: { doctor_id: doctorId },
+            select: {
+                date: true,
+                time: true,
+                status: true
+            }
+        });
+
+        const free = currentAppointments.some(a => {
+            if (a.date.toISOString() === date
+                && a.time.toISOString() === time
+                && a.status != AppointmentStatus.odwołana) {
+                return false;
+            }
+            return true;
+        });
+
+        if (!free) {
+            throw new Error("This term is already taken!");
+        }
+
         return prisma.appointment.create({
             data: {
                 patient_id: patientId,

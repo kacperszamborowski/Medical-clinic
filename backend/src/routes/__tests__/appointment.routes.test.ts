@@ -14,13 +14,12 @@ describe("Integration tests for /appointments", () => {
         expect(response.status).toBe(200);
         expect(Array.isArray(response.body)).toBe(true);
 
-        expect(response.body[0].date).toEqual((new Date("2025-12-10")).toISOString());
-        expect(response.body[0].time).toEqual((new Date("1970-01-01 10:30 UTC")).toISOString());
+        expect(response.body[0].date).toEqual("2025-12-10");
+        expect(response.body[0].time).toEqual("10:30");
         expect(response.body[0].status).toEqual(AppointmentStatus.zarezerwowana);
-        expect(response.body[0].appointmentDetails).toBe(null);
-        expect(response.body[0].doctor.specialization).toEqual("Kardiolog");
-        expect(response.body[0].doctor.user.firstname).toEqual("Anna");
-        expect(response.body[0].doctor.user.lastname).toEqual("Nowak");
+        expect(response.body[0].details).toBe(null);
+        expect(response.body[0].specialization).toEqual("Kardiolog");
+        expect(response.body[0].doctor).toEqual("Anna Nowak");
     });
 
     it("POST /appointments/status should update 3rd appointment's status to 'odwołana' and return it", async () => {
@@ -40,7 +39,7 @@ describe("Integration tests for /appointments", () => {
             password: 'pass123'
         });
 
-        const response1 = await request(app)
+        const response = await request(app)
         .post("/appointments/create")
         .send({
             doctorId: 2,
@@ -48,13 +47,22 @@ describe("Integration tests for /appointments", () => {
             time: "10:00"
         })
         .set("Authorization", "Bearer " + auth.body.token);
-        newAppointmentId = response1.body.id;
+        newAppointmentId = response.body.id;
 
-        expect(response1.status).toBe(200);
-        expect(response1.body.date).toEqual((new Date("2025-12-11")).toISOString());
-        expect(response1.body.time).toEqual((new Date("1970-01-01 10:00 UTC")).toISOString());
+        expect(response.status).toBe(200);
+        expect(response.body.date).toEqual((new Date("2025-12-11")).toISOString());
+        expect(response.body.time).toEqual((new Date("1970-01-01 10:00 UTC")).toISOString());
+    });
 
-        const response2 = await request(app)
+    it("POST /appointments/create should return status 500 for being invalid with schedule", async () => { 
+        const auth = await request(app)
+        .post('/auth/login')
+        .send({
+            email: 'katarzyna.wojcik@example.com',
+            password: 'pass123'
+        });
+        
+        const response = await request(app)
         .post("/appointments/create")
         .send({
             doctorId: 1,
@@ -63,9 +71,18 @@ describe("Integration tests for /appointments", () => {
         })
         .set("Authorization", "Bearer " + auth.body.token);
 
-        expect(response2.status).toBe(500);
+        expect(response.status).toBe(500);
+    });
+
+    it("POST /appointments/create should return status 500 for being invalid with schedule", async () => {
+        const auth = await request(app)
+        .post('/auth/login')
+        .send({
+            email: 'katarzyna.wojcik@example.com',
+            password: 'pass123'
+        });
         
-        const response3 = await request(app)
+        const response = await request(app)
         .post("/appointments/create")
         .send({
             doctorId: 1,
@@ -74,7 +91,27 @@ describe("Integration tests for /appointments", () => {
         })
         .set("Authorization", "Bearer " + auth.body.token);
 
-        expect(response2.status).toBe(500);
+        expect(response.status).toBe(500);
+    });
+
+    it("POST /appointments/create should return status 500 for being already taken", async () => {
+        const auth = await request(app)
+        .post('/auth/login')
+        .send({
+            email: 'katarzyna.wojcik@example.com',
+            password: 'pass123'
+        });
+        
+        const response = await request(app)
+        .post("/appointments/create")
+        .send({
+            doctorId: 2,
+            date: "2025-12-12",
+            time: "09:00"
+        })
+        .set("Authorization", "Bearer " + auth.body.token);
+
+        expect(response.status).toBe(500);
     });
 
     afterAll(async () => {
