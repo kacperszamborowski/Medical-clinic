@@ -26,11 +26,8 @@
       </tbody>
     </table>
 
-    <p v-if="!scheduleStore.loading && scheduleStore.schedule.length === 0">
-      Brak ustawionego harmonogramu.
-    </p>
   </div>
-  <button class="appointment-btn" @click="openModal" :disabled="scheduleStore.loading || scheduleStore.schedule.length === 0">
+  <button v-if="!scheduleStore.error && !scheduleStore.loading" class="appointment-btn" @click="openModal" :disabled="scheduleStore.loading || scheduleStore.schedule.length === 0">
     Umów wizytę
   </button>
   <p v-if="appointmentsStore.success" class="success">
@@ -56,8 +53,14 @@
         <h4>Dostępne godziny:</h4>
 
         <div class="hours-select">
-          <label>
-            {{ freeHours.length > 0 ? "Wybierz godzinę:" : "Brak dostępnych terminów dla wybranej daty." }}
+          <label v-if="appointmentsStore.hasAppointment">
+            Masz już umówioną wizytę tego dnia.
+          </label>
+          <label v-else-if="freeHours.length > 0">
+            Wybierz godzinę:
+          </label>
+          <label v-else>
+            Brak dostępnych terminów dla wybranej daty.
           </label>
 
           <select v-if="freeHours.length > 0" v-model="selectedHour">
@@ -166,6 +169,11 @@ watch(selectedDate, async (date) => {
   let possibleHours = getDoctorHoursForDay(date);
 
   const iso = date.toISOString().substring(0, 10);
+  await appointmentsStore.hasAppointmentF(doctorId, iso);
+  if (appointmentsStore.hasAppointment === true) {
+    freeHours.value = [];
+    return;
+  }
   await appointmentsStore.getBusyHours(doctorId, iso);
   const busy = appointmentsStore.busyHours;
 
@@ -269,6 +277,7 @@ function createAppointment(date: Date, hour: string) {
 
 .error {
   margin-top: 10px;
+  margin-bottom: 10px;
   color: red;
 }
 

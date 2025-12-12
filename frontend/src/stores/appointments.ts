@@ -8,6 +8,7 @@ export const useAppointmentsStore = defineStore("appointments", {
     loading: false,
     error: "" as string | null,
     success: "" as string | null,
+    hasAppointment: false as boolean
   }),
 
   actions: {
@@ -26,6 +27,26 @@ export const useAppointmentsStore = defineStore("appointments", {
       } catch (err: any) {
         this.error = err.response?.data?.message || "Nie udało się pobrać godzin.";
         this.busyHours = [];
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    async hasAppointmentF(doctorId: number, date: string) {
+      this.loading = true;
+      this.error = null;
+
+      try {
+        const token = localStorage.getItem("token");
+        const res = await axios.get(`${API_URL}/appointments/isregistered`, {
+          params: { doctorId, date },
+          headers: { Authorization: `Bearer ${token}`}
+        });
+
+        this.hasAppointment = res.data;
+      } catch (err: any) {
+        this.error = "Coś poszło nie tak";
+        this.hasAppointment = false;
       } finally {
         this.loading = false;
       }
