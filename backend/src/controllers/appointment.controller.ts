@@ -8,7 +8,11 @@ export class AppointmentController {
         try {
             const patientId = Number(req.query.patientId)
             const history = await AppointmentService.getPatientHistory(patientId);
-            res.json(history);
+            const cleaned = history.map(h => ({
+                ...h,
+                time: h.time.toISOString().substring(11, 16)
+            }))
+            res.json(cleaned);
         }
         catch (error: any) {
             res.status(500).json({ message: error.message });

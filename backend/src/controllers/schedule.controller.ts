@@ -8,7 +8,7 @@ export class ScheduleController {
         try {
             const doctorId = Number(req.query.doctorId);
             const schedule = await ScheduleService.getSchedule(doctorId);
-            const cleaned = schedule.map((s) => ({
+            const cleaned = schedule.map(s => ({
                 ...s,
                 hour_from: s.hour_from.toISOString().substring(11, 16),
                 hour_to: s.hour_to.toISOString().substring(11, 16)

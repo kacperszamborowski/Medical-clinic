@@ -3,9 +3,10 @@ import { prisma } from "../db/prisma";
 
 export class AppointmentService {
     static async getPatientHistory(patientId: number) {
-        return await prisma.appointment.findMany({
+        const appointments =  await prisma.appointment.findMany({
             where: { patient_id: patientId },
             select: {
+                id: true,
                 date: true,
                 time: true,
                 status: true,
@@ -29,6 +30,16 @@ export class AppointmentService {
                 }
             }
         });
+
+        return appointments.map(a => ({
+            id: a.id,
+            date: a.date,
+            time: a.time,
+            doctor: `${a.doctor.user.firstname} ${a.doctor.user.lastname}`,
+            specialization: a.doctor.specialization,
+            status: a.status,
+            details: a.appointmentDetails
+        }));
     }
 
     static async setAppointmentStatus(appointmentId: number, newStatus: AppointmentStatus) {
