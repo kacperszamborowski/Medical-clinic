@@ -1,38 +1,160 @@
 import request from 'supertest';
 import app from '../../app';
 import { AppointmentStatus } from '@prisma/client';
-import { after } from 'node:test';
+import { prisma } from '../../db/prisma';
+
+let newAppointmentId: number;
 
 describe("Integration tests for /appointments", () => {
-    it("GET /appointments/history?patientId=1 should return 1st patient's appointments history", async () => {
+    it("GET /appointments/history should return logged in patient's appointments history", async () => {
+        const auth = await request(app)
+        .post('/auth/login')
+        .send({
+            email: 'katarzyna.wojcik@example.com',
+            password: 'pass123'
+        });
+        
         const response = await request(app)
         .get("/appointments/history")
-        .query({ patientId: 1 });
+        .set("Authorization", "Bearer " + auth.body.token);
 
         expect(response.status).toBe(200);
         expect(Array.isArray(response.body)).toBe(true);
 
-        expect(response.body[0].date).toEqual((new Date("2025-12-10")).toISOString());
-        expect(response.body[0].time).toEqual((new Date("1970-01-01 10:30 UTC")).toISOString());
+        expect(response.body[0].date).toEqual("2025-12-12");
+        expect(response.body[0].time).toEqual("09:00");
         expect(response.body[0].status).toEqual(AppointmentStatus.zarezerwowana);
-        expect(response.body[0].appointmentDetails).toBe(null);
-        expect(response.body[0].doctor.specialization).toEqual("Kardiolog");
-        expect(response.body[0].doctor.user.firstname).toEqual("Anna");
-        expect(response.body[0].doctor.user.lastname).toEqual("Nowak");
+        expect(response.body[0].details).toBe(null);
+        expect(response.body[0].specialization).toEqual("Dermatolog");
+        expect(response.body[0].doctor).toEqual("Michał Kamiński");
     });
 
-    it("POST /appointment/status should update 3rd appointment's status to 'odwołana' and return it", async () => {
+    it("PUT /appointments/status should update 3rd appointment's status to 'odwołana'", async () => {
+        const auth = await request(app)
+        .post('/auth/login')
+        .send({
+            email: 'michal.kaminski@example.com',
+            password: 'pass123'
+        });
+        
         const response = await request(app)
-        .post("/appointments/status")
-        .query({ appointmentId: 3, newStatus: "odwołana" });
+        .put("/appointments/status")
+        .send({ appointmentId: 3, newStatus: "odwołana" })
+        .set("Authorization", "Bearer " + auth.body.token);
 
         expect(response.status).toBe(200);
         expect(response.body.status).toEqual(AppointmentStatus.odwołana);
     });
 
+    it("PUT /appointments/status should return status 403 for trying to modify someone else's appointment", async () => {
+        const auth = await request(app)
+        .post('/auth/login')
+        .send({
+            email: 'michal.kaminski@example.com',
+            password: 'pass123'
+        });
+        
+        const response = await request(app)
+        .put("/appointments/status")
+        .send({ appointmentId: 1, newStatus: "odwołana" })
+        .set("Authorization", "Bearer " + auth.body.token);
+
+        expect(response.status).toBe(403);
+    });
+
+    it("POST /appointments/create should create a new appointment for Katarzyna Wójcik", async () => {
+        const auth = await request(app)
+        .post('/auth/login')
+        .send({
+            email: 'katarzyna.wojcik@example.com',
+            password: 'pass123'
+        });
+
+        const response = await request(app)
+        .post("/appointments/create")
+        .send({
+            doctorId: 2,
+            date: "2025-12-11",
+            time: "10:00"
+        })
+        .set("Authorization", "Bearer " + auth.body.token);
+        newAppointmentId = response.body.id;
+
+        expect(response.status).toBe(200);
+        expect(response.body.date).toEqual((new Date("2025-12-11")).toISOString());
+        expect(response.body.time).toEqual((new Date("1970-01-01 10:00 UTC")).toISOString());
+    });
+
+    it("POST /appointments/create should return status 500 for being invalid with schedule", async () => { 
+        const auth = await request(app)
+        .post('/auth/login')
+        .send({
+            email: 'katarzyna.wojcik@example.com',
+            password: 'pass123'
+        });
+        
+        const response = await request(app)
+        .post("/appointments/create")
+        .send({
+            doctorId: 1,
+            date: "2025-12-02",
+            time: "10:00"
+        })
+        .set("Authorization", "Bearer " + auth.body.token);
+
+        expect(response.status).toBe(500);
+    });
+
+    it("POST /appointments/create should return status 500 for being invalid with schedule", async () => {
+        const auth = await request(app)
+        .post('/auth/login')
+        .send({
+            email: 'katarzyna.wojcik@example.com',
+            password: 'pass123'
+        });
+        
+        const response = await request(app)
+        .post("/appointments/create")
+        .send({
+            doctorId: 1,
+            date: "2025-12-01",
+            time: "08:00"
+        })
+        .set("Authorization", "Bearer " + auth.body.token);
+
+        expect(response.status).toBe(500);
+    });
+
+    it("POST /appointments/create should return status 500 for being already taken", async () => {
+        const auth = await request(app)
+        .post('/auth/login')
+        .send({
+            email: 'katarzyna.wojcik@example.com',
+            password: 'pass123'
+        });
+        
+        const response = await request(app)
+        .post("/appointments/create")
+        .send({
+            doctorId: 2,
+            date: "2025-12-12",
+            time: "09:00"
+        })
+        .set("Authorization", "Bearer " + auth.body.token);
+
+        expect(response.status).toBe(500);
+    });
+
     afterAll(async () => {
-        await request(app)
-        .post("/appointments/status")
-        .query({ appointmentId: 3, newStatus: "zarezerwowana" });
+        await prisma.appointment.update({
+            where: { id: 3 },
+            data: {
+                status: AppointmentStatus.zarezerwowana
+            }
+        });
+
+        await prisma.appointment.delete({
+            where: { id: newAppointmentId }
+        });
     });
 });

@@ -2,7 +2,7 @@ import { prisma } from "../db/prisma";
 
 export class ScheduleService {
     static async getSchedule(doctorId: number) {
-        return await prisma.schedule.findMany({
+        const schedule = await prisma.schedule.findMany({
             where: {
                 doctor_id: doctorId
             },
@@ -24,6 +24,15 @@ export class ScheduleService {
                 }
             }
         });
+
+        return schedule.map(s => ({
+            id: s.id,
+            doctor: `${s.doctor.user.firstname} ${s.doctor.user.lastname}`,
+            specialization: s.doctor.specialization,
+            day_of_the_week: s.day_of_the_week,
+            hour_from: s.hour_from,
+            hour_to: s.hour_to,
+        }));
     }
 
     static async createSchedule(doctorId: number, dayOfTheWeek: number, hourFrom: string, hourTo: string) {
