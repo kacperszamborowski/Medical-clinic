@@ -173,7 +173,7 @@ watch(selectedDate, async (date) => {
 
   const iso = date.toISOString().substring(0, 10);
   await appointmentsStore.hasAppointmentF(doctorId, iso);
-  if (appointmentsStore.hasAppointment) {
+  if (appointmentsStore.hasAppointment === true) {
     freeHours.value = [];
     return;
   }

@@ -38,12 +38,12 @@ export const useAppointmentsStore = defineStore("appointments", {
 
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get(`${API_URL}/appointments/tba`, {
-          params: {doctorId, date },
+        const res = await axios.get(`${API_URL}/appointments/isregistered`, {
+          params: { doctorId, date },
           headers: { Authorization: `Bearer ${token}`}
         });
 
-        this.hasAppointment = res.data.hasAppointment;
+        this.hasAppointment = res.data;
       } catch (err: any) {
         this.error = "Coś poszło nie tak";
         this.hasAppointment = false;
