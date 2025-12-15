@@ -73,7 +73,46 @@ export class AppointmentService {
         return appointments.length > 0;
     }
 
-    static async getDoctorAppointments(doctorId: number, status: AppointmentStatus) {
+    static async getDoctorFinishedAppointments(doctorId: number) {
+        const appointments =  await prisma.appointment.findMany({
+            where: { 
+                doctor_id: doctorId,
+                OR: [
+                    { status: "zrealizowana" },
+                    { status: "odwołana" }
+                ]
+            },
+            select: {
+                id: true,
+                date: true,
+                time: true,
+                status: true,
+                patient: {
+                    select: {
+                        firstname: true,
+                        lastname: true
+                    }
+                },
+                appointmentDetails: {
+                    select: {
+                        diagnosis: true,
+                        recommendations: true,
+                        prescription: true
+                    }
+                }
+            }
+        });
+        return appointments.map(a => ({
+            id: a.id,
+            date: a.date,
+            time: a.time,
+            patient: `${a.patient.firstname} ${a.patient.lastname}`,
+            status: a.status,
+            details: a.appointmentDetails
+        }));
+    }
+
+    static async getDoctorAppointmentsByStatus(doctorId: number, status: AppointmentStatus) {
         const appointments =  await prisma.appointment.findMany({
             where: { 
                 doctor_id: doctorId,
@@ -110,10 +149,19 @@ export class AppointmentService {
         }));
     }
 
-    static async setAppointmentStatus(appointmentId: number, newStatus: AppointmentStatus) {
+    static async setAppointmentStatus(appointmentId: number, newStatus: AppointmentStatus, cancelReason?: string) {
+        const updatedData: {
+            status: AppointmentStatus,
+            cancel_reason?: string
+        } = { status: newStatus };
+        
+        if (newStatus === AppointmentStatus.odwołana && cancelReason != undefined) {
+            updatedData.cancel_reason = cancelReason;
+        }
+
         return prisma.appointment.update({
             where: { id: appointmentId },
-            data: { status: newStatus }
+            data: updatedData
         }); 
     }
 

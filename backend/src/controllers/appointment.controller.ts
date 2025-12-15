@@ -40,9 +40,25 @@ export class AppointmentController {
     static async getDoctorHistory(req: AuthRequest, res: Response) {
         try {
             const doctorId = await UserService.getDoctorIdByUserId(Number(req.user?.userId));
-            const status = req.query.status as AppointmentStatus;
 
-            const appointments = await AppointmentService.getDoctorAppointments(doctorId, status);
+            const appointments = await AppointmentService.getDoctorFinishedAppointments(doctorId);
+            const cleaned = appointments.map(a => ({
+                ...a,
+                date: a.date.toISOString().substring(0, 10),
+                time: a.time.toISOString().substring(11, 16)
+            }));
+            res.json(cleaned);
+        }
+        catch (error: any) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+
+    static async getDoctorReservedAppointments(req: AuthRequest, res: Response) {
+        try {
+            const doctorId = await UserService.getDoctorIdByUserId(Number(req.user?.userId));
+
+            const appointments = await AppointmentService.getDoctorAppointmentsByStatus(doctorId, "zarezerwowana");
             const cleaned = appointments.map(a => ({
                 ...a,
                 date: a.date.toISOString().substring(0, 10),
@@ -75,19 +91,20 @@ export class AppointmentController {
             const doctorId = await UserService.getDoctorIdByUserId(Number(req.user?.userId));
             const appointmentId = Number(req.body.appointmentId);
             const newStatus = req.body.newStatus as AppointmentStatus;
+            const cancelReason = req.body.cancelReason as string;
 
-            const authorized = await (async () => { 
+            const allowed = await (async () => { 
                 const appointment = await AppointmentService.getAppointment(appointmentId);
                 return appointment?.doctor_id == doctorId;
             })();
 
-            if (!authorized) {
+            if (!allowed) {
                 res.status(403).json({ message: "Cannot modify someone else's appointment!" });
                 return;
             }
 
             const updatedAppointment = await AppointmentService
-            .setAppointmentStatus(appointmentId, newStatus);
+            .setAppointmentStatus(appointmentId, newStatus, cancelReason);
             res.json(updatedAppointment);
         }
         catch (error: any) {
