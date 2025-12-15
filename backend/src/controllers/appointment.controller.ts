@@ -76,12 +76,12 @@ export class AppointmentController {
             const appointmentId = Number(req.body.appointmentId);
             const newStatus = req.body.newStatus as AppointmentStatus;
 
-            const authorized = await (async () => { 
+            const allowed = await (async () => { 
                 const appointment = await AppointmentService.getAppointment(appointmentId);
                 return appointment?.doctor_id == doctorId;
             })();
 
-            if (!authorized) {
+            if (!allowed) {
                 res.status(403).json({ message: "Cannot modify someone else's appointment!" });
                 return;
             }
