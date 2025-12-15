@@ -110,10 +110,19 @@ export class AppointmentService {
         }));
     }
 
-    static async setAppointmentStatus(appointmentId: number, newStatus: AppointmentStatus) {
+    static async setAppointmentStatus(appointmentId: number, newStatus: AppointmentStatus, cancelReason?: string) {
+        const updatedData: {
+            status: AppointmentStatus,
+            cancel_reason?: string
+        } = { status: newStatus };
+        
+        if (newStatus === AppointmentStatus.odwołana && cancelReason != undefined) {
+            updatedData.cancel_reason = cancelReason;
+        }
+
         return prisma.appointment.update({
             where: { id: appointmentId },
-            data: { status: newStatus }
+            data: updatedData
         }); 
     }
 

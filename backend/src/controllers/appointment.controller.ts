@@ -75,6 +75,7 @@ export class AppointmentController {
             const doctorId = await UserService.getDoctorIdByUserId(Number(req.user?.userId));
             const appointmentId = Number(req.body.appointmentId);
             const newStatus = req.body.newStatus as AppointmentStatus;
+            const cancelReason = req.body.cancelReason as string;
 
             const allowed = await (async () => { 
                 const appointment = await AppointmentService.getAppointment(appointmentId);
@@ -87,7 +88,7 @@ export class AppointmentController {
             }
 
             const updatedAppointment = await AppointmentService
-            .setAppointmentStatus(appointmentId, newStatus);
+            .setAppointmentStatus(appointmentId, newStatus, cancelReason);
             res.json(updatedAppointment);
         }
         catch (error: any) {

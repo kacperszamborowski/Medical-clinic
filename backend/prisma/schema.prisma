@@ -43,6 +43,7 @@ model Appointment {
   date               DateTime             @db.Date
   time               DateTime             @db.Time(6)
   status             AppointmentStatus    @default(zarezerwowana)
+  cancel_reason      String?
   doctor             Doctor               @relation(fields: [doctor_id], references: [id])
   patient            User                 @relation(fields: [patient_id], references: [id])
   appointmentDetails Appointment_details?

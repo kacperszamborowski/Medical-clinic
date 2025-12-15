@@ -130,7 +130,7 @@ describe("Integration tests for /appointments", () => {
         expect(response.body[0].time).toBe("09:00");
     });
 
-    it("PUT /appointments/status should update 3rd appointment's status to 'odwołana'", async () => {
+    it("PUT /appointments/status should update 3rd appointment's status to 'odwołana' and add a cancel reason", async () => {
         const auth = await request(app)
         .post('/auth/login')
         .send({
@@ -140,11 +140,16 @@ describe("Integration tests for /appointments", () => {
         
         const response = await request(app)
         .put("/appointments/status")
-        .send({ appointmentId: 3, newStatus: "odwołana" })
+        .send({ 
+            appointmentId: 3, 
+            newStatus: "odwołana",
+            cancelReason: "Pacjent zrezygnował z wizyty"
+        })
         .set("Authorization", "Bearer " + auth.body.token);
 
         expect(response.status).toBe(200);
         expect(response.body.status).toEqual(AppointmentStatus.odwołana);
+        expect(response.body.cancel_reason).toEqual("Pacjent zrezygnował z wizyty");
     });
 
     it("PUT /appointments/status should return status 403 for trying to modify someone else's appointment", async () => {
@@ -250,7 +255,8 @@ describe("Integration tests for /appointments", () => {
         await prisma.appointment.update({
             where: { id: 3 },
             data: {
-                status: AppointmentStatus.zarezerwowana
+                status: AppointmentStatus.zarezerwowana,
+                cancel_reason: null
             }
         });
 
