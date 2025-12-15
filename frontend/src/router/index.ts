@@ -10,7 +10,7 @@ import PatientProfile from "../components/patient/PatientProfile.vue";
 import PatientDoctorList from "../components/patient/PatientDoctorList.vue";
 import PatientReserveAppointment from "../components/patient/PatientReserveAppointment.vue";
 import DoctorDashboard from "../components/doctor/DoctorDashboard.vue";
-import DoctorPatients from "../components/doctor/DoctorPatients.vue";
+import DoctorAppointments from "../components/doctor/DoctorAppointments.vue";
 import DoctorProfile from "../components/doctor/DoctorProfile.vue";
 import DoctorSchedule from "../components/doctor/DoctorSchedule.vue";
 import AdminDashboard from "../components/admin/AdminDashboard.vue";
@@ -38,7 +38,7 @@ const routes = [
     meta: { requiresAuth: true, role: "doctor" },
     children: [
       { path: "dashboard", component: () => DoctorDashboard },
-      { path: "patients", component: () => DoctorPatients },
+      { path: "appointments", component: () => DoctorAppointments },
       { path: "profile", component: () => DoctorProfile },
       { path: "schedule", component: () => DoctorSchedule },
     ]

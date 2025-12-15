@@ -4,7 +4,7 @@ import LoggedInLayout from '../components/LoggedInLayout.vue'
 const menu = [
     { label: 'Przegląd', to: "/doctor/dashboard" },
     { label: 'Harmonogram', to: "/doctor/schedule" },
-    { label: 'Pacjenci', to: "/doctor/patients" },
+    { label: 'Wizyty', to: "/doctor/appointments" },
     { label: 'Profil', to: "/doctor/profile" },
 ]
 </script>
