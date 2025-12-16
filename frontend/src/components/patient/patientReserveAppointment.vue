@@ -9,7 +9,7 @@
     <div v-if="scheduleStore.loading" class="loading">Ładowanie…</div>
     <div v-if="scheduleStore.error" class="error">{{ scheduleStore.error }}</div>
 
-    <table v-if="!scheduleStore.loading && scheduleStore.schedule.length" class="schedule-table">
+    <table v-if="!scheduleStore.loading && scheduleStore.schedule.length" class="table">
       <thead>
         <tr>
           <th>Dzień tygodnia</th>
@@ -94,6 +94,7 @@ import { useScheduleStore } from "../../stores/schedule";
 import { useAppointmentsStore } from "../../stores/appointments";
 import { VueDatePicker } from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
+import "../../style/global.css"
 
 const route = useRoute();
 const router = useRouter();
@@ -196,22 +197,6 @@ function createAppointment(date: Date, hour: string) {
 </script>
 
 <style scoped>
-.back-btn,
-.appointment-btn,
-.modal button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 8px 16px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  transition: background 0.2s, border-color 0.2s;
-}
-
 .back-btn {
   background: #fcf9f9;
   border: 1px solid #e0e0e0;
@@ -248,85 +233,11 @@ function createAppointment(date: Date, hour: string) {
   font-family: system-ui, sans-serif;
 }
 
-.schedule-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: white;
-  margin: 20px 0;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-}
-
-.schedule-table th,
-.schedule-table td {
-  padding: 12px 16px;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.schedule-table th {
-  text-align: left;
-  background: #dfdfdf;
-  font-weight: 600;
-}
-
-.loading {
-  margin-top: 10px;
-  color: #555;
-}
-
-.error {
-  margin-top: 10px;
-  margin-bottom: 10px;
-  color: red;
-}
-
-.success {
-  margin-top: 10px;
-  color: green;
-}
-
 .hours-select {
   display: flex;
   flex-direction: column;
   gap: 6px;
   margin-top: 10px;
-}
-
-.hours-select select {
-  padding: 6px 8px;
-  border: 1px solid #d0d7e2;
-  border-radius: 6px;
-  background: white;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.modal {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  min-width: 300px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 50px;
-}
-
-.modal-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 15px;
 }
 
 .modal-actions button {

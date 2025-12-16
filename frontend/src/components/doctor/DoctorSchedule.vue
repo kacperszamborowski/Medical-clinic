@@ -33,7 +33,7 @@
       <button type="submit">Dodaj slot</button>
     </form>
 
-    <table v-if="!scheduleStore.loading && scheduleStore.schedule.length" class="schedule-table">
+    <table v-if="!scheduleStore.loading && scheduleStore.schedule.length" class="table">
       <thead>
         <tr>
           <th>Dzień tygodnia</th>
@@ -88,6 +88,7 @@
 <script setup lang="ts">
 import { ref, onMounted, computed, watch } from "vue";
 import { useScheduleStore } from "../../stores/schedule";
+import "../../style/global.css"
 
 const scheduleStore = useScheduleStore();
 
@@ -176,70 +177,32 @@ async function deleteSlot(id: number) {
   font-family: system-ui, sans-serif;
 }
 
-.schedule-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: #fff;
-  margin-top: 20px;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-}
-
-.schedule-table th,
-.schedule-table td {
-  padding: 12px 16px;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.schedule-table th {
-  text-align: left;
-  background: #f3f4f6;
-  font-weight: 600;
-}
-
-.schedule-table button,
-.modal button {
-  padding: 8px 16px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background 0.2s;
-}
-
 .schedule-form button,
-.schedule-table button.edit,
+.table button.edit,
 .modal button.save {
   background: #2563eb;
   color: white;
 }
 
 .schedule-form button:hover,
-.schedule-table button.edit:hover,
+.table button.edit:hover,
 .modal button.save:hover {
   background: #1e40af;
 }
 
-.schedule-table button.delete,
+.table button.delete,
 .modal button.abort {
   background: #dc2626;
   color: white;
 }
 
-.schedule-table button.delete:hover,
+.table button.delete:hover,
 .modal button.abort:hover {
   background: #991b1b;
 }
 
 .schedule-form button {
-  padding: 8px 16px;
   margin-bottom: 2px;
-  border-radius: 8px;
-  cursor: pointer;
-  border: none;
-  font-weight: 500;
-  transition: background 0.2s;
 }
 
 .schedule-form {
@@ -250,8 +213,7 @@ async function deleteSlot(id: number) {
   align-items: flex-end;
 }
 
-.schedule-form label,
-.modal label {
+.schedule-form label {
   display: flex;
   flex-direction: column;
   font-weight: 500;
@@ -262,12 +224,6 @@ async function deleteSlot(id: number) {
 .schedule-form select,
 .modal select {
   margin-top: 4px;
-  padding: 8px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  background: white;
-  cursor: pointer;
-  font-size: 14px;
 }
 
 .loading {
