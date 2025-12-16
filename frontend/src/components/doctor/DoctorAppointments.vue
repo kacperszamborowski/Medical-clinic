@@ -33,54 +33,56 @@
       </button>
     </div>
 
-    <table v-if="!appointmentsStore.loading && appointmentsStore.appointments.length" class="table">
-      <thead>
-        <tr>
-          <th>Data</th>
-          <th>Godzina</th>
-          <th>Pacjent</th>
-          <th v-if="activeTab === 'zarezerwowana'">Zakończ wizytę</th>
-          <th v-if="activeTab === 'zarezerwowana'">Odwołaj wizytę</th>
-          <th v-if="activeTab === 'zrealizowana'">Status</th>
-          <th v-if="activeTab === 'zrealizowana'">Diagnoza</th>
-          <th v-if="activeTab === 'zrealizowana'">Zalecenia</th>
-          <th v-if="activeTab === 'zrealizowana'">Recepta</th>
-          <th v-if="activeTab === 'zrealizowana'">Edytuj</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="row in filteredAppointments" :key="row.id">
-          <td>{{ row.date }}</td>
-          <td>{{ row.time }}</td>
-          <td>{{ row.patient }}</td>
-          <td v-if="activeTab === 'zarezerwowana'">
-            <button class="finish-btn" @click="openModal('finish', row.id)">
-              Zakończ wizytę
-            </button>
-          </td>
-          <td v-if="activeTab === 'zarezerwowana'">
-            <button class="cancel-btn" @click="openModal('cancel', row.id)">
-              Odwołaj wizytę
-            </button>
-          </td>
-          <td v-if="activeTab === 'zrealizowana'">{{ row.status }}</td>
-          <td v-if="activeTab === 'zrealizowana'">
-            {{ row.details?.diagnosis || "-" }}
-          </td>
-          <td v-if="activeTab === 'zrealizowana'">
-            {{ row.details?.recommendations || "-" }}
-          </td>
-          <td v-if="activeTab === 'zrealizowana'">
-            {{ row.details?.prescription ? "Tak" : "Nie" }}
-          </td>
-          <td v-if="activeTab === 'zrealizowana'">
-            <button class="edit-btn" :disabled="row.status === 'odwołana'" @click="editAppointment(row)">
-              Edytuj
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-wrapper">
+      <table v-if="!appointmentsStore.loading && appointmentsStore.appointments.length" class="table">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Godzina</th>
+            <th>Pacjent</th>
+            <th v-if="activeTab === 'zarezerwowana'">Zakończ wizytę</th>
+            <th v-if="activeTab === 'zarezerwowana'">Odwołaj wizytę</th>
+            <th v-if="activeTab === 'zrealizowana'">Status</th>
+            <th v-if="activeTab === 'zrealizowana'">Diagnoza</th>
+            <th v-if="activeTab === 'zrealizowana'">Zalecenia</th>
+            <th v-if="activeTab === 'zrealizowana'">Recepta</th>
+            <th v-if="activeTab === 'zrealizowana'">Edytuj</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="row in filteredAppointments" :key="row.id">
+            <td>{{ row.date }}</td>
+            <td>{{ row.time }}</td>
+            <td>{{ row.patient }}</td>
+            <td v-if="activeTab === 'zarezerwowana'">
+              <button class="finish-btn" @click="openModal('finish', row.id)">
+                Zakończ wizytę
+              </button>
+            </td>
+            <td v-if="activeTab === 'zarezerwowana'">
+              <button class="cancel-btn" @click="openModal('cancel', row.id)">
+                Odwołaj wizytę
+              </button>
+            </td>
+            <td v-if="activeTab === 'zrealizowana'">{{ row.status }}</td>
+            <td v-if="activeTab === 'zrealizowana'">
+              {{ row.details?.diagnosis || "-" }}
+            </td>
+            <td v-if="activeTab === 'zrealizowana'">
+              {{ row.details?.recommendations || "-" }}
+            </td>
+            <td v-if="activeTab === 'zrealizowana'">
+              {{ row.details?.prescription ? "Tak" : "Nie" }}
+            </td>
+            <td v-if="activeTab === 'zrealizowana'">
+              <button class="edit-btn" :disabled="row.status === 'odwołana'" @click="editAppointment(row)">
+                Edytuj
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <p v-if="appointmentsStore.success" class="success">
       {{ appointmentsStore.success }}

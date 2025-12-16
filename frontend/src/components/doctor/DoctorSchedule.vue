@@ -33,30 +33,32 @@
       <button type="submit">Dodaj slot</button>
     </form>
 
-    <table v-if="!scheduleStore.loading && scheduleStore.schedule.length" class="table">
-      <thead>
-        <tr>
-          <th>Dzień tygodnia</th>
-          <th>Godzina od</th>
-          <th>Godzina do</th>
-          <th>Edytuj</th>
-          <th>Usuń</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="row in scheduleStore.schedule" :key="row.id">
-          <td>{{ dayName(row.day_of_the_week) }}</td>
-          <td>{{ formatTime(row.hour_from) }}</td>
-          <td>{{ formatTime(row.hour_to) }}</td>
-          <td>
-            <button @click="openEditModal(row)" class="edit">Edytuj</button>
-          </td>
-          <td>
-            <button class="delete" @click="deleteSlot(row.id)">Usuń</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-wrapper">
+      <table v-if="!scheduleStore.loading && scheduleStore.schedule.length" class="table">
+        <thead>
+          <tr>
+            <th>Dzień tygodnia</th>
+            <th>Godzina od</th>
+            <th>Godzina do</th>
+            <th>Edytuj</th>
+            <th>Usuń</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="row in scheduleStore.schedule" :key="row.id">
+            <td>{{ dayName(row.day_of_the_week) }}</td>
+            <td>{{ formatTime(row.hour_from) }}</td>
+            <td>{{ formatTime(row.hour_to) }}</td>
+            <td>
+              <button @click="openEditModal(row)" class="edit">Edytuj</button>
+            </td>
+            <td>
+              <button class="delete" @click="deleteSlot(row.id)">Usuń</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
   </div>
   <div v-if="showModal" class="modal-backdrop">

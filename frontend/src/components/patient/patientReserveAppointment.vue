@@ -9,22 +9,24 @@
     <div v-if="scheduleStore.loading" class="loading">Ładowanie…</div>
     <div v-if="scheduleStore.error" class="error">{{ scheduleStore.error }}</div>
 
-    <table v-if="!scheduleStore.loading && scheduleStore.schedule.length" class="table">
-      <thead>
-        <tr>
-          <th>Dzień tygodnia</th>
-          <th>Godzina od</th>
-          <th>Godzina do</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="row in scheduleStore.schedule" :key="row.id">
-          <td>{{ dayName(row.day_of_the_week) }}</td>
-          <td>{{ formatTime(row.hour_from) }}</td>
-          <td>{{ formatTime(row.hour_to) }}</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-wrapper">
+      <table v-if="!scheduleStore.loading && scheduleStore.schedule.length" class="table">
+        <thead>
+          <tr>
+            <th>Dzień tygodnia</th>
+            <th>Godzina od</th>
+            <th>Godzina do</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="row in scheduleStore.schedule" :key="row.id">
+            <td>{{ dayName(row.day_of_the_week) }}</td>
+            <td>{{ formatTime(row.hour_from) }}</td>
+            <td>{{ formatTime(row.hour_to) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
   </div>
   <button v-if="!scheduleStore.error && !scheduleStore.loading" class="appointment-btn" @click="openModal" :disabled="scheduleStore.loading || scheduleStore.schedule.length === 0">
@@ -34,7 +36,7 @@
     {{ appointmentsStore.success}}
   </p>
 
-  <div v-if="showModal" class="modal-backdrop" @click="showModal = false">
+  <div v-if="showModal" class="modal-backdrop" @click="closeModal">
     <div class="modal" @click.stop>
       <h3>Umów wizytę</h3>
 
@@ -53,15 +55,15 @@
         <h4>Dostępne godziny:</h4>
 
         <div class="hours-select">
-          <label v-if="appointmentsStore.hasAppointment">
+          <p v-if="appointmentsStore.hasAppointment">
             Masz już umówioną wizytę tego dnia.
-          </label>
-          <label v-else-if="freeHours.length > 0">
+          </p>
+          <p v-else-if="freeHours.length > 0">
             Wybierz godzinę:
-          </label>
-          <label v-else>
+          </p>
+          <p v-else>
             Brak dostępnych terminów dla wybranej daty.
-          </label>
+          </p>
 
           <select v-if="freeHours.length > 0" v-model="selectedHour">
             <option disabled value="">-- wybierz godzinę --</option>
@@ -78,7 +80,7 @@
           Zatwierdź wizytę
         </button>
 
-        <button class="abort" @click="showModal = false">
+        <button class="abort" @click="closeModal">
           Zamknij
         </button>
       </div>
@@ -124,6 +126,11 @@ const showModal = ref(false);
 function openModal() {
   showModal.value = true;
   selectedDate.value = minDate
+}
+
+function closeModal() {
+  showModal.value = false;
+  selectedHour.value = "";
 }
 
 const selectedDate = ref<Date | null>(null);
@@ -193,6 +200,7 @@ function createAppointment(date: Date, hour: string) {
 
   appointmentsStore.createAppointment(doctorId, iso, hour);
   showModal.value = false;
+  selectedHour.value = ""
 }
 </script>
 

@@ -20,32 +20,34 @@
     <p v-if="appointmentsStore.loading" class="loading">Ładowanie…</p>
     <p v-if="appointmentsStore.error" class="error">{{ appointmentsStore.error }}</p>
 
-    <table v-if="!appointmentsStore.loading && appointmentsStore.patientAppointments.length" class="table">
-      <thead>
-        <tr>
-          <th>Data</th>
-          <th>Godzina</th>
-          <th>Doktor</th>
-          <th>Specjalizacja</th>
-          <th>Status</th>
-          <th>Szczegóły wizyty</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="row in filteredAppointments" :key="row.id">
-          <td>{{ row.date }}</td>
-          <td>{{ row.time }}</td>
-          <td>{{ row.doctor }}</td>
-          <td>{{ row.specialization }}</td>
-          <td>{{ row.status }}</td>
-          <td>
-            <button class="details" :disabled="row.status === 'zarezerwowana'" @click="openModal(row)">
-              Pokaż szczegóły
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-wrapper">
+      <table v-if="!appointmentsStore.loading && appointmentsStore.patientAppointments.length" class="table">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Godzina</th>
+            <th>Doktor</th>
+            <th>Specjalizacja</th>
+            <th>Status</th>
+            <th>Szczegóły wizyty</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="row in filteredAppointments" :key="row.id">
+            <td>{{ row.date }}</td>
+            <td>{{ row.time }}</td>
+            <td>{{ row.doctor }}</td>
+            <td>{{ row.specialization }}</td>
+            <td>{{ row.status }}</td>
+            <td>
+              <button class="details" :disabled="row.status === 'zarezerwowana'" @click="openModal(row)">
+                Pokaż szczegóły
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
   <div v-if="showModal" class="modal-backdrop" @click="closeModal">
     <div class="modal" @click.stop>
