@@ -21,6 +21,11 @@
     </p>
 
     <div v-if="activeTab === 'zrealizowana'" class="filters">
+      <select v-model="filterStatus">
+        <option value="">Wszystkie statusy</option>
+        <option value="zrealizowana">Zrealizowane</option>
+        <option value="odwołana">Odwołane</option>
+      </select>
       <input type="date" v-model="filterDate" />
       <input type="text" v-model="filterPatient" placeholder="Imię lub nazwisko pacjenta" />
       <button class="reset-btn" :disabled="!filterDate && !filterPatient" @click="resetFilters">
@@ -28,54 +33,56 @@
       </button>
     </div>
 
-    <table v-if="!appointmentsStore.loading && appointmentsStore.appointments.length" class="appointments-table">
-      <thead>
-        <tr>
-          <th>Data</th>
-          <th>Godzina</th>
-          <th>Pacjent</th>
-          <th v-if="activeTab === 'zarezerwowana'">Zakończ wizytę</th>
-          <th v-if="activeTab === 'zarezerwowana'">Odwołaj wizytę</th>
-          <th v-if="activeTab === 'zrealizowana'">Status</th>
-          <th v-if="activeTab === 'zrealizowana'">Diagnoza</th>
-          <th v-if="activeTab === 'zrealizowana'">Zalecenia</th>
-          <th v-if="activeTab === 'zrealizowana'">Recepta</th>
-          <th v-if="activeTab === 'zrealizowana'">Edytuj</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="row in filteredAppointments" :key="row.id">
-          <td>{{ row.date }}</td>
-          <td>{{ row.time }}</td>
-          <td>{{ row.patient }}</td>
-          <td v-if="activeTab === 'zarezerwowana'">
-            <button class="finish-btn" @click="openModal('finish', row.id)">
-              Zakończ wizytę
-            </button>
-          </td>
-          <td v-if="activeTab === 'zarezerwowana'">
-            <button class="cancel-btn" @click="openModal('cancel', row.id)">
-              Odwołaj wizytę
-            </button>
-          </td>
-          <td v-if="activeTab === 'zrealizowana'">{{ row.status }}</td>
-          <td v-if="activeTab === 'zrealizowana'">
-            {{ row.details?.diagnosis || "-" }}
-          </td>
-          <td v-if="activeTab === 'zrealizowana'">
-            {{ row.details?.recommendations || "-" }}
-          </td>
-          <td v-if="activeTab === 'zrealizowana'">
-            {{ row.details?.prescription ? "Tak" : "Nie" }}
-          </td>
-          <td v-if="activeTab === 'zrealizowana'">
-            <button class="edit-btn" :disabled="row.status === 'odwołana'" @click="editAppointment(row)">
-              Edytuj
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-wrapper">
+      <table v-if="!appointmentsStore.loading && appointmentsStore.appointments.length" class="table">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Godzina</th>
+            <th>Pacjent</th>
+            <th v-if="activeTab === 'zarezerwowana'">Zakończ wizytę</th>
+            <th v-if="activeTab === 'zarezerwowana'">Odwołaj wizytę</th>
+            <th v-if="activeTab === 'zrealizowana'">Status</th>
+            <th v-if="activeTab === 'zrealizowana'">Diagnoza</th>
+            <th v-if="activeTab === 'zrealizowana'">Zalecenia</th>
+            <th v-if="activeTab === 'zrealizowana'">Recepta</th>
+            <th v-if="activeTab === 'zrealizowana'">Edytuj</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="row in filteredAppointments" :key="row.id">
+            <td>{{ row.date }}</td>
+            <td>{{ row.time }}</td>
+            <td>{{ row.patient }}</td>
+            <td v-if="activeTab === 'zarezerwowana'">
+              <button class="finish-btn" @click="openModal('finish', row.id)">
+                Zakończ wizytę
+              </button>
+            </td>
+            <td v-if="activeTab === 'zarezerwowana'">
+              <button class="cancel-btn" @click="openModal('cancel', row.id)">
+                Odwołaj wizytę
+              </button>
+            </td>
+            <td v-if="activeTab === 'zrealizowana'">{{ row.status }}</td>
+            <td v-if="activeTab === 'zrealizowana'">
+              {{ row.details?.diagnosis || "-" }}
+            </td>
+            <td v-if="activeTab === 'zrealizowana'">
+              {{ row.details?.recommendations || "-" }}
+            </td>
+            <td v-if="activeTab === 'zrealizowana'">
+              {{ row.details?.prescription ? "Tak" : "Nie" }}
+            </td>
+            <td v-if="activeTab === 'zrealizowana'">
+              <button class="edit-btn" :disabled="row.status === 'odwołana'" @click="editAppointment(row)">
+                Edytuj
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <p v-if="appointmentsStore.success" class="success">
       {{ appointmentsStore.success }}
@@ -133,6 +140,7 @@ import {
   type AppointmentStatus,
   type DoctorAppointment,
 } from "../../stores/appointments";
+import "../../style/global.css"
 
 type ModalMode = "finish" | "cancel";
 
@@ -153,6 +161,7 @@ const isEditing = ref(false);
 
 const filterDate = ref("");
 const filterPatient = ref("");
+const filterStatus = ref("");
 
 const filteredAppointments = computed(() => {
   if (activeTab.value !== "zrealizowana") {
@@ -161,16 +170,16 @@ const filteredAppointments = computed(() => {
 
   return appointmentsStore.appointments.filter((a) => {
     const matchesDate = !filterDate.value || a.date === filterDate.value;
-    const matchesPatient =
-      !filterPatient.value ||
-      a.patient.toLowerCase().includes(filterPatient.value.toLowerCase());
-    return matchesDate && matchesPatient;
+    const matchesPatient = !filterPatient.value || a.patient.toLowerCase().includes(filterPatient.value.toLowerCase());
+    const matchesStatus = !filterStatus.value || a.status === filterStatus.value;
+    return matchesDate && matchesPatient && matchesStatus;
   });
 });
 
 function resetFilters() {
   filterDate.value = "";
   filterPatient.value = "";
+  filterStatus.value = "";
 }
 
 function changeTab(tab: AppointmentStatus) {
@@ -257,28 +266,12 @@ onMounted(() => {
 <style scoped>
 .doctor-appointments {
   max-width: 1200px;
-  font-family: system-ui, sans-serif;
 }
 
 .tabs {
   display: flex;
   gap: 8px;
   margin: 15px 0;
-}
-
-.tabs button,
-.finish-btn,
-.cancel-btn,
-.edit-btn,
-.modal button,
-.reset-btn {
-  padding: 8px 16px;
-  border-radius: 8px;
-  border: none;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.2s;
 }
 
 .tabs button,
@@ -322,19 +315,6 @@ onMounted(() => {
   cursor: default;
 }
 
-.filters {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 12px;
-}
-
-.filters input {
-  padding: 8px 12px;
-  border-radius: 6px;
-  border: 1px solid #d1d5db;
-  font-size: 14px;
-}
-
 .reset-btn {
   background: #6b7280;
   color: #fff;
@@ -342,103 +322,5 @@ onMounted(() => {
 
 .reset-btn:hover {
   background: #4b5563;
-}
-
-.appointments-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: #fff;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-}
-
-.appointments-table th,
-.appointments-table td {
-  padding: 12px 16px;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.appointments-table th {
-  background: #f3f4f6;
-  font-weight: 600;
-  text-align: left;
-}
-
-.loading,
-.error,
-.empty,
-.success {
-  margin-top: 10px;
-}
-
-.error {
-  color: red;
-}
-
-.empty,
-.loading {
-  color: #555;
-}
-
-.success {
-  color: green;
-}
-
-.modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.45);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.modal {
-  background: #fff;
-  width: 100%;
-  max-width: 420px;
-  border-radius: 12px;
-  padding: 24px;
-  margin-bottom: 50px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-}
-
-.modal h3 {
-  font-size: 18px;
-  font-weight: 600;
-  color: #111827;
-  margin: 0;
-}
-
-.modal label {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  font-size: 14px;
-}
-
-.modal textarea {
-  padding: 8px;
-  border-radius: 6px;
-  border: 1px solid #d1d5db;
-  resize: vertical;
-}
-
-.modal .checkbox {
-  flex-direction: row;
-  align-items: center;
-  gap: 8px;
-}
-
-.modal-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 10px;
 }
 </style>

@@ -9,6 +9,7 @@ import PatientDashboard from "../components/patient/PatientDashboard.vue";
 import PatientProfile from "../components/patient/PatientProfile.vue";
 import PatientDoctorList from "../components/patient/PatientDoctorList.vue";
 import PatientReserveAppointment from "../components/patient/PatientReserveAppointment.vue";
+import PatientAppointments from "../components/patient/PatientAppointments.vue";
 import DoctorDashboard from "../components/doctor/DoctorDashboard.vue";
 import DoctorAppointments from "../components/doctor/DoctorAppointments.vue";
 import DoctorProfile from "../components/doctor/DoctorProfile.vue";
@@ -29,6 +30,7 @@ const routes = [
       { path: "profile", component: () => PatientProfile },
       { path: "doctor-list", component: () => PatientDoctorList },
       { path: "doctor-list/:id", component: () => PatientReserveAppointment },
+      { path: "appointments", component: () => PatientAppointments },
     ]
   },
 

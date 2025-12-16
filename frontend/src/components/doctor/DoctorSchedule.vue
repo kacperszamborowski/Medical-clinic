@@ -3,8 +3,8 @@
     <h2>Harmonogram pracy</h2>
     <p>Ustal lub edytuj swój harmonogram</p>
 
-    <div v-if="scheduleStore.loading" class="loading">Ładowanie…</div>
-    <div v-if="scheduleStore.error" class="error">{{ scheduleStore.error }}</div>
+    <p v-if="scheduleStore.loading" class="loading">Ładowanie…</p>
+    <p v-if="scheduleStore.error" class="error">{{ scheduleStore.error }}</p>
 
     <form v-if="availableDays.length > 0 && dayOfTheWeek != 0" @submit.prevent="onSubmit" class="schedule-form">
       <label>
@@ -33,30 +33,32 @@
       <button type="submit">Dodaj slot</button>
     </form>
 
-    <table v-if="!scheduleStore.loading && scheduleStore.schedule.length" class="schedule-table">
-      <thead>
-        <tr>
-          <th>Dzień tygodnia</th>
-          <th>Godzina od</th>
-          <th>Godzina do</th>
-          <th>Edytuj</th>
-          <th>Usuń</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="row in scheduleStore.schedule" :key="row.id">
-          <td>{{ dayName(row.day_of_the_week) }}</td>
-          <td>{{ formatTime(row.hour_from) }}</td>
-          <td>{{ formatTime(row.hour_to) }}</td>
-          <td>
-            <button @click="openEditModal(row)" class="edit">Edytuj</button>
-          </td>
-          <td>
-            <button class="delete" @click="deleteSlot(row.id)">Usuń</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-wrapper">
+      <table v-if="!scheduleStore.loading && scheduleStore.schedule.length" class="table">
+        <thead>
+          <tr>
+            <th>Dzień tygodnia</th>
+            <th>Godzina od</th>
+            <th>Godzina do</th>
+            <th>Edytuj</th>
+            <th>Usuń</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="row in scheduleStore.schedule" :key="row.id">
+            <td>{{ dayName(row.day_of_the_week) }}</td>
+            <td>{{ formatTime(row.hour_from) }}</td>
+            <td>{{ formatTime(row.hour_to) }}</td>
+            <td>
+              <button @click="openEditModal(row)" class="edit">Edytuj</button>
+            </td>
+            <td>
+              <button class="delete" @click="deleteSlot(row.id)">Usuń</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
   </div>
   <div v-if="showModal" class="modal-backdrop">
@@ -79,8 +81,8 @@
           <option v-for="hour in hoursTo" :key="hour" :value="hour">{{ hour }}</option>
         </select>
       </label>
-      <button class = "save" @click="saveEdit">Zapisz</button>
-      <button class = "abort" @click="showModal=false">Anuluj</button>
+      <button class="save" @click="saveEdit">Zapisz</button>
+      <button class="abort" @click="showModal = false">Anuluj</button>
     </div>
   </div>
 </template>
@@ -88,6 +90,7 @@
 <script setup lang="ts">
 import { ref, onMounted, computed, watch } from "vue";
 import { useScheduleStore } from "../../stores/schedule";
+import "../../style/global.css"
 
 const scheduleStore = useScheduleStore();
 
@@ -114,8 +117,8 @@ watch(availableDays, (newDays) => {
 });
 
 
-const hoursFrom = ["06:00","07:00","08:00","09:00","10:00","11:00","12:00","13:00","14:00"];
-const hoursTo   = ["14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"];
+const hoursFrom = ["06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00"];
+const hoursTo = ["14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00"];
 
 onMounted(() => {
   scheduleStore.fetchMySchedule();
@@ -130,7 +133,7 @@ function formatTime(t: string) {
 }
 
 async function onSubmit() {
-  if(scheduleStore.loading) return;
+  if (scheduleStore.loading) return;
   await scheduleStore.createSchedule(dayOfTheWeek.value, hourFrom.value, hourTo.value);
 }
 
@@ -145,14 +148,14 @@ const modalDays = ref<{ day: string; index: number }[]>([]);
 function openEditModal(row: any) {
   editingRow.value = row;
   editDay.value = row.day_of_the_week;
-  editFrom.value = row.hour_from.slice(0,5);
-  editTo.value = row.hour_to.slice(0,5);
+  editFrom.value = row.hour_from.slice(0, 5);
+  editTo.value = row.hour_to.slice(0, 5);
   modalDays.value = [...availableDays.value];
 
   if (!modalDays.value.some(d => d.index === editDay.value)) {
     modalDays.value.push({ day: dayName(editDay.value), index: editDay.value });
   }
-  modalDays.value.sort((a,b) => a.index - b.index);
+  modalDays.value.sort((a, b) => a.index - b.index);
 
   showModal.value = true;
 }
@@ -173,69 +176,45 @@ async function deleteSlot(id: number) {
 <style scoped>
 .doctor-schedule {
   max-width: 800px;
-  margin-left: 20px;
-  font-family: system-ui, sans-serif;
 }
 
-.schedule-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: white;
-  margin-top: 20px;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-}
-
-.schedule-table th,
-.schedule-table td {
-  padding: 12px 16px;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.schedule-table th {
-  text-align: left;
-  background: #dfdfdf;
-  font-weight: 600;
-}
-
-.schedule-table button, .modal button {
-  padding: 4px 10px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-  font-size: 13px;
-  transition: background 0.2s;
-}
-
-.schedule-table button.edit, .modal button.save {
+.schedule-form button,
+.table button.edit,
+.modal button.save {
   background: #2563eb;
   color: white;
 }
 
-.schedule-table button.edit:hover, .modal button.save:hover {
+.schedule-form button:hover,
+.table button.edit:hover,
+.modal button.save:hover {
   background: #1e40af;
 }
 
-.schedule-table button.delete, .modal button.abort{
+.table button.delete,
+.modal button.abort {
   background: #dc2626;
   color: white;
 }
 
-.schedule-table button.delete:hover, .modal button.abort:hover {
+.table button.delete:hover,
+.modal button.abort:hover {
   background: #991b1b;
 }
 
+.schedule-form button {
+  margin-bottom: 2px;
+}
 
 .schedule-form {
   display: flex;
-  gap: 16px;
+  gap: 12px;
   margin-top: 20px;
   flex-wrap: wrap;
   align-items: flex-end;
 }
 
-.schedule-form label, .modal label {
+.schedule-form label {
   display: flex;
   flex-direction: column;
   font-weight: 500;
@@ -243,36 +222,9 @@ async function deleteSlot(id: number) {
   color: #0f172a;
 }
 
-.schedule-form select, .modal select {
+.schedule-form select,
+.modal select {
   margin-top: 4px;
-  padding: 6px 8px;
-  border: 1px solid #cbd5e1;
-  border-radius: 6px;
-  background: white;
-  cursor: pointer;
-  font-size: 14px;
-  transition: border 0.2s, box-shadow 0.2s;
-}
-
-.schedule-form select:focus, .modal select:focus {
-  outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 2px rgba(59,130,246,0.2);
-}
-
-.schedule-form button {
-  padding: 8px 16px;
-  border-radius: 6px;
-  cursor: pointer;
-  background: #0f172a;
-  color: white;
-  border: none;
-  font-weight: 500;
-  transition: background 0.2s;
-}
-
-.schedule-form button:hover {
-  background: #1e293b;
 }
 
 .loading {
@@ -282,25 +234,29 @@ async function deleteSlot(id: number) {
 
 .error {
   margin-top: 10px;
-  color :red 
+  color: red;
 }
 
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0, 0, 0, 0.45);
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000;
 }
 
 .modal {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  min-width: 300px;
+  background: #fff;
+  width: 100%;
+  max-width: 420px;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 50px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
 }
 </style>
