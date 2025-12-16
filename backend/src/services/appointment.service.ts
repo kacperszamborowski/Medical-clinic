@@ -29,6 +29,7 @@ export class AppointmentService {
                 date: true,
                 time: true,
                 status: true,
+                cancel_reason: true,
                 doctor: {
                     select: {
                         specialization: true,
@@ -49,7 +50,7 @@ export class AppointmentService {
                 }
             }
         });
-
+        
         return appointments.map(a => ({
             id: a.id,
             date: a.date,
@@ -57,6 +58,7 @@ export class AppointmentService {
             doctor: `${a.doctor.user.firstname} ${a.doctor.user.lastname}`,
             specialization: a.doctor.specialization,
             status: a.status,
+            cancelReason: a.cancel_reason,
             details: a.appointmentDetails
         }));
     }

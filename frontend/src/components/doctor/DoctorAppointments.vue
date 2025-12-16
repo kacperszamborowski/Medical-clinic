@@ -258,7 +258,6 @@ onMounted(() => {
 <style scoped>
 .doctor-appointments {
   max-width: 1200px;
-  font-family: system-ui, sans-serif;
 }
 
 .tabs {

@@ -230,7 +230,6 @@ function createAppointment(date: Date, hour: string) {
 .doctor-schedule {
   max-width: 800px;
   margin-top: 20px;
-  font-family: system-ui, sans-serif;
 }
 
 .hours-select {

@@ -3,8 +3,8 @@
     <h2>Harmonogram pracy</h2>
     <p>Ustal lub edytuj swój harmonogram</p>
 
-    <div v-if="scheduleStore.loading" class="loading">Ładowanie…</div>
-    <div v-if="scheduleStore.error" class="error">{{ scheduleStore.error }}</div>
+    <p v-if="scheduleStore.loading" class="loading">Ładowanie…</p>
+    <p v-if="scheduleStore.error" class="error">{{ scheduleStore.error }}</p>
 
     <form v-if="availableDays.length > 0 && dayOfTheWeek != 0" @submit.prevent="onSubmit" class="schedule-form">
       <label>
@@ -174,7 +174,6 @@ async function deleteSlot(id: number) {
 <style scoped>
 .doctor-schedule {
   max-width: 800px;
-  font-family: system-ui, sans-serif;
 }
 
 .schedule-form button,
