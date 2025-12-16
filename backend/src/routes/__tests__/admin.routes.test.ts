@@ -1,8 +1,8 @@
 import request from 'supertest';
 import app from '../../app';
-import { prisma } from '../../db/prisma';
+import { Response } from 'superagent/lib/node';
 
-let auth: import("superagent/lib/node/response");
+let auth: Response;
 
 beforeEach(async () => {
     auth = await request(app)
@@ -82,5 +82,40 @@ describe("Integration tests for admin privileges", () => {
         expect(response.body[0]).toHaveProperty("diagnosis");
         expect(response.body[0]).toHaveProperty("recommendations");
         expect(response.body[0]).toHaveProperty("prescription");
+    });
+
+    it("GET should return 5x status 403 for non-admin user", async () => {
+        const auth = await request(app)
+        .post('/auth/login')
+        .send({
+            email: 'jan.kowalski@example.com',
+            password: 'pass123'
+        });
+
+        let responses: Response[] = [];
+
+        responses.push(await request(app)
+        .get("/users/table")
+        .set("Authorization", "Bearer " + auth.body.token));
+
+        responses.push(await request(app)
+        .get("/schedule/table")
+        .set("Authorization", "Bearer " + auth.body.token));
+
+        responses.push(await request(app)
+        .get("/doctors/table")
+        .set("Authorization", "Bearer " + auth.body.token));    
+
+        responses.push(await request(app)
+        .get("/appointments/table")
+        .set("Authorization", "Bearer " + auth.body.token));
+
+        responses.push(await request(app)
+        .get("/appointments/details/table")
+        .set("Authorization", "Bearer " + auth.body.token));
+
+        responses.forEach(res => {
+            expect(res.status).toBe(403);
+        });
     });
 })

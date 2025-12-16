@@ -7,7 +7,6 @@ export class UserController {
     static async getUsersTable(req: AuthRequest, res: Response) {
         try {
             if (req.user?.role != UserRole.admin) {
-                console.log(req.user?.role);
                 res.status(403).json({ message: "Forbidden" });
                 return;
             }
