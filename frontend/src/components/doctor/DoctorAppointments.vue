@@ -21,6 +21,11 @@
     </p>
 
     <div v-if="activeTab === 'zrealizowana'" class="filters">
+      <select v-model="filterStatus">
+        <option value="">Wszystkie statusy</option>
+        <option value="zrealizowana">Zrealizowane</option>
+        <option value="odwołana">Odwołane</option>
+      </select>
       <input type="date" v-model="filterDate" />
       <input type="text" v-model="filterPatient" placeholder="Imię lub nazwisko pacjenta" />
       <button class="reset-btn" :disabled="!filterDate && !filterPatient" @click="resetFilters">
@@ -154,6 +159,7 @@ const isEditing = ref(false);
 
 const filterDate = ref("");
 const filterPatient = ref("");
+const filterStatus = ref("");
 
 const filteredAppointments = computed(() => {
   if (activeTab.value !== "zrealizowana") {
@@ -162,16 +168,16 @@ const filteredAppointments = computed(() => {
 
   return appointmentsStore.appointments.filter((a) => {
     const matchesDate = !filterDate.value || a.date === filterDate.value;
-    const matchesPatient =
-      !filterPatient.value ||
-      a.patient.toLowerCase().includes(filterPatient.value.toLowerCase());
-    return matchesDate && matchesPatient;
+    const matchesPatient = !filterPatient.value || a.patient.toLowerCase().includes(filterPatient.value.toLowerCase());
+    const matchesStatus = !filterStatus.value || a.status === filterStatus.value;
+    return matchesDate && matchesPatient && matchesStatus;
   });
 });
 
 function resetFilters() {
   filterDate.value = "";
   filterPatient.value = "";
+  filterStatus.value = "";
 }
 
 function changeTab(tab: AppointmentStatus) {
@@ -305,12 +311,6 @@ onMounted(() => {
 .modal button.confirm:disabled {
   background: #aaaaaa;
   cursor: default;
-}
-
-.filters {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 12px;
 }
 
 .reset-btn {

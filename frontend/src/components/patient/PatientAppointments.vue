@@ -69,6 +69,7 @@
 <script setup lang="ts">
 import { onMounted, computed, ref } from 'vue';
 import { useAppointmentsStore, type PatientAppointment } from '../../stores/appointments';
+import "../../style/global.css"
 
 const appointmentsStore = useAppointmentsStore();
 const showModal = ref(false)
@@ -129,17 +130,6 @@ onMounted(() => {
 <style scoped>
 .patient-appointments {
   max-width: 1200px;
-}
-
-.filters {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 12px;
-  margin-top: 12px;
-}
-
-.filters select {
-  max-width: 175px;
 }
 
 .reset-btn {

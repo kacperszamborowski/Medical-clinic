@@ -143,3 +143,14 @@ textarea {
 .success {
   color: green;
 }
+
+.filters {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+  margin-top: 12px;
+}
+
+.filters select {
+  max-width: 175px;
+}
