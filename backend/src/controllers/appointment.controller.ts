@@ -1,10 +1,25 @@
 import type { Request, Response } from "express";
 import { AppointmentService } from "../services/appointment.service";
-import { AppointmentStatus } from "@prisma/client";
+import { AppointmentStatus, UserRole } from "@prisma/client";
 import { AuthRequest } from "../middleware/auth.middleware";
 import { UserService } from "../services/user.service";
 
 export class AppointmentController {
+    static async getAppointmentsTable(req: AuthRequest, res: Response) {
+        try {
+            if (req.user?.role != UserRole.admin) {
+                res.status(403).json({ message: "Forbidden" });
+                return;
+            }
+            
+            const appointments = await AppointmentService.getAppointmentsTable();
+            res.json(appointments);
+        }
+        catch (error: any) {
+            res.status(500).json({ message: error.message });
+        }
+    } 
+
     static async getPatientHistory(req: AuthRequest, res: Response) {
         try {
             const patientId = Number(req.user?.userId);

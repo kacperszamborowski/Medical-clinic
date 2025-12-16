@@ -1,10 +1,18 @@
 import type { Request, Response } from "express";
 import { UserService } from "../services/user.service";
+import { AuthRequest } from "../middleware/auth.middleware";
+import { UserRole } from "@prisma/client";
 
 export class UserController {
-    static async getAllUsers(req: Request, res: Response) {
+    static async getUsersTable(req: AuthRequest, res: Response) {
         try {
-            const users = await UserService.getAllUsers();
+            if (req.user?.role != UserRole.admin) {
+                console.log(req.user?.role);
+                res.status(403).json({ message: "Forbidden" });
+                return;
+            }
+            
+            const users = await UserService.getUsersTable();
             res.json(users);
         }
         catch (error: any) {

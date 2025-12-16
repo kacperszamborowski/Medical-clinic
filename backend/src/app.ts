@@ -6,7 +6,6 @@ import scheduleRoutes from "./routes/schedule.routes";
 import appointmentRoutes from "./routes/appointment.routes";
 import appointmentDetailsRoutes from "./routes/appointment.details.routes";
 import doctorRoutes from "./routes/doctor.routes";
-// import patientRoutes from "./routes/patient.routes"
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -22,6 +21,5 @@ app.use("/schedule", scheduleRoutes);
 app.use("/appointments", appointmentRoutes);
 app.use("/appointments/details", appointmentDetailsRoutes)
 app.use("/doctors", doctorRoutes)
-// app.use("/api/patients", patientRoutes)
 
 export default app;

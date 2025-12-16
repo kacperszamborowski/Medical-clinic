@@ -1,7 +1,7 @@
 import { prisma } from "../db/prisma";
 
 export class UserService {
-    static async getAllUsers() {
+    static async getUsersTable() {
         return await prisma.user.findMany();
     }
 
