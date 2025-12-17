@@ -4,6 +4,7 @@ import { authMiddleware } from "../middleware/auth.middleware";
 
 const router: Router = Router();
 
+router.get("/table", authMiddleware, AppointmentController.getAppointmentsTable)
 router.get("/history", authMiddleware, AppointmentController.getPatientHistory);
 router.get("/visits-upcoming", authMiddleware, AppointmentController.getDoctorReservedAppointments);
 router.get("/visits-history", authMiddleware, AppointmentController.getDoctorHistory);

@@ -3,8 +3,24 @@ import { AppointmentService } from "../services/appointment.service";
 import { AuthRequest } from "../middleware/auth.middleware";
 import { UserService } from "../services/user.service";
 import { AppointmentDetailsService } from "../services/appointment.details.service";
+import { UserRole } from "@prisma/client";
 
 export class AppointmentDetailsController {
+    static async getAppointmentDetailsTable(req: AuthRequest, res: Response) {
+        try {
+            if (req.user?.role != UserRole.admin) {
+                res.status(403).json({ message: "Forbidden" });
+                return;
+            }
+            
+            const details = await AppointmentDetailsService.getAppointmentDetailsTable();
+            res.json(details);
+        }
+        catch (error: any) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+
     static async createAppointmentDetails(req: AuthRequest, res: Response) {
         try {
             const doctorId = await UserService.getDoctorIdByUserId(Number(req.user?.userId));

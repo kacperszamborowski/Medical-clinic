@@ -1,6 +1,10 @@
 import { prisma } from "../db/prisma";
 
 export class ScheduleService {
+    static async getSchedulesTable() {
+        return await prisma.schedule.findMany();
+    }
+
     static async getSchedule(doctorId: number) {
         const schedule = await prisma.schedule.findMany({
             where: {

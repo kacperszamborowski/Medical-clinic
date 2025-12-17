@@ -4,9 +4,17 @@ import { prisma } from "../../db/prisma";
 
 describe("Integration tests for /schedule", () => {
     it("GET /schedule?doctorId=2 should return 2nd doctor's schedule", async () => {
+        const auth = await request(app)
+        .post('/auth/login')
+        .send({
+            email: 'jan.kowalski@example.com',
+            password: 'pass123'
+        });
+        
         const response = await request(app)
         .get("/schedule")
-        .query({ doctorId: 2 });
+        .query({ doctorId: 2 })
+        .set("Authorization", "Bearer " + auth.body.token);
 
         expect(response.status).toBe(200);
         expect(Array.isArray(response.body)).toBe(true);

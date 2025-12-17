@@ -12,6 +12,12 @@ enum AppointmentStatus {
   odwołana
 }
 
+enum UserRole {
+  admin
+  patient
+  doctor
+}
+
 model User {
   id           Int           @id @default(autoincrement())
   firstname    String
@@ -19,9 +25,9 @@ model User {
   birth_date   DateTime      @db.Date
   email        String        @unique
   password     String
-  role         String
+  role         UserRole
   created_at   DateTime      @default(now())
-  verified     Boolean       @default(false)
+  verified     Boolean       @default(true)
   doctor       Doctor?
   appointments Appointment[]
 }
