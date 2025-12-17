@@ -15,20 +15,11 @@ class AuthController {
         }
     }
 
-  async register(req: Request, res: Response) {
-    try {
-      const { firstname, lastname, birth_date, email, password } = req.body.payload;
-
-      const user = await authService.register(firstname, lastname, birth_date, email, password);
-      res.status(201).json(user);
-    } 
-    catch (e: any) {
-      res.status(400).json({ error: e.message });
     async register(req: Request, res: Response) {
         try {
-            const { firstname, lastname, birth_date, email, password, role } = req.body;
+            const { firstname, lastname, birth_date, email, password } = req.body.payload;
 
-            const user = await authService.register(firstname, lastname, birth_date, email, password, role);
+            const user = await authService.register(firstname, lastname, birth_date, email, password);
             res.status(201).json(user);
         }
         catch (e: any) {
