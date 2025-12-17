@@ -217,12 +217,14 @@ textarea {
   margin-top: 10px;
 }
 
-.password-card button.confirm {
+.password-card button.confirm,
+.dashboard-card button {
   background: #2563eb;
   color: white;
 }
 
-.password-card button.confirm:hover {
+.password-card button.confirm:hover,
+.dashboard-card button:hover {
   background: #1e40af;
 }
 
@@ -247,13 +249,4 @@ textarea {
 .info {
   margin-bottom: 12px;
   color: #111827;
-}
-
-.dashboard-card button {
-  background: #2563eb;
-  color: white;
-}
-
-.dashboard-card button:hover {
-  background: #1e40af;
 }
