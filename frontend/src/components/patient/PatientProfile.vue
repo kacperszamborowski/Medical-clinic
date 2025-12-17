@@ -14,23 +14,23 @@
     <div v-if="usersStore.patient && !usersStore.error && !usersStore.loading" class="profile-card">
       <div class="row">
         <span class="label">Imię</span>
-        <span class="value">{{ usersStore.patient!.firstname }}</span>
+        <span class="value">{{ usersStore.patient.firstname }}</span>
       </div>
 
       <div class="row">
         <span class="label">Nazwisko</span>
-        <span class="value">{{ usersStore.patient!.lastname }}</span>
+        <span class="value">{{ usersStore.patient.lastname }}</span>
       </div>
 
       <div class="row">
         <span class="label">Email</span>
-        <span class="value">{{ usersStore.patient!.email }}</span>
+        <span class="value">{{ usersStore.patient.email }}</span>
       </div>
 
       <div class="row">
         <span class="label">Data urodzenia</span>
         <span class="value">
-          {{ usersStore.patient!.birth_date }}
+          {{ usersStore.patient.birth_date }}
         </span>
       </div>
     </div>
