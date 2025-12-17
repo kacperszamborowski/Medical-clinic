@@ -5,6 +5,7 @@ import { AppointmentDetailsController } from "../controllers/appointment.details
 
 const router: Router = Router();
 
+router.get("/table", authMiddleware, AppointmentDetailsController.getAppointmentDetailsTable)
 router.post("/create", authMiddleware, AppointmentDetailsController.createAppointmentDetails);
 router.put("/update", authMiddleware, AppointmentDetailsController.updateAppointmentDetails);
 export default router;

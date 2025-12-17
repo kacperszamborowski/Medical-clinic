@@ -1,24 +1,46 @@
 import request from 'supertest';
 import app from '../../app';
 
-describe('Integration tests for /users', () => {
-  it('GET should return all users', async () => {
-    const response = await request(app).get('/users');
+describe("Integration test for /users", () => {
+    it("GET /users/me should return user data", async () => {
+        const auth = await request(app)
+        .post('/auth/login')
+        .send({
+            email: 'jan.kowalski@example.com',
+            password: 'pass123'
+        });
 
-    expect(response.status).toBe(200);
-    expect(Array.isArray(response.body)).toBe(true);
+        const response = await request(app)
+        .get("/users/me")
+        .set("Authorization", "Bearer " + auth.body.token);
 
-    expect(response.body[0]).toHaveProperty('id');
-    expect(response.body[0]).toHaveProperty('firstname');
-    expect(response.body[0]).toHaveProperty('lastname');
-    expect(response.body[0]).toHaveProperty('birth_date');
-    expect(response.body[0]).toHaveProperty('email');
-    expect(response.body[0]).toHaveProperty('password');
-    expect(response.body[0]).toHaveProperty('role');
-    expect(response.body[0]).toHaveProperty('created_at');
-    expect(response.body[0]).toHaveProperty('verified');
+        expect(response.status).toBe(200);
+        expect(response.body).toHaveProperty("firstname");
+        expect(response.body).toHaveProperty("role");
+        expect(response.body).toHaveProperty("created_at");
+        expect(response.body.email).toEqual("jan.kowalski@example.com");
+    });
 
-    expect(response.body[4].email).toEqual("michal.kaminski@example.com");
-    expect(response.body[4].birth_date).toEqual(new Date("1982-06-08").toISOString());
-  });
-});
+    it("GET /users/me should return doctor data", async () => {
+        const auth = await request(app)
+        .post('/auth/login')
+        .send({
+            email: 'anna.nowak@example.com',
+            password: 'pass123'
+        });
+
+        const response = await request(app)
+        .get("/users/me")
+        .set("Authorization", "Bearer " + auth.body.token);
+
+        expect(response.status).toBe(200);
+        expect(response.body).toHaveProperty("firstname");
+        expect(response.body).toHaveProperty("role");
+        expect(response.body).toHaveProperty("created_at");
+        expect(response.body).toHaveProperty("specialization");
+        expect(response.body).toHaveProperty("license_number");
+        expect(response.body.email).toEqual("anna.nowak@example.com");
+        expect(response.body.specialization).toEqual("Kardiolog");
+        expect(response.body.license_number).toEqual("LEK12345");
+    });
+})

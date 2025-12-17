@@ -4,7 +4,8 @@ import { authMiddleware } from "../middleware/auth.middleware";
 
 const router: Router = Router();
 
-router.get("/", ScheduleController.getSchedule);
+router.get("/", authMiddleware, ScheduleController.getSchedule);
+router.get("/table", authMiddleware, ScheduleController.getSchedulesTable);
 router.get("/my", authMiddleware, ScheduleController.getMySchedule);
 router.post("/my/create", authMiddleware, ScheduleController.createSchedule);
 router.put("/my/edit", authMiddleware, ScheduleController.updateSchedule);

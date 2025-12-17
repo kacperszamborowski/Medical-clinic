@@ -2,9 +2,25 @@ import type { Request, Response } from "express";
 import { ScheduleService } from "../services/schedule.service";
 import { AuthRequest } from "../middleware/auth.middleware";
 import { UserService } from "../services/user.service";
+import { UserRole } from "@prisma/client";
 
 export class ScheduleController {
-    static async getSchedule(req: Request, res: Response) {
+    static async getSchedulesTable(req: AuthRequest, res: Response) {
+        try {
+            if (req.user?.role != UserRole.admin) {
+                res.status(403).json({ message: "Forbidden" });
+                return;
+            }
+            
+            const schedules = await ScheduleService.getSchedulesTable();
+            res.json(schedules);
+        }
+        catch (error: any) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+
+    static async getSchedule(req: AuthRequest, res: Response) {
         try {
             const doctorId = Number(req.query.doctorId);
             const schedule = await ScheduleService.getSchedule(doctorId);

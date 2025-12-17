@@ -5,5 +5,6 @@ import { authMiddleware } from "../middleware/auth.middleware";
 const router: Router = Router();
 
 router.get("/", authMiddleware, DoctorController.getAllDoctors);
-// router.post("/", DoctorController.createDoctor);
+router.get("/table", authMiddleware, DoctorController.getDoctorsTable);
+router.post("/create", authMiddleware, DoctorController.createDoctor);
 export default router;

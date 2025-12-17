@@ -1,6 +1,10 @@
 import { prisma } from "../db/prisma";
 
 export class AppointmentDetailsService {
+    static async getAppointmentDetailsTable() {
+        return await prisma.appointment_details.findMany();
+    }
+
     static async createAppointmentDetails(appointmentId: number, diagnosis: string, recommendations: string, prescription: boolean) {
         return await prisma.appointment_details.create({
             data: {

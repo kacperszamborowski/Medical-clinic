@@ -67,7 +67,7 @@ describe("Integration tests for /appointments", () => {
         expect(response.body).toBe(false);
     });
 
-    it("GET /appointments/visits should return logged in doctor's reserved appointments", async () => {
+    it("GET /appointments/visits-upcoming should return logged in doctor's upcoming appointments", async () => {
         const auth = await request(app)
         .post('/auth/login')
         .send({
@@ -76,8 +76,7 @@ describe("Integration tests for /appointments", () => {
         });
         
         const response = await request(app)
-        .get("/appointments/visits")
-        .query({ status: "zarezerwowana" })
+        .get("/appointments/visits-upcoming")
         .set("Authorization", "Bearer " + auth.body.token);
 
         expect(response.status).toBe(200);
@@ -88,7 +87,7 @@ describe("Integration tests for /appointments", () => {
         expect(response.body[0].status).toEqual(AppointmentStatus.zarezerwowana);
     });
 
-    it("GET /appointments/visits should return logged in doctor's realized appointments", async () => {
+    it("GET /appointments/visits-history should return logged in doctor's realized appointments", async () => {
         const auth = await request(app)
         .post('/auth/login')
         .send({
@@ -97,8 +96,7 @@ describe("Integration tests for /appointments", () => {
         });
         
         const response = await request(app)
-        .get("/appointments/visits")
-        .query({ status: "zrealizowana" })
+        .get("/appointments/visits-history")
         .set("Authorization", "Bearer " + auth.body.token);
 
         expect(response.status).toBe(200);
