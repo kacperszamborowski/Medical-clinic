@@ -3,36 +3,9 @@ import { signAccessToken } from "../utils/jwt";
 import { prisma } from '../db/prisma';
 
 class AuthService {
-  async login(email: string, password: string) {
-    const user = await prisma.user.findUnique({ where: { email } });
-    if (!user) throw new Error("User not found");
-
-    const match = await bcrypt.compare(password, user.password);
-    if (!match) throw new Error("Invalid password");
-
-    // token
-    const token = signAccessToken({ userId: user.id, email: user.email, role: user.role });
-
-    return { token, user };
-  }
-
-  async register(
-    firstname: string,
-    lastname: string,
-    birth_date: string,
-    email: string, 
-    password: string ) {
-    const hashed = await bcrypt.hash(password, 10);
-
-    const user = await prisma.user.create({
-      data: { firstname, lastname, birth_date, email, password: hashed, role: "patient" }
-    });
-
-    return user;
-  }
     async login(email: string, password: string) {
-        const user = await prisma.user.findUnique({ 
-            where: { email } 
+        const user = await prisma.user.findUnique({
+            where: { email }
         });
         if (!user) {
             throw new Error("User not found");
@@ -43,10 +16,10 @@ class AuthService {
             throw new Error("Invalid password");
         }
 
-        const token = signAccessToken({ 
-            userId: user.id, 
-            email: user.email, 
-            role: user.role 
+        const token = signAccessToken({
+            userId: user.id,
+            email: user.email,
+            role: user.role
         });
 
         return { token, user };
@@ -57,19 +30,11 @@ class AuthService {
         lastname: string,
         birth_date: string,
         email: string,
-        password: string,
-        role: string) {
+        password: string) {
         const hashed = await bcrypt.hash(password, 10);
 
         const user = await prisma.user.create({
-            data: { 
-                firstname, 
-                lastname, 
-                birth_date, 
-                email, 
-                password: hashed, 
-                role 
-            }
+            data: { firstname, lastname, birth_date, email, password: hashed, role: "patient" }
         });
 
         return user;
