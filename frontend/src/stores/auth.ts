@@ -37,6 +37,18 @@ export const useAuthStore = defineStore("auth", {
       return this.user!;
     },
 
+    async register(payload: {
+      firstname: string,
+      lastname: string,
+      birth_date: string,
+      email: string,
+      password: string,
+    }) {
+      await axios.post(`${API_URL}/auth/register`, {
+        payload
+      });
+    },
+
     logout() {
       this.token = "";
       this.user = null;

@@ -17,9 +17,11 @@ import DoctorSchedule from "../components/doctor/DoctorSchedule.vue";
 import AdminDashboard from "../components/admin/AdminDashboard.vue";
 import AdminSettings from "../components/admin/AdminSettings.vue";
 import AdminTables from "../components/admin/AdminTables.vue";
+import RegisterView from "../views/RegisterView.vue";
 
 const routes = [
   { path: "/", name: "login", component: LoginForm },
+  { path: "/register", name: "register", component: RegisterView},
 
   {
     path: "/patient",

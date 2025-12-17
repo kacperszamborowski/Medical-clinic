@@ -3,7 +3,7 @@
     <h2>Moje wizyty</h2>
     <p>Tutaj znajdziesz wszystkie swoje wizyty</p>
 
-    <div v-if="!appointmentsStore.error && !appointmentsStore.loading" class="filters">
+    <div v-if="!appointmentsStore.error && !appointmentsStore.loading && appointmentsStore.patientAppointments.length !== 0" class="filters">
       <select v-model="filterStatus">
         <option value="">Wszystkie statusy</option>
         <option value="zarezerwowana">Zarezerwowane</option>
@@ -19,6 +19,10 @@
 
     <p v-if="appointmentsStore.loading" class="loading">Ładowanie…</p>
     <p v-if="appointmentsStore.error" class="error">{{ appointmentsStore.error }}</p>
+    <p v-if="!appointmentsStore.loading && !appointmentsStore.error && appointmentsStore.appointments.length === 0"
+      class="empty">
+      Brak wizyt.
+    </p>
 
     <div class="table-wrapper">
       <table v-if="!appointmentsStore.loading && appointmentsStore.patientAppointments.length" class="table">
