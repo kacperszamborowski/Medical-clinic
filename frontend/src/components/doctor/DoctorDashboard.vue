@@ -3,18 +3,18 @@
     <h2 v-if="usersStore.doctor">
       Dzień dobry, dr {{ usersStore.doctor.firstname }} {{ usersStore.doctor.lastname }}.
     </h2>
-    <h2 v-else>Dzień dobry, dr </h2>
+    <h2 v-else>Dzień dobry</h2>
     <div class="dashboard-card">
       <h3>Dzisiejsze wizyty</h3>
 
-      <p v-if="appointmentsStore.loading" class="loading">
+      <p v-if="loading" class="loading">
         Ładowanie…
       </p>
 
-      <p v-if="appointmentsStore.error" class="error">
+      <p v-if="error" class="error">
         Nie udało się pobrać danych
       </p>
-      <div v-if="!appointmentsStore.error && !appointmentsStore.loading">
+      <div v-if="!error && !loading">
         <p v-if="todayAppointmentsCount === 0" class="empty">
           Dzisiaj nie masz zaplanowanych wizyt
         </p>
@@ -42,9 +42,15 @@ const usersStore = useUsersStore();
 const appointmentsStore = useAppointmentsStore();
 const router = useRouter();
 
-function todayISO() {
-  return new Date().toISOString().slice(0,10);
-}
+const loading = computed(() => {
+  return usersStore.loading && appointmentsStore.loading
+})
+
+const error = computed(() => {
+  return usersStore.error && appointmentsStore.error
+})
+
+function todayISO() { return new Date().toISOString().slice(0,10); }
 
 const todayAppointments = computed(() => {
   const today = todayISO();
