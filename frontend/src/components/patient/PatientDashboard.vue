@@ -79,6 +79,5 @@ onMounted(() => {
 <style scoped>
 .patient-dashboard {
   max-width: 600px;
-  font-family: system-ui, sans-serif;
 }
 </style>
