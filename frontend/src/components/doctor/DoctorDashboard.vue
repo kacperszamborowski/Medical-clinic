@@ -83,31 +83,4 @@ onMounted(() => {
 .doctor-dashboard {
   max-width: 600px;
 }
-
-.dashboard-card {
-  margin-top: 20px;
-  padding: 20px;
-  border-radius: 12px;
-  background: white;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-}
-
-.dashboard-card h3 {
-  margin-bottom: 8px;
-  font-size: 16px;
-}
-
-.info {
-  margin-bottom: 12px;
-  color: #111827;
-}
-
-.dashboard-card button {
-  background: #2563eb;
-  color: white;
-}
-
-.dashboard-card button:hover {
-  background: #1e40af;
-}
 </style>
