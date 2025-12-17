@@ -4,6 +4,21 @@ import { AuthRequest } from "../middleware/auth.middleware";
 import { UserRole } from "@prisma/client";
 
 export class UserController {
+    static async getMeUser(req: AuthRequest, res: Response) {
+        try {
+            const id = req.user?.userId;
+            if (id == undefined) {
+                res.status(401).json({ message: "Unauthorized" });
+                return;
+            }
+            const user = await UserService.getUser(id);
+            res.json(user);
+        }   
+        catch (error: any) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+
     static async getUsersTable(req: AuthRequest, res: Response) {
         try {
             if (req.user?.role != UserRole.admin) {
