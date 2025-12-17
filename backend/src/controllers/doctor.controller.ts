@@ -28,4 +28,20 @@ export class DoctorController {
             res.status(500).json({ message: error.message });
         }
     }
+
+    static async createDoctor(req: AuthRequest, res: Response) {
+        try {
+            if (req.user?.role != UserRole.admin) {
+                res.status(403).json({ message: "Forbidden" });
+                return;
+            }
+
+            const { userId, specialization, licenseNumber } = req.body;
+            const newDoctor = await DoctorService.createDoctor(userId, specialization, licenseNumber);
+            res.json(newDoctor);
+        }
+        catch (error: any) {
+            res.status(500).json({ message: error.message });
+        }
+    }
 }
