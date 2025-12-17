@@ -44,14 +44,64 @@
         <span class="value">{{ usersStore.doctor.license_number }}</span>
       </div>
     </div>
+    <div class="password-card">
+      <h3>Zmień hasło</h3>
+
+      <label>
+        Stare hasło
+        <input type="password" v-model="oldPassword" placeholder="Wpisz stare hasło" />
+      </label>
+
+      <label>
+        Nowe hasło
+        <input type="password" v-model="newPassword" placeholder="Wpisz nowe hasło" />
+      </label>
+
+      <button class="confirm" :disabled="!oldPassword || !newPassword || usersStore.loading" @click="changePassword">
+        Zmień hasło
+      </button>
+
+      <p v-if="success" class="success">
+        Hasło zostało zmienione
+      </p>
+      <p v-if="error" class="error">
+        Nie udało się zmienić hasła
+      </p>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import { useUsersStore } from "../../stores/user";
+import { useAuthStore } from "../../stores/auth"
+import { useRouter } from "vue-router";
 
 const usersStore = useUsersStore();
+const authStore = useAuthStore();
+const router = useRouter();
+
+const oldPassword = ref("")
+const newPassword = ref("")
+
+const error = ref(false);
+const success = ref(false);
+
+async function changePassword() {
+  error.value = false
+  success.value = false
+  try {
+    await authStore.changePassword(oldPassword.value, newPassword.value);
+    success.value = true
+    setTimeout(() => {
+      success.value = false
+      authStore.logout();
+      router.push('/');
+    }, 1200)
+  } catch (err: any) {
+    error.value = true
+  }
+}
 
 onMounted(() => {
   usersStore.fetchDoctor();

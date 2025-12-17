@@ -35,7 +35,7 @@ button:disabled {
 table {
   width: 100%;
   border-collapse: collapse;
-  background-color: #fff;  
+  background-color: #fff;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
@@ -165,7 +165,7 @@ textarea {
   background: white;
   border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -186,4 +186,53 @@ textarea {
   font-size: 15px;
   font-weight: 500;
   color: #111827;
+}
+
+.password-card {
+  margin-top: 30px;
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.password-card h3 {
+  margin: 0 0 10px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.password-card label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 14px;
+}
+
+.password-card input {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+}
+
+.password-card button.confirm {
+  align-self: flex-start;
+  margin-top: 10px;
+}
+
+.password-card button.confirm {
+  background: #2563eb;
+  color: white;
+}
+
+.password-card button.confirm:hover {
+  background: #1e40af;
+}
+
+.password-card button.confirm:disabled {
+  background: #aaaaaa;
+  cursor: default;
 }
