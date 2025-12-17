@@ -51,6 +51,5 @@ onMounted(() => {
 <style scoped>
 .patient-profile {
   max-width: 600px;
-  font-family: system-ui, sans-serif;
 }
 </style>
