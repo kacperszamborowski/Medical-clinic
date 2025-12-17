@@ -7,9 +7,10 @@
       <input v-model="password" type="password" placeholder="Hasło" required />
 
       <button type="submit">Zaloguj</button>
+      <button type="button" @click="navRegister">Zarejestruj się</button>
     </form>
 
-    <p v-if="error" style="color:red">{{ error }}</p>
+    <p v-if="error" class="error">{{ error }}</p>
   </div>
 </template>
 
@@ -36,9 +37,13 @@ const onSubmit = async () => {
     if (user.role === "admin") return router.push("/admin/dashboard");
     return router.push("/");
   } catch (err: any) {
-    error.value = err.message || "Błąd logowania";
+    error.value = "Błąd logowania";
   }
 };
+
+function navRegister() {
+  router.push("/register");
+}
 </script>
 
 <style scoped>
@@ -71,6 +76,7 @@ const onSubmit = async () => {
   gap: 14px;
   width: 360px;
   padding: 28px;
+  margin-bottom: 50px;
   background: white;
   border-radius: 10px;
   box-shadow: 0 4px 16px rgba(0,0,0,0.08);
@@ -110,5 +116,10 @@ const onSubmit = async () => {
   color: #ef4444;
   text-align: center;
   font-size: 18px;
+}
+
+.error {
+  margin-top: 0px;
+  margin-bottom: px;
 }
 </style>

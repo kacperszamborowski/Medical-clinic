@@ -20,7 +20,6 @@ describe('Auth Endpoints', () => {
         birth_date: (new Date('1990-07-16')).toISOString(),
         email: 'test1@example.com',
         password: '!password123',
-        role: 'patient'
       });
 
     expect(res.statusCode).toEqual(201);

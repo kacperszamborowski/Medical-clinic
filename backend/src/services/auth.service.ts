@@ -21,12 +21,11 @@ class AuthService {
     lastname: string,
     birth_date: string,
     email: string, 
-    password: string, 
-    role: string) {
+    password: string ) {
     const hashed = await bcrypt.hash(password, 10);
 
     const user = await prisma.user.create({
-      data: { firstname, lastname, birth_date, email, password: hashed, role }
+      data: { firstname, lastname, birth_date, email, password: hashed, role: "patient" }
     });
 
     return user;
