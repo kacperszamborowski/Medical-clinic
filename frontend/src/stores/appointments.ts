@@ -17,16 +17,31 @@ export interface DoctorAppointment {
   };
 }
 
+export interface PatientAppointment {
+  id: number;
+  date: string;
+  time: string;
+  doctor: string;
+  specialization: string;
+  status: AppointmentStatus;
+  cancelReason: string;
+  details?: {
+    diagnosis?: string;
+    recommendations?: string;
+    prescription?: string;
+  };
+}
+
 export const useAppointmentsStore = defineStore("appointments", {
   state: () => ({
     busyHours: [] as string[],
     appointments: [] as DoctorAppointment[],
+    patientAppointments: [] as PatientAppointment[],
+    hasAppointment: false,
 
     loading: false,
     error: null as string | null,
-    success: null as string | null,
-
-    hasAppointment: false
+    success: null as string | null
   }),
 
   actions: {
@@ -114,7 +129,9 @@ export const useAppointmentsStore = defineStore("appointments", {
           }
         );
 
-        this.appointments = res.data;
+        this.appointments = res.data.sort((a: DoctorAppointment, b: DoctorAppointment) => {
+          return new Date(a.date).getTime() - new Date(b.date).getTime()
+        });
       } catch (err: any) {
         this.error = "Nie udało się pobrać wizyt.";
         this.appointments = [];
@@ -136,10 +153,36 @@ export const useAppointmentsStore = defineStore("appointments", {
           }
         );
 
-        this.appointments = res.data;
+        this.appointments = res.data.sort((a: DoctorAppointment, b: DoctorAppointment) => {
+          return new Date(a.date).getTime() - new Date(b.date).getTime()
+        });
       } catch (err: any) {
         this.error = "Nie udało się pobrać wizyt.";
         this.appointments = [];
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    async getPatientAppointments() {
+      this.loading = true;
+      this.error = null;
+
+      try {
+        const token = localStorage.getItem("token");
+        const res = await axios.get(
+          `${API_URL}/appointments/history`,
+          {
+            headers: { Authorization: `Bearer ${token}` }
+          }
+        );
+
+        this.patientAppointments = res.data.sort((a: PatientAppointment, b: PatientAppointment) => {
+          return new Date(a.date).getTime() - new Date(b.date).getTime()
+        });
+      } catch (err: any) {
+        this.error = "Nie udało się pobrać wizyt.";
+        this.patientAppointments = [];
       } finally {
         this.loading = false;
       }
