@@ -27,7 +27,7 @@ model User {
   password     String
   role         UserRole
   created_at   DateTime      @default(now())
-  verified     Boolean       @default(false)
+  verified     Boolean       @default(true)
   doctor       Doctor?
   appointments Appointment[]
 }
