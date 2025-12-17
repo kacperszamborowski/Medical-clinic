@@ -41,8 +41,10 @@ export const useScheduleStore = defineStore("schedule", {
       this.error = "";
 
       try {
+        const token = localStorage.getItem("token");
         const res = await axios.get(`${API_URL}/schedule`, {
-          params: { doctorId }
+          params: { doctorId },
+          headers: { Authorization: `Bearer: ${token}`}
         });
 
         this.schedule = res.data;
