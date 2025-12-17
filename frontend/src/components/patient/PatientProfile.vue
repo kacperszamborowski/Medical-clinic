@@ -11,52 +11,54 @@
       {{ usersStore.error }}
     </p>
 
-    <div v-if="usersStore.patient && !usersStore.error && !usersStore.loading" class="profile-card">
-      <div class="row">
-        <span class="label">Imię</span>
-        <span class="value">{{ usersStore.patient.firstname }}</span>
+    <div v-if="usersStore.patient && !usersStore.error && !usersStore.loading">
+      <div class="profile-card">
+        <div class="row">
+          <span class="label">Imię</span>
+          <span class="value">{{ usersStore.patient.firstname }}</span>
+        </div>
+
+        <div class="row">
+          <span class="label">Nazwisko</span>
+          <span class="value">{{ usersStore.patient.lastname }}</span>
+        </div>
+
+        <div class="row">
+          <span class="label">Email</span>
+          <span class="value">{{ usersStore.patient.email }}</span>
+        </div>
+
+        <div class="row">
+          <span class="label">Data urodzenia</span>
+          <span class="value">
+            {{ usersStore.patient.birth_date }}
+          </span>
+        </div>
       </div>
+      <div class="password-card">
+        <h3>Zmień hasło</h3>
 
-      <div class="row">
-        <span class="label">Nazwisko</span>
-        <span class="value">{{ usersStore.patient.lastname }}</span>
+        <label>
+          Stare hasło
+          <input type="password" v-model="oldPassword" placeholder="Wpisz stare hasło" />
+        </label>
+
+        <label>
+          Nowe hasło
+          <input type="password" v-model="newPassword" placeholder="Wpisz nowe hasło" />
+        </label>
+
+        <button class="confirm" :disabled="!oldPassword || !newPassword || usersStore.loading" @click="changePassword">
+          Zmień hasło
+        </button>
+
+        <p v-if="success" class="success">
+          Hasło zostało zmienione
+        </p>
+        <p v-if="error" class="error">
+          Nie udało się zmienić hasła
+        </p>
       </div>
-
-      <div class="row">
-        <span class="label">Email</span>
-        <span class="value">{{ usersStore.patient.email }}</span>
-      </div>
-
-      <div class="row">
-        <span class="label">Data urodzenia</span>
-        <span class="value">
-          {{ usersStore.patient.birth_date }}
-        </span>
-      </div>
-    </div>
-    <div class="password-card">
-      <h3>Zmień hasło</h3>
-
-      <label>
-        Stare hasło
-        <input type="password" v-model="oldPassword" placeholder="Wpisz stare hasło" />
-      </label>
-
-      <label>
-        Nowe hasło
-        <input type="password" v-model="newPassword" placeholder="Wpisz nowe hasło" />
-      </label>
-
-      <button class="confirm" :disabled="!oldPassword || !newPassword || usersStore.loading" @click="changePassword">
-        Zmień hasło
-      </button>
-
-      <p v-if="success" class="success">
-        Hasło zostało zmienione
-      </p>
-      <p v-if="error" class="error">
-        Nie udało się zmienić hasła
-      </p>
     </div>
   </div>
 </template>
