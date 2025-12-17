@@ -7,7 +7,7 @@
         Nadchodzące
       </button>
       <button :class="{ active: activeTab === 'zrealizowana' }" @click="changeTab('zrealizowana')">
-        Zrealizowane
+        Zakończone
       </button>
     </div>
 
