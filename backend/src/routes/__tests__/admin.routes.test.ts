@@ -1,6 +1,7 @@
 import request from 'supertest';
 import app from '../../app';
 import { Response } from 'superagent/lib/node';
+import { prisma } from '../../db/prisma';
 
 let auth: Response;
 
@@ -117,5 +118,45 @@ describe("Integration tests for admin privileges", () => {
         responses.forEach(res => {
             expect(res.status).toBe(403);
         });
+    });
+
+    it("PUT /users/verify should verify user with id=3", async () => {
+        await prisma.user.update({
+            where: { id: 3 },
+            data: { verified: false } 
+        });
+
+        const response = await request(app)
+        .put("/users/verify")
+        .send({ userId: 3 })
+        .set("Authorization", "Bearer " + auth.body.token);
+
+        expect(response.status).toBe(200);
+        expect(response.body.verified).toBe(true);
+    });
+
+    it("PUT /users/verify should return status 400 for already verified user", async () => {
+        const response = await request(app)
+        .put("/users/verify")
+        .send({ userId: 1 })
+        .set("Authorization", "Bearer " + auth.body.token);
+
+        expect(response.status).toBe(400);
+    });
+
+    it("PUT /users/verify should return status 403 for non-admin user", async () => {
+        const auth = await request(app)
+        .post('/auth/login')
+        .send({
+            email: 'jan.kowalski@example.com',
+            password: 'pass123'
+        });
+        
+        const response = await request(app)
+        .put("/users/verify")
+        .send({ userId: 3 })
+        .set("Authorization", "Bearer " + auth.body.token);
+
+        expect(response.status).toBe(403);
     });
 })
