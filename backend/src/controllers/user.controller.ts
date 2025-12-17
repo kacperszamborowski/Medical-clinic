@@ -12,7 +12,11 @@ export class UserController {
                 return;
             }
             const user = await UserService.getUser(id);
-            res.json(user);
+            const cleanedUser = {
+                ...user,
+                birth_date: user.birth_date.toISOString().substring(0, 10)
+            }
+            res.json(cleanedUser);
         }   
         catch (error: any) {
             res.status(500).json({ message: error.message });

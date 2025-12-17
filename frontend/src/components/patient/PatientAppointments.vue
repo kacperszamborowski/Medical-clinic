@@ -12,7 +12,7 @@
       </select>
       <input type="date" v-model="filterDate" />
       <input type="text" v-model="filterDoctor" placeholder="Imię lub nazwisko doktora" />
-      <button class="reset-btn" :disabled="!filterDate && !filterDoctor" @click="resetFilters">
+      <button class="reset-btn" @click="resetFilters">
         Wyczyść filtry
       </button>
     </div>

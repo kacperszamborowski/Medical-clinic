@@ -287,7 +287,7 @@ export const useAppointmentsStore = defineStore("appointments", {
 
         setTimeout(() => {
           this.success = null;
-        }, 6000);
+        }, 5000);
       } catch (err: any) {
         this.error = "Nie udało się odwołać wizyty.";
       } finally {

@@ -4,22 +4,22 @@ import { API_URL } from "../api";
 
 export const useAuthStore = defineStore("auth", {
   state: () => {
-  let user = null;
-  const userStr = localStorage.getItem("user");
-  if (userStr) {
-    try {
-      user = JSON.parse(userStr);
-    } catch (err) {
-      console.error("Błąd parsowania usera z localStorage:", err);
-      localStorage.removeItem("user"); // usuń uszkodzone dane
+    let user = null;
+    const userStr = localStorage.getItem("user");
+    if (userStr) {
+      try {
+        user = JSON.parse(userStr);
+      } catch (err) {
+        console.error("Błąd parsowania usera z localStorage:", err);
+        localStorage.removeItem("user"); // usuń uszkodzone dane
+      }
     }
-  }
 
-  return {
-    token: localStorage.getItem("token") || "",
-    user: user as { id: number; email: string; role: string } | null,
-  };
-},
+    return {
+      token: localStorage.getItem("token") || "",
+      user: user as { id: number; email: string; role: string } | null,
+    };
+  },
 
   actions: {
     async login(email: string, password: string) {
@@ -49,15 +49,20 @@ export const useAuthStore = defineStore("auth", {
       });
     },
 
+    async changePassword(oldPassword: string, newPassword: string) {
+      const token = localStorage.getItem("token");
+
+      await axios.put(`${API_URL}/auth/password`,
+        { oldPassword, newPassword },
+        { headers: { Authorization: `Bearer: ${token}` } }
+      );
+    },
+
     logout() {
       this.token = "";
       this.user = null;
       localStorage.removeItem("token");
       localStorage.removeItem("user");
-    },
-
-    isRole(role: string) {
-      return this.user?.role === role;
     },
   },
 });
