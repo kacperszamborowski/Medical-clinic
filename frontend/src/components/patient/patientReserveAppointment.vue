@@ -29,7 +29,9 @@
     </div>
 
   </div>
-  <button v-if="!scheduleStore.error && !scheduleStore.loading" class="appointment-btn" @click="openModal" :disabled="scheduleStore.loading || scheduleStore.schedule.length === 0">
+  <button v-if="!scheduleStore.error && !scheduleStore.loading"
+   class="appointment-btn" @click="openModal" 
+   :disabled="scheduleStore.loading || scheduleStore.schedule.length === 0">
     Umów wizytę
   </button>
   <p v-if="appointmentsStore.success" class="success">
