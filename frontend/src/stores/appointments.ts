@@ -42,13 +42,21 @@ export interface AppointmentsTable {
   cancel_reason: string;
 }
 
+export interface AppointmentDetailsTable {
+  id: number;
+  appointment_id: number;
+  diagnosis: string;
+  recommendations: string;
+  prescription: string;
+}
 
 export const useAppointmentsStore = defineStore("appointments", {
   state: () => ({
     busyHours: [] as string[],
     appointments: [] as DoctorAppointment[],
     patientAppointments: [] as PatientAppointment[],
-    table:[] as AppointmentsTable[],
+    table: [] as AppointmentsTable[],
+    detailsTable: [] as AppointmentDetailsTable[],
     hasAppointment: false,
 
     loading: false,
@@ -326,6 +334,27 @@ export const useAppointmentsStore = defineStore("appointments", {
       } finally{
         this.loading = false;
       }
-    }
+    },
+
+        async fetchDetailsTable() {
+      this.loading = true;
+      this.error = "";
+
+      try {
+        const token = localStorage.getItem("token");
+
+        const res = await axios.get(`${API_URL}/appointments/details/table`, {
+          headers: { Authorization: `Bearer ${token}`}
+        });
+
+        this.detailsTable = res.data.sort((a: AppointmentDetailsTable, b: AppointmentDetailsTable) => {
+          return a.id - b.id;
+        });
+      } catch (err: any) {
+        this.error = "Błąd pobierania tabeli";
+      } finally{
+        this.loading = false;
+      }
+    },
   }
 });
