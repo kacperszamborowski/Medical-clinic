@@ -1,8 +1,9 @@
 <template>
   <div class="doctors-list">
     <h2>Wybierz lekarza</h2>
-    <div v-if="doctorsStore.error" class="error">{{ doctorsStore.error }}</div>
-    <div class="grid">
+    <p v-if="doctorsStore.loading" class="loading">Ładowanie...</p>
+    <p v-if="doctorsStore.error" class="error">{{ doctorsStore.error }}</p>
+    <div v-if="!doctorsStore.loading && !doctorsStore.error" class="grid">
       <div
         class="doctor-card"
         v-for="doctor in doctors"
@@ -37,8 +38,7 @@ const doctors = computed(() => doctorsStore.doctors);
 
 <style scoped>
 .doctors-list {
-  padding: 20px;
-  font-family: system-ui, sans-serif;
+  max-width: 1200px;
 }
 
 .grid {

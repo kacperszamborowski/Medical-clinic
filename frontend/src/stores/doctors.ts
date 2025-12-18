@@ -12,10 +12,12 @@ export const useDoctorsStore = defineStore("doctors", {
   state: () => ({
     doctors: [] as Doctor[],
     error: "",
+    loading: false,
   }),
 
   actions: {
     async fetchDoctors() {
+      this.loading = true;
       this.error = "";
 
       try {
@@ -29,8 +31,10 @@ export const useDoctorsStore = defineStore("doctors", {
 
         this.doctors = res.data;
       } catch (err: any) {
-        this.error =
-          err.response?.data?.message || "Błąd pobierania listy lekarzy";
+        this.error = "Błąd pobierania listy lekarzy";
+        this.doctors = [];
+      } finally {
+        this.loading = false;
       }
     },
   },
