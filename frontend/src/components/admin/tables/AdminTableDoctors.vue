@@ -3,6 +3,7 @@
         <button class="back-btn" @click="goBack">
             Wróć
         </button>
+        <h3 class="tables-header">Tabela: Doctor</h3>
 
         <p v-if="doctorsStore.loading" class="loading">Ładowanie...</p>
         <p v-if="doctorsStore.error" class="error">{{ doctorsStore.error }}</p>
