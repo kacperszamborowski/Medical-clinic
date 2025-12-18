@@ -6,5 +6,6 @@ const router: Router = Router();
 
 router.get("/me", authMiddleware, UserController.getMeUser);
 router.get("/table", authMiddleware, UserController.getUsersTable);
+router.post("/newdoctor", authMiddleware, UserController.createDoctorUser);
 router.put("/verify", authMiddleware, UserController.verifyUser);
 export default router;

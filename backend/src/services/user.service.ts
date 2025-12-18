@@ -1,5 +1,6 @@
 import { UserRole } from "@prisma/client";
 import { prisma } from "../db/prisma";
+import bcrypt from "bcrypt";
 
 export class UserService {
     static async getUser(userId: number) {
@@ -59,6 +60,42 @@ export class UserService {
             throw new Error("Doctor not found");
         }
         return doctor.id;
+    }
+
+    static async createDoctorUser(
+        firstname: string,
+        lastname: string,
+        birthDate: Date,
+        email: string,
+        password: string,
+        specialization: string,
+        licenseNumber: string
+    ) {
+        const hashed = await bcrypt.hash(password, 10);
+        const newUser = await prisma.user.create({
+            data: {
+                firstname: firstname,
+                lastname: lastname,
+                birth_date: birthDate,
+                email: email,
+                password: hashed,
+                role: UserRole.doctor
+            }
+        });
+
+        const newDoctor = await prisma.doctor.create({
+            data: {
+                user_id: newUser.id,
+                specialization: specialization,
+                license_number: licenseNumber,
+            }
+        });
+
+        return {
+            ...newUser,
+            specialization: newDoctor.specialization,
+            license_number: newDoctor.license_number
+        };
     }
 
     static async verifyUser(userId: number) {

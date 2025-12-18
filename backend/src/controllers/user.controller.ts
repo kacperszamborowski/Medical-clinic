@@ -38,6 +38,39 @@ export class UserController {
         }
     }
 
+    static async createDoctorUser(req: AuthRequest, res: Response) {
+        try {
+            if (req.user?.role != UserRole.admin) {
+                res.status(403).json({ message: "Forbidden" });
+                return;
+            }
+
+            const { 
+                firstname, 
+                lastname, 
+                birthDate, 
+                email, 
+                password, 
+                specialization, 
+                licenseNumber
+            } = req.body;
+
+            const newDoctorUser = await UserService.createDoctorUser(
+                firstname,
+                lastname,
+                birthDate,
+                email,
+                password,
+                specialization,
+                licenseNumber
+            );
+            res.json(newDoctorUser);
+        }
+        catch (error: any) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+
     static async verifyUser(req: AuthRequest, res: Response) {
         try {
             if (req.user?.role != UserRole.admin) {
