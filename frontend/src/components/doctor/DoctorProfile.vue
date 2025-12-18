@@ -10,7 +10,7 @@
     <p v-if="usersStore.error" class="error">
       {{ usersStore.error }}
     </p>
-    <div v-if="usersStore.doctor && !usersStore.error && !usersStore.loading" >
+    <div v-if="usersStore.doctor && !usersStore.error && !usersStore.loading">
       <div class="profile-card">
         <div class="row">
           <span class="label">Imię</span>

@@ -9,28 +9,16 @@
       <input v-model="firstname" type="text" placeholder="Imię" required />
       <input v-model="lastname" type="text" placeholder="Nazwisko" required />
 
-      <input
-        v-model="birthDate"
-        type="date"
-        :min="minDate"
-        :max="maxDate"
-        placeholder="Data urodzenia"
-        required
-      />
+      <input v-model="birthDate" type="date" :min="minDate" :max="maxDate" placeholder="Data urodzenia" required />
 
       <input v-model="email" type="email" placeholder="Email" required />
 
-      <input
-        v-model="password"
-        type="password"
-        placeholder="Hasło"
-        required
-      />
+      <input v-model="password" type="password" placeholder="Hasło" required />
 
       <button type="submit">Zarejestruj się</button>
     </form>
 
-    <p v-if="error" class="error" >{{ error }}</p>
+    <p v-if="error" class="error">{{ error }}</p>
     <p v-if="success" class="success">{{ success }}</p>
   </div>
 </template>
@@ -122,7 +110,7 @@ const onSubmit = async () => {
   margin-bottom: 40px;
   background: white;
   border-radius: 10px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
 
 .register input,
@@ -154,8 +142,9 @@ const onSubmit = async () => {
   background: #1e2a45;
 }
 
-.error, .success {
-    margin-top: 0px;
+.error,
+.success {
+  margin-top: 0px;
 }
 
 button.back-btn {
@@ -169,5 +158,4 @@ button.back-btn:hover {
   background: #e0ebf5;
   border-color: #c4d4e3;
 }
-
 </style>

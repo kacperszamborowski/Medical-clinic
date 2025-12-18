@@ -50,7 +50,7 @@ const error = computed(() => {
   return usersStore.error && appointmentsStore.error
 })
 
-function todayISO() { return new Date().toISOString().slice(0,10); }
+function todayISO() { return new Date().toISOString().slice(0, 10); }
 
 const todayAppointments = computed(() => {
   const today = todayISO();
@@ -67,7 +67,7 @@ const todayAppointmentsCount = computed(() => {
 const nextAppointment = computed(() => {
   if (todayAppointments.value.length === 0) return "";
 
-  const sorted = [...todayAppointments.value].sort((a,b) =>
+  const sorted = [...todayAppointments.value].sort((a, b) =>
     a.time.localeCompare(b.time)
   );
   const next = sorted[0];

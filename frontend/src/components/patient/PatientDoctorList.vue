@@ -1,14 +1,10 @@
 <template>
   <div class="doctors-list">
     <h2>Wybierz lekarza</h2>
-    <div v-if="doctorsStore.error" class="error">{{ doctorsStore.error }}</div>
-    <div class="grid">
-      <div
-        class="doctor-card"
-        v-for="doctor in doctors"
-        :key="doctor.id"
-        @click="selectDoctor(doctor.id)"
-      >
+    <p v-if="doctorsStore.loading" class="loading">Ładowanie...</p>
+    <p v-if="doctorsStore.error" class="error">{{ doctorsStore.error }}</p>
+    <div v-if="!doctorsStore.loading && !doctorsStore.error" class="grid">
+      <div class="doctor-card" v-for="doctor in doctors" :key="doctor.id" @click="selectDoctor(doctor.id)">
         <b>{{ doctor.name }}</b>
         <p>{{ doctor.specialization }}</p>
       </div>
@@ -37,8 +33,7 @@ const doctors = computed(() => doctorsStore.doctors);
 
 <style scoped>
 .doctors-list {
-  padding: 20px;
-  font-family: system-ui, sans-serif;
+  max-width: 1200px;
 }
 
 .grid {

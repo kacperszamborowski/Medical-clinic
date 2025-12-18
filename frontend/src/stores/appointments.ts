@@ -32,11 +32,31 @@ export interface PatientAppointment {
   };
 }
 
+export interface AppointmentsTable {
+  id: number;
+  patient_id: number;
+  doctor_id: number;
+  date: string;
+  time: string;
+  status: AppointmentStatus;
+  cancel_reason: string;
+}
+
+export interface AppointmentDetailsTable {
+  id: number;
+  appointment_id: number;
+  diagnosis: string;
+  recommendations: string;
+  prescription: string;
+}
+
 export const useAppointmentsStore = defineStore("appointments", {
   state: () => ({
     busyHours: [] as string[],
     appointments: [] as DoctorAppointment[],
     patientAppointments: [] as PatientAppointment[],
+    table: [] as AppointmentsTable[],
+    detailsTable: [] as AppointmentDetailsTable[],
     hasAppointment: false,
 
     loading: false,
@@ -290,6 +310,48 @@ export const useAppointmentsStore = defineStore("appointments", {
         }, 5000);
       } catch (err: any) {
         this.error = "Nie udało się odwołać wizyty.";
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    async fetchTable() {
+      this.loading = true;
+      this.error = "";
+
+      try {
+        const token = localStorage.getItem("token");
+
+        const res = await axios.get(`${API_URL}/appointments/table`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        this.table = res.data.sort((a: AppointmentsTable, b: AppointmentsTable) => {
+          return a.id - b.id;
+        });
+      } catch (err: any) {
+        this.error = "Błąd pobierania tabeli";
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    async fetchDetailsTable() {
+      this.loading = true;
+      this.error = "";
+
+      try {
+        const token = localStorage.getItem("token");
+
+        const res = await axios.get(`${API_URL}/appointments/details/table`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        this.detailsTable = res.data.sort((a: AppointmentDetailsTable, b: AppointmentDetailsTable) => {
+          return a.id - b.id;
+        });
+      } catch (err: any) {
+        this.error = "Błąd pobierania tabeli";
       } finally {
         this.loading = false;
       }

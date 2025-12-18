@@ -79,7 +79,7 @@ function navRegister() {
   margin-bottom: 50px;
   background: white;
   border-radius: 10px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
 
 .login input {

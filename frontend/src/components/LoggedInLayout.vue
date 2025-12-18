@@ -3,11 +3,7 @@
     <aside class="sidebar">
       <div class="brand">Poradnia medyczna</div>
       <ul class="menu">
-        <li 
-        v-for="item in menu"
-        :key="item.to"
-        :class="{ active: isActive(item.to) }"
-        @click="navigate(item.to)">
+        <li v-for="item in menu" :key="item.to" :class="{ active: isActive(item.to) }" @click="navigate(item.to)">
           {{ item.label }}
         </li>
       </ul>
@@ -16,7 +12,7 @@
     <div class="main">
       <header class="header">
         <h1 class="header-title">{{ title }}</h1>
-        
+
         <button class="logout" @click="logout">Wyloguj</button>
       </header>
 
@@ -49,7 +45,7 @@ function logout() {
 </script>
 
 <style>
-  * {
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -92,8 +88,14 @@ function logout() {
   transition: background .12s;
 }
 
-.menu li:hover { background: rgba(255,255,255,0.03); }
-.menu li.active { background: rgba(255,255,255,0.06); font-weight: 600 }
+.menu li:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.menu li.active {
+  background: rgba(255, 255, 255, 0.06);
+  font-weight: 600
+}
 
 .main {
   flex: 1;
@@ -108,11 +110,14 @@ function logout() {
   align-items: center;
   justify-content: space-between;
   padding: 0 18px;
-  box-shadow: 0 1px 0 rgba(16,24,40,0.04);
+  box-shadow: 0 1px 0 rgba(16, 24, 40, 0.04);
   background: white;
 }
 
-.header-title { margin: 0; font-size: 24px }
+.header-title {
+  margin: 0;
+  font-size: 24px
+}
 
 .logout {
   background: #ededf5;
@@ -133,7 +138,13 @@ function logout() {
 }
 
 @media (max-width: 800px) {
-  .sidebar { width: 64px }
-  .menu li { padding: 10px 6px; font-size: 13px }
+  .sidebar {
+    width: 64px
+  }
+
+  .menu li {
+    padding: 10px 6px;
+    font-size: 13px
+  }
 }
 </style>

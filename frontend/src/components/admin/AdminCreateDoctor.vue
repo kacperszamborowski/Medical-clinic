@@ -1,7 +1,7 @@
 <template>
-  <div class="admin-settings">
-    <h2>Ustawienia</h2>
-    <p>Konfiguracja aplikacji.</p>
+  <div class="admin-create-doctor">
+    <h2>Dodaj konto doktora</h2>
+    <p>...</p>
   </div>
 </template>
 
@@ -9,7 +9,7 @@
 </script>
 
 <style scoped>
-.admin-settings {
+.admin-create-doctor {
   max-width: 1200px;
 }
 </style>

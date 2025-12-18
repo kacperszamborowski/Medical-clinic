@@ -21,7 +21,7 @@
         </p>
 
         <p v-else class="info">
-          Doktor <b>{{ nextAppointment.doctor }}</b> - <b>{{  nextAppointment.specialization }}</b><br />
+          Doktor <b>{{ nextAppointment.doctor }}</b> - <b>{{ nextAppointment.specialization }}</b><br />
           Dnia <b>{{ nextAppointment.date }}</b> o godzinie <b>{{ nextAppointment.time }}</b>
         </p>
 
