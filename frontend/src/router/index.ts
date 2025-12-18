@@ -26,7 +26,7 @@ import RegisterView from "../views/RegisterView.vue";
 
 const routes = [
   { path: "/", name: "login", component: LoginForm },
-  { path: "/register", name: "register", component: RegisterView},
+  { path: "/register", name: "register", component: RegisterView },
 
   {
     path: "/patient",
@@ -61,11 +61,11 @@ const routes = [
       { path: "dashboard", component: () => AdminDashboard },
       { path: "create-doctor", component: () => AdminCreateDoctor },
       { path: "tables", component: () => AdminTables },
-      { path: "tables/users", component: () => AdminTableUsers},
-      { path: "tables/doctors", component: () => AdminTableDoctors},
-      { path: "tables/schedules", component: () => AdminTableSchedules},
-      { path: "tables/appointments", component: () => AdminTableAppointments},
-      { path: "tables/appointment-details", component: () => AdminTableAppointmentDetails},
+      { path: "tables/users", component: () => AdminTableUsers },
+      { path: "tables/doctors", component: () => AdminTableDoctors },
+      { path: "tables/schedules", component: () => AdminTableSchedules },
+      { path: "tables/appointments", component: () => AdminTableAppointments },
+      { path: "tables/appointment-details", component: () => AdminTableAppointmentDetails },
     ]
   },
 ];

@@ -45,8 +45,8 @@ export const useUsersStore = defineStore("users", {
       try {
         const token = localStorage.getItem("token");
 
-        const res = await axios.get(`${API_URL}/users/me`, { 
-            headers: { Authorization: `Bearer ${token}`} 
+        const res = await axios.get(`${API_URL}/users/me`, {
+          headers: { Authorization: `Bearer ${token}` }
         });
 
         this.patient = res.data;
@@ -65,8 +65,8 @@ export const useUsersStore = defineStore("users", {
       try {
         const token = localStorage.getItem("token");
 
-        const res = await axios.get(`${API_URL}/users/me`, { 
-            headers: { Authorization: `Bearer ${token}`} 
+        const res = await axios.get(`${API_URL}/users/me`, {
+          headers: { Authorization: `Bearer ${token}` }
         });
 
         this.doctor = res.data;
@@ -86,7 +86,7 @@ export const useUsersStore = defineStore("users", {
         const token = localStorage.getItem("token");
 
         const res = await axios.get(`${API_URL}/users/table`, {
-          headers: { Authorization: `Bearer ${token}`}
+          headers: { Authorization: `Bearer ${token}` }
         });
 
         this.table = res.data.sort((a: UsersTable, b: UsersTable) => {
@@ -94,7 +94,7 @@ export const useUsersStore = defineStore("users", {
         });
       } catch (err: any) {
         this.error = "Błąd pobierania tabeli";
-      } finally{
+      } finally {
         this.loading = false;
       }
     }

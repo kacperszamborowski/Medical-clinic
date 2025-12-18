@@ -47,7 +47,7 @@ export const useScheduleStore = defineStore("schedule", {
         const token = localStorage.getItem("token");
         const res = await axios.get(`${API_URL}/schedule`, {
           params: { doctorId },
-          headers: { Authorization: `Bearer: ${token}`}
+          headers: { Authorization: `Bearer: ${token}` }
         });
 
         this.schedule = res.data;
@@ -114,7 +114,7 @@ export const useScheduleStore = defineStore("schedule", {
         const token = localStorage.getItem("token");
 
         const res = await axios.get(`${API_URL}/schedule/table`, {
-          headers: { Authorization: `Bearer ${token}`}
+          headers: { Authorization: `Bearer ${token}` }
         });
 
         this.table = res.data.sort((a: Schedule, b: Schedule) => {
@@ -122,7 +122,7 @@ export const useScheduleStore = defineStore("schedule", {
         });
       } catch (err: any) {
         this.error = "Błąd pobierania tabeli";
-      } finally{
+      } finally {
         this.loading = false;
       }
     }

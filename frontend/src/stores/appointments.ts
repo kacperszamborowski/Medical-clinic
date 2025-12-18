@@ -323,7 +323,7 @@ export const useAppointmentsStore = defineStore("appointments", {
         const token = localStorage.getItem("token");
 
         const res = await axios.get(`${API_URL}/appointments/table`, {
-          headers: { Authorization: `Bearer ${token}`}
+          headers: { Authorization: `Bearer ${token}` }
         });
 
         this.table = res.data.sort((a: AppointmentsTable, b: AppointmentsTable) => {
@@ -331,12 +331,12 @@ export const useAppointmentsStore = defineStore("appointments", {
         });
       } catch (err: any) {
         this.error = "Błąd pobierania tabeli";
-      } finally{
+      } finally {
         this.loading = false;
       }
     },
 
-        async fetchDetailsTable() {
+    async fetchDetailsTable() {
       this.loading = true;
       this.error = "";
 
@@ -344,7 +344,7 @@ export const useAppointmentsStore = defineStore("appointments", {
         const token = localStorage.getItem("token");
 
         const res = await axios.get(`${API_URL}/appointments/details/table`, {
-          headers: { Authorization: `Bearer ${token}`}
+          headers: { Authorization: `Bearer ${token}` }
         });
 
         this.detailsTable = res.data.sort((a: AppointmentDetailsTable, b: AppointmentDetailsTable) => {
@@ -352,7 +352,7 @@ export const useAppointmentsStore = defineStore("appointments", {
         });
       } catch (err: any) {
         this.error = "Błąd pobierania tabeli";
-      } finally{
+      } finally {
         this.loading = false;
       }
     },

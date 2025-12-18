@@ -4,12 +4,7 @@
     <p>Podgląd tabel z bazy</p>
 
     <div class="tables-grid">
-      <div
-        v-for="table in tables"
-        :key="table.route"
-        class="dashboard-card table-card"
-        @click="goTo(table.route)"
-      >
+      <div v-for="table in tables" :key="table.route" class="dashboard-card table-card" @click="goTo(table.route)">
         <h3>{{ table.label }}</h3>
         <p class="info">{{ table.description }}</p>
       </div>
@@ -74,6 +69,6 @@ function goTo(path: string) {
 
 .table-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
 }
 </style>

@@ -3,7 +3,9 @@
     <h2>Moje wizyty</h2>
     <p>Tutaj znajdziesz wszystkie swoje wizyty</p>
 
-    <div v-if="!appointmentsStore.error && !appointmentsStore.loading && appointmentsStore.patientAppointments.length !== 0" class="filters">
+    <div
+      v-if="!appointmentsStore.error && !appointmentsStore.loading && appointmentsStore.patientAppointments.length !== 0"
+      class="filters">
       <select v-model="filterStatus">
         <option value="">Wszystkie statusy</option>
         <option value="zarezerwowana">Zarezerwowane</option>

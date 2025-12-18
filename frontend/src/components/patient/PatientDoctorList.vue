@@ -4,12 +4,7 @@
     <p v-if="doctorsStore.loading" class="loading">Ładowanie...</p>
     <p v-if="doctorsStore.error" class="error">{{ doctorsStore.error }}</p>
     <div v-if="!doctorsStore.loading && !doctorsStore.error" class="grid">
-      <div
-        class="doctor-card"
-        v-for="doctor in doctors"
-        :key="doctor.id"
-        @click="selectDoctor(doctor.id)"
-      >
+      <div class="doctor-card" v-for="doctor in doctors" :key="doctor.id" @click="selectDoctor(doctor.id)">
         <b>{{ doctor.name }}</b>
         <p>{{ doctor.specialization }}</p>
       </div>

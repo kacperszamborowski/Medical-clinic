@@ -29,13 +29,12 @@
     </div>
 
   </div>
-  <button v-if="!scheduleStore.error && !scheduleStore.loading"
-   class="appointment-btn" @click="openModal" 
-   :disabled="scheduleStore.loading || scheduleStore.schedule.length === 0">
+  <button v-if="!scheduleStore.error && !scheduleStore.loading" class="appointment-btn" @click="openModal"
+    :disabled="scheduleStore.loading || scheduleStore.schedule.length === 0">
     Umów wizytę
   </button>
   <p v-if="appointmentsStore.success" class="success">
-    {{ appointmentsStore.success}}
+    {{ appointmentsStore.success }}
   </p>
 
   <div v-if="showModal" class="modal-backdrop" @click="closeModal">
@@ -43,15 +42,10 @@
       <h3>Umów wizytę</h3>
 
       <label>Wybierz datę:</label>
-      <VueDatePicker
-        v-model="selectedDate"
-        :min-date="minDate"
-        :max-date="maxDate"
-        :time-config="{
-           enableTimePicker: false,
-           ignoreTimeValidation: true }"
-        auto-apply
-      />
+      <VueDatePicker v-model="selectedDate" :min-date="minDate" :max-date="maxDate" :time-config="{
+        enableTimePicker: false,
+        ignoreTimeValidation: true
+      }" auto-apply />
 
       <div v-if="selectedDate" class="hours-container">
         <h4>Dostępne godziny:</h4>
@@ -92,7 +86,7 @@
 
 
 <script setup lang="ts">
-import { ref, watch, onMounted} from "vue";
+import { ref, watch, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useScheduleStore } from "../../stores/schedule";
 import { useAppointmentsStore } from "../../stores/appointments";
@@ -145,7 +139,7 @@ maxDate.setMonth(maxDate.getMonth() + 1);
 
 function getDoctorHoursForDay(date: Date): string[] {
   const dayOfWeek = date.getDay();
-  
+
   const scheduleForDay = scheduleStore.schedule.find(s => s.day_of_the_week === (dayOfWeek === 0 ? 7 : dayOfWeek));
   if (!scheduleForDay) return [];
 

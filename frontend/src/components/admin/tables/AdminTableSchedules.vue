@@ -1,34 +1,34 @@
 <template>
   <div class="admin-table-schedules">
     <button class="back-btn" @click="goBack">
-        Wróć
+      Wróć
     </button>
 
     <p v-if="scheduleStore.loading" class="loading">Ładowanie...</p>
     <p v-if="scheduleStore.error" class="error">{{ scheduleStore.error }}</p>
 
     <div v-if="scheduleStore.table && !scheduleStore.loading &&
-    !scheduleStore.error" class="table-wrapper">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Id doktora</th>
-                    <th>Dzień tygodnia</th>
-                    <th>Godzina od</th>
-                    <th>Godzina do</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="schedule in scheduleStore.table" :key="schedule.id">
-                    <td>{{ schedule.id }}</td>
-                    <td>{{ schedule.doctor_id }}</td>
-                    <td>{{ schedule.day_of_the_week }}</td>
-                    <td>{{ formatTime(schedule.hour_from) }}</td>
-                    <td>{{ formatTime(schedule.hour_to) }}</td>
-                </tr>
-            </tbody>
-        </table>
+      !scheduleStore.error" class="table-wrapper">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Id doktora</th>
+            <th>Dzień tygodnia</th>
+            <th>Godzina od</th>
+            <th>Godzina do</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="schedule in scheduleStore.table" :key="schedule.id">
+            <td>{{ schedule.id }}</td>
+            <td>{{ schedule.doctor_id }}</td>
+            <td>{{ schedule.day_of_the_week }}</td>
+            <td>{{ formatTime(schedule.hour_from) }}</td>
+            <td>{{ formatTime(schedule.hour_to) }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </template>
@@ -42,7 +42,7 @@ const router = useRouter();
 const scheduleStore = useScheduleStore();
 
 function goBack() {
-    router.back();
+  router.back();
 }
 
 function formatTime(time: string) {
@@ -62,6 +62,6 @@ onMounted(() => {
 
 <style scoped>
 .admin-table-schedules {
-    max-width: 800px;
+  max-width: 800px;
 }
 </style>

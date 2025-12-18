@@ -54,7 +54,7 @@ export const useDoctorsStore = defineStore("doctors", {
         const token = localStorage.getItem("token");
 
         const res = await axios.get(`${API_URL}/doctors/table`, {
-          headers: { Authorization: `Bearer ${token}`}
+          headers: { Authorization: `Bearer ${token}` }
         });
 
         this.table = res.data.sort((a: DoctorsTable, b: DoctorsTable) => {
@@ -62,7 +62,7 @@ export const useDoctorsStore = defineStore("doctors", {
         });
       } catch (err: any) {
         this.error = "Błąd pobierania tabeli";
-      } finally{
+      } finally {
         this.loading = false;
       }
     }
