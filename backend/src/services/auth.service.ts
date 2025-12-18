@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import { signAccessToken } from "../utils/jwt";
 import { prisma } from '../db/prisma';
+import { UserRole } from "@prisma/client";
 
 class AuthService {
     async login(email: string, password: string) {
@@ -34,7 +35,7 @@ class AuthService {
         const hashed = await bcrypt.hash(password, 10);
 
         const user = await prisma.user.create({
-            data: { firstname, lastname, birth_date, email, password: hashed, role: "patient" }
+            data: { firstname, lastname, birth_date, email, password: hashed, role: UserRole.patient }
         });
 
         return user;
