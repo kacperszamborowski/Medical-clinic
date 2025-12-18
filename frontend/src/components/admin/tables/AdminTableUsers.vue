@@ -1,37 +1,39 @@
 <template>
-  <button class="back-btn" @click="goBack">
-    Wróć
-  </button>
+  <div class="admin-table-users">
+    <button class="back-btn" @click="goBack">
+        Wróć
+    </button>
 
-  <p v-if="usersStore.loading" class="loading">Ładowanie...</p>
-  <p v-if="usersStore.error" class="error">{{ usersStore.error }}</p>
+    <p v-if="usersStore.loading" class="loading">Ładowanie...</p>
+    <p v-if="usersStore.error" class="error">{{ usersStore.error }}</p>
 
-  <div v-if="usersStore.table && !usersStore.loading &&
-   !usersStore.error" class="table-wrapper">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Imię</th>
-                <th>Nazwisko</th>
-                <th>Data urodzenia</th>
-                <th>Email</th>
-                <th>Rola</th>
-                <th>Data utworzenia</th>                    
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="user in usersStore.table" :key="user.id">
-                <td>{{ user.id }}</td>
-                <td>{{ user.firstname }}</td>
-                <td>{{ user.lastname }}</td>
-                <td>{{ formatDate(user.birth_date) }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.role }}</td>
-                <td>{{ formatDateAndTime(user.created_at) }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div v-if="usersStore.table && !usersStore.loading &&
+    !usersStore.error" class="table-wrapper">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Imię</th>
+                    <th>Nazwisko</th>
+                    <th>Data urodzenia</th>
+                    <th>Email</th>
+                    <th>Rola</th>
+                    <th>Data utworzenia</th>                    
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="user in usersStore.table" :key="user.id">
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.firstname }}</td>
+                    <td>{{ user.lastname }}</td>
+                    <td>{{ formatDate(user.birth_date) }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.role }}</td>
+                    <td>{{ formatDateAndTime(user.created_at) }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
   </div>
 </template>
 
@@ -68,3 +70,9 @@ onMounted(() => {
   usersStore.fetchTable();
 });
 </script>
+
+<style scoped>
+.admin-table-users {
+    max-width: 1400px;
+}
+</style>

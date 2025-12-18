@@ -1,7 +1,7 @@
 <template>
   <div class="admin-tables">
     <h2>Tabele</h2>
-    <p>Podgląd i modyfikacja tabel z bazy</p>
+    <p>Podgląd tabel z bazy</p>
 
     <div class="tables-grid">
       <div
