@@ -26,23 +26,4 @@ export class DoctorService {
             name: `${d.user.firstname} ${d.user.lastname}`
         }));
     }
-
-    static async createDoctor(userId: number, specialization: string, licenseNumber: string) {
-        const user = await prisma.user.findUnique({
-            where: { id: userId },
-            select: { role: true }
-        });
-
-        if (user == undefined || user.role != UserRole.doctor) {
-            throw new Error("This user does not exist or is not a doctor.");
-        }
-        
-        return await prisma.doctor.create({
-            data: {
-                user_id: userId,
-                specialization: specialization,
-                license_number: licenseNumber
-            }
-        });
-    }
 }
