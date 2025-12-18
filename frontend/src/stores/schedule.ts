@@ -2,15 +2,18 @@ import { defineStore } from "pinia";
 import axios from "axios";
 import { API_URL } from "../api";
 
+export interface Schedule {
+  id: number;
+  doctor_id: number;
+  day_of_the_week: number;
+  hour_from: string;
+  hour_to: string;
+}
+
 export const useScheduleStore = defineStore("schedule", {
   state: () => ({
-    schedule: [] as Array<{
-      id: number;
-      doctor_id: number;
-      day_of_the_week: number;
-      hour_from: string;
-      hour_to: string;
-    }>,
+    schedule: [] as Schedule[],
+    table: [] as Schedule[],
     loading: false,
     error: "",
     days: ["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota", "Niedziela"],
@@ -28,7 +31,7 @@ export const useScheduleStore = defineStore("schedule", {
         });
 
         this.schedule = res.data;
-        this.schedule.sort((a, b) => a.day_of_the_week - b.day_of_the_week);
+        this.schedule.sort((a: Schedule, b: Schedule) => a.day_of_the_week - b.day_of_the_week);
       } catch (err: any) {
         this.error = "Błąd pobierania harmonogramu";
       } finally {
@@ -101,7 +104,27 @@ export const useScheduleStore = defineStore("schedule", {
       } catch (err: any) {
         this.error = "Błąd usuwania slota";
       }
-    }
+    },
 
+    async fetchTable() {
+      this.loading = true;
+      this.error = "";
+
+      try {
+        const token = localStorage.getItem("token");
+
+        const res = await axios.get(`${API_URL}/schedule/table`, {
+          headers: { Authorization: `Bearer ${token}`}
+        });
+
+        this.table = res.data.sort((a: Schedule, b: Schedule) => {
+          return a.id - b.id;
+        });
+      } catch (err: any) {
+        this.error = "Błąd pobierania tabeli";
+      } finally{
+        this.loading = false;
+      }
+    }
   },
 });
