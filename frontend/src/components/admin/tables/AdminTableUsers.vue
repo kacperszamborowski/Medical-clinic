@@ -3,7 +3,11 @@
     Wróć
   </button>
 
-  <div v-if="usersStore.table" class="table-wrapper">
+  <p v-if="usersStore.loading" class="loading">Ładowanie...</p>
+  <p v-if="usersStore.error" class="error">{{ usersStore.error }}</p>
+
+  <div v-if="usersStore.table && !usersStore.loading &&
+   !usersStore.error" class="table-wrapper">
     <table class="table">
         <thead>
             <tr>
