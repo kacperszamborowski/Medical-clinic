@@ -32,11 +32,23 @@ export interface PatientAppointment {
   };
 }
 
+export interface AppointmentsTable {
+  id: number;
+  patient_id: number;
+  doctor_id: number;
+  date: string;
+  time: string;
+  status: AppointmentStatus;
+  cancel_reason: string;
+}
+
+
 export const useAppointmentsStore = defineStore("appointments", {
   state: () => ({
     busyHours: [] as string[],
     appointments: [] as DoctorAppointment[],
     patientAppointments: [] as PatientAppointment[],
+    table:[] as AppointmentsTable[],
     hasAppointment: false,
 
     loading: false,
@@ -294,5 +306,26 @@ export const useAppointmentsStore = defineStore("appointments", {
         this.loading = false;
       }
     },
+
+    async fetchTable() {
+      this.loading = true;
+      this.error = "";
+
+      try {
+        const token = localStorage.getItem("token");
+
+        const res = await axios.get(`${API_URL}/appointments/table`, {
+          headers: { Authorization: `Bearer ${token}`}
+        });
+
+        this.table = res.data.sort((a: AppointmentsTable, b: AppointmentsTable) => {
+          return a.id - b.id;
+        });
+      } catch (err: any) {
+        this.error = "Błąd pobierania tabeli";
+      } finally{
+        this.loading = false;
+      }
+    }
   }
 });
