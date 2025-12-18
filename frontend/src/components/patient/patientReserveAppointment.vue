@@ -207,16 +207,6 @@ function createAppointment(date: Date, hour: string) {
 </script>
 
 <style scoped>
-.back-btn {
-  background: #fcf9f9;
-  border: 1px solid #e0e0e0;
-}
-
-.back-btn:hover {
-  background: #e0ebf5;
-  border-color: #c4d4e3;
-}
-
 .appointment-btn,
 .modal button.confirm {
   background: #2563eb;

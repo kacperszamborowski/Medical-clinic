@@ -18,10 +18,21 @@ export interface UserDoctor {
   license_number: string;
 }
 
+export interface UsersTable {
+  id: number;
+  firstname: string;
+  lastname: string;
+  birth_date: string;
+  email: string;
+  role: string;
+  created_at: Date;
+}
+
 export const useUsersStore = defineStore("users", {
   state: () => ({
     patient: null as UserPatient | null,
     doctor: null as UserDoctor | null,
+    table: [] as UsersTable[],
     error: "",
     loading: false
   }),
@@ -66,5 +77,26 @@ export const useUsersStore = defineStore("users", {
         this.loading = false;
       }
     },
+
+    async fetchTable() {
+      this.loading = true;
+      this.error = "";
+
+      try {
+        const token = localStorage.getItem("token");
+
+        const res = await axios.get(`${API_URL}/users/table`, {
+          headers: { Authorization: `Bearer ${token}`}
+        });
+
+        this.table = res.data.sort((a: UsersTable, b: UsersTable) => {
+          return a.id - b.id;
+        });
+      } catch (err: any) {
+        this.error = "Błąd pobierania tabeli";
+      } finally{
+        this.loading = false;
+      }
+    }
   },
 });

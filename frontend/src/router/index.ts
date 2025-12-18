@@ -15,8 +15,13 @@ import DoctorAppointments from "../components/doctor/DoctorAppointments.vue";
 import DoctorProfile from "../components/doctor/DoctorProfile.vue";
 import DoctorSchedule from "../components/doctor/DoctorSchedule.vue";
 import AdminDashboard from "../components/admin/AdminDashboard.vue";
-import AdminSettings from "../components/admin/AdminSettings.vue";
+import AdminCreateDoctor from "../components/admin/AdminCreateDoctor.vue";
 import AdminTables from "../components/admin/AdminTables.vue";
+import AdminTableUsers from "../components/admin/tables/AdminTableUsers.vue";
+import AdminTableDoctors from "../components/admin/tables/AdminTableDoctors.vue";
+import AdminTableSchedules from "../components/admin/tables/AdminTableSchedules.vue";
+import AdminTableAppointments from "../components/admin/tables/AdminTableAppointments.vue";
+import AdminTableAppointmentDetails from "../components/admin/tables/AdminTableAppointmentDetails.vue";
 import RegisterView from "../views/RegisterView.vue";
 
 const routes = [
@@ -54,8 +59,13 @@ const routes = [
     meta: { requiresAuth: true, role: "admin" },
     children: [
       { path: "dashboard", component: () => AdminDashboard },
-      { path: "settings", component: () => AdminSettings },
+      { path: "create-doctor", component: () => AdminCreateDoctor },
       { path: "tables", component: () => AdminTables },
+      { path: "tables/users", component: () => AdminTableUsers},
+      { path: "tables/doctor", component: () => AdminTableDoctors},
+      { path: "tables/schedules", component: () => AdminTableSchedules},
+      { path: "tables/appointments", component: () => AdminTableAppointments},
+      { path: "tables/appointment-details", component: () => AdminTableAppointmentDetails},
     ]
   },
 ];

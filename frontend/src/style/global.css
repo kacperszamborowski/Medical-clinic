@@ -250,3 +250,13 @@ textarea {
   margin-bottom: 12px;
   color: #111827;
 }
+
+.back-btn {
+  background: #fcf9f9;
+  border: 1px solid #e0e0e0;
+}
+
+.back-btn:hover {
+  background: #e0ebf5;
+  border-color: #c4d4e3;
+}
