@@ -8,7 +8,7 @@ import AdminLayoutView from "../views/AdminLayoutView.vue";
 import PatientDashboard from "../components/patient/PatientDashboard.vue";
 import PatientProfile from "../components/patient/PatientProfile.vue";
 import PatientDoctorList from "../components/patient/PatientDoctorList.vue";
-import PatientReserveAppointment from "../components/patient/PatientReserveAppointment.vue";
+import PatientAppointmentReserve from "../components/patient/PatientAppointmentReserve.vue";
 import PatientAppointments from "../components/patient/PatientAppointments.vue";
 import DoctorDashboard from "../components/doctor/DoctorDashboard.vue";
 import DoctorAppointments from "../components/doctor/DoctorAppointments.vue";
@@ -36,7 +36,7 @@ const routes = [
       { path: "dashboard", component: () => PatientDashboard },
       { path: "profile", component: () => PatientProfile },
       { path: "doctor-list", component: () => PatientDoctorList },
-      { path: "doctor-list/:id", component: () => PatientReserveAppointment },
+      { path: "doctor-list/:id", component: () => PatientAppointmentReserve },
       { path: "appointments", component: () => PatientAppointments },
     ]
   },
