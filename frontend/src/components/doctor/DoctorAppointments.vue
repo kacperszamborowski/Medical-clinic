@@ -20,7 +20,7 @@
       Brak wizyt.
     </p>
 
-    <div v-if="activeTab === 'zrealizowana'" class="filters">
+    <div v-if="activeTab === 'zrealizowana' && appointmentsStore.appointments.length !== 0" class="filters">
       <select v-model="filterStatus">
         <option value="">Wszystkie statusy</option>
         <option value="zrealizowana">Zrealizowane</option>
