@@ -36,9 +36,7 @@ const minDate = new Date(
   today.getFullYear() - 150,
   today.getMonth(),
   today.getDate()
-)
-  .toISOString()
-  .split("T")[0];
+).toISOString().split("T")[0];
 
 const router = useRouter();
 const auth = useAuthStore();

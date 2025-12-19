@@ -62,7 +62,7 @@ export class UserService {
         return doctor.id;
     }
 
-    static async createDoctorUser(
+    static async createDoctorUser(payload: {
         firstname: string,
         lastname: string,
         birthDate: Date,
@@ -70,13 +70,23 @@ export class UserService {
         password: string,
         specialization: string,
         licenseNumber: string
-    ) {
+    }) {
+        const {
+                firstname, 
+                lastname, 
+                birthDate, 
+                email, 
+                password, 
+                specialization, 
+                licenseNumber
+        } = payload;
+        
         const hashed = await bcrypt.hash(password, 10);
         const newUser = await prisma.user.create({
             data: {
                 firstname: firstname,
                 lastname: lastname,
-                birth_date: birthDate,
+                birth_date: new Date(birthDate),
                 email: email,
                 password: hashed,
                 role: UserRole.doctor

@@ -34,7 +34,8 @@ export const useUsersStore = defineStore("users", {
     doctor: null as UserDoctor | null,
     table: [] as UsersTable[],
     error: "",
-    loading: false
+    loading: false,
+    success: "",
   }),
 
   actions: {
@@ -97,6 +98,41 @@ export const useUsersStore = defineStore("users", {
       } finally {
         this.loading = false;
       }
+    },
+
+    async createDoctor(payload: {
+      firstname: string;
+      lastname: string;
+      birthDate: string;
+      email: string;
+      password: string;
+      specialization: string;
+      licenseNumber: string;
+    }) {
+      this.loading = true;
+      this.error = "";
+      this.success = "";
+
+      try {
+        const token = localStorage.getItem("token");
+        await axios.post(`${API_URL}/users/newdoctor`,
+          { payload },
+          { headers: { Authorization: `Bearer ${token}`} }
+        );
+
+        this.success = "Konto utworzone pomyślnie";
+        setTimeout(() => {
+          this.success = ""
+        }, 3000);
+      } catch (err: any) {
+        this.error = "Nie udało się utworzyć konta doktora"
+        setTimeout(() => {
+          this.error="";
+        },3000)
+      } finally {
+        this.loading = false;
+      }
     }
+    
   },
 });

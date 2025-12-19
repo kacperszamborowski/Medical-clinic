@@ -45,25 +45,9 @@ export class UserController {
                 return;
             }
 
-            const { 
-                firstname, 
-                lastname, 
-                birthDate, 
-                email, 
-                password, 
-                specialization, 
-                licenseNumber
-            } = req.body;
+            const payload = req.body.payload;
 
-            const newDoctorUser = await UserService.createDoctorUser(
-                firstname,
-                lastname,
-                birthDate,
-                email,
-                password,
-                specialization,
-                licenseNumber
-            );
+            const newDoctorUser = await UserService.createDoctorUser(payload);
             res.json(newDoctorUser);
         }
         catch (error: any) {
