@@ -57,13 +57,15 @@ describe("Integration test for /users", () => {
         const response = await request(app)
         .post("/users/newdoctor")
         .send({
-            firstname: "Nowy",
-            lastname: "Lekarz",
-            birthDate: new Date("1980-05-05"),
-            email: "nowy.lekarz@example.com",
-            password: "newPass123",
-            specialization: "Specjalista",
-            licenseNumber: "SPEC369"
+            payload: {
+                firstname: "Nowy",
+                lastname: "Lekarz",
+                birthDate: new Date("1980-05-05"),
+                email: "nowy.lekarz@example.com",
+                password: "newPass123",
+                specialization: "Specjalista",
+                licenseNumber: "SPEC369"
+            }
         })
         .set("Authorization", "Bearer " + auth.body.token);
 
