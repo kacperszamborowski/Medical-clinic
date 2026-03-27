@@ -1,8 +1,14 @@
 <template>
   <div class="login">
     <h1>Logowanie</h1>
-
+    
     <form @submit.prevent="onSubmit">
+      <div class="demo-buttons">
+        <b>Zaloguj jako:</b>
+        <button class="demo" @click="fill('patient')">Pacjent</button>
+        <button class="demo" @click="fill('doctor')">Lekarz</button>
+        <button class="demo" @click="fill('admin')">Admin</button>
+      </div>
       <input v-model="email" type="email" placeholder="Email" required />
       <input v-model="password" type="password" placeholder="Hasło" required />
 
@@ -44,6 +50,22 @@ const onSubmit = async () => {
 function navRegister() {
   router.push("/register");
 }
+
+function fill(user: "patient" | "doctor" | "admin" = "patient") {
+  if (user === "patient") {
+    email.value = "jan.kowalski@example.com"
+    password.value = "pass123"
+  }
+  if (user === "doctor") {
+    email.value = "anna.nowak@example.com"
+    password.value = "pass123"
+  }
+  if (user === "admin") {
+    email.value = "admin@example.com"
+    password.value = "pass123"
+  }
+  onSubmit()
+}
 </script>
 
 <style scoped>
@@ -80,6 +102,24 @@ function navRegister() {
   background: white;
   border-radius: 10px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.demo-buttons {
+  display: flex;
+  gap:5px;
+  align-items: center;
+}
+
+.login button.demo {
+  padding: 6px 10px;
+  font-size: 14px;
+  font-weight: 600;
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.login button.demo:hover {
+  background: #cbd5e1;
 }
 
 .login input {
