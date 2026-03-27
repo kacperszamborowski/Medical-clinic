@@ -58,7 +58,3 @@ Open your web browser and type in the following URL:
 ```
 http://localhost:5173/
 ```
-
-The password in the seed data is set to **pass123** for every user account. The e-mails are visible in the database in the _Users_ table.
-
-### NOTE: This app has been tested on the Microsoft Edge web browser. Other browsers may or may not work properly. 
