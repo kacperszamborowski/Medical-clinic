@@ -135,7 +135,7 @@ const minDate = new Date();
 minDate.setDate(minDate.getDate() + 1);
 
 const maxDate = new Date();
-maxDate.setMonth(maxDate.getMonth() + 1);
+maxDate.setMonth(maxDate.getMonth() + 6);
 
 function getDoctorHoursForDay(date: Date): string[] {
   const dayOfWeek = date.getDay();

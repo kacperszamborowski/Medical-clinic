@@ -34,7 +34,7 @@ export const useAuthStore = defineStore("auth", {
       localStorage.setItem("token", this.token);
       localStorage.setItem("user", JSON.stringify(this.user));
 
-      return this.user!;
+      return this.user;
     },
 
     async register(payload: {

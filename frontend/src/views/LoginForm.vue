@@ -3,6 +3,11 @@
     <h1>Logowanie</h1>
 
     <form @submit.prevent="onSubmit">
+      <div class="demo-buttons">
+        <b>Demo login:</b>
+        <button class="demo" @click="fill('patient')">Pacjent</button>
+        <button class="demo" @click="fill('doctor')">Lekarz</button>
+      </div>
       <input v-model="email" type="email" placeholder="Email" required />
       <input v-model="password" type="password" placeholder="Hasło" required />
 
@@ -32,10 +37,19 @@ const onSubmit = async () => {
     const user = await auth.login(email.value, password.value);
 
     // Przekierowania zależne od roli
-    if (user.role === "patient") return router.push("/patient/dashboard");
-    if (user.role === "doctor") return router.push("/doctor/dashboard");
-    if (user.role === "admin") return router.push("/admin/dashboard");
-    return router.push("/");
+    if (user && user.role === "patient") {
+      await router.push("/patient/dashboard");
+      return;
+    } 
+    if (user && user.role === "doctor") {
+      await router.push("/doctor/dashboard");
+      return;
+    }
+    if (user && user.role === "admin") {
+      await router.push("/admin/dashboard");
+      return;
+    }
+    await router.push("/");
   } catch (err: any) {
     error.value = "Błąd logowania";
   }
@@ -43,6 +57,18 @@ const onSubmit = async () => {
 
 function navRegister() {
   router.push("/register");
+}
+
+function fill(user: "patient" | "doctor" | "admin" = "patient") {
+  if (user === "patient") {
+    email.value = "jan.kowalski@example.com"
+    password.value = "pass123"
+  }
+  if (user === "doctor") {
+    email.value = "anna.nowak@example.com"
+    password.value = "pass123"
+  }
+  onSubmit()
 }
 </script>
 
@@ -80,6 +106,24 @@ function navRegister() {
   background: white;
   border-radius: 10px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.demo-buttons {
+  display: flex;
+  gap:5px;
+  align-items: center;
+}
+
+.login button.demo {
+  padding: 6px 10px;
+  font-size: 14px;
+  font-weight: 600;
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.login button.demo:hover {
+  background: #cbd5e1;
 }
 
 .login input {

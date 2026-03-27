@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHashHistory } from "vue-router";
 import { useAuthStore } from "../stores/auth";
 
 import LoginForm from "../views/LoginForm.vue";
@@ -33,11 +33,11 @@ const routes = [
     component: PatientLayoutView,
     meta: { requiresAuth: true, role: "patient" },
     children: [
-      { path: "dashboard", component: () => PatientDashboard },
-      { path: "profile", component: () => PatientProfile },
-      { path: "doctor-list", component: () => PatientDoctorList },
-      { path: "doctor-list/:id", component: () => PatientAppointmentReserve },
-      { path: "appointments", component: () => PatientAppointments },
+      { path: "dashboard", component: PatientDashboard },
+      { path: "profile", component: PatientProfile },
+      { path: "doctor-list", component: PatientDoctorList },
+      { path: "doctor-list/:id", component: PatientAppointmentReserve },
+      { path: "appointments", component: PatientAppointments },
     ]
   },
 
@@ -46,10 +46,10 @@ const routes = [
     component: DoctorLayoutView,
     meta: { requiresAuth: true, role: "doctor" },
     children: [
-      { path: "dashboard", component: () => DoctorDashboard },
-      { path: "appointments", component: () => DoctorAppointments },
-      { path: "profile", component: () => DoctorProfile },
-      { path: "schedule", component: () => DoctorSchedule },
+      { path: "dashboard", component:  DoctorDashboard },
+      { path: "appointments", component: DoctorAppointments },
+      { path: "profile", component: DoctorProfile },
+      { path: "schedule", component: DoctorSchedule },
     ]
   },
 
@@ -58,20 +58,20 @@ const routes = [
     component: AdminLayoutView,
     meta: { requiresAuth: true, role: "admin" },
     children: [
-      { path: "dashboard", component: () => AdminDashboard },
-      { path: "create-doctor", component: () => AdminCreateDoctor },
-      { path: "tables", component: () => AdminTables },
-      { path: "tables/users", component: () => AdminTableUsers },
-      { path: "tables/doctors", component: () => AdminTableDoctors },
-      { path: "tables/schedules", component: () => AdminTableSchedules },
-      { path: "tables/appointments", component: () => AdminTableAppointments },
-      { path: "tables/appointment-details", component: () => AdminTableAppointmentDetails },
+      { path: "dashboard", component: AdminDashboard },
+      { path: "create-doctor", component: AdminCreateDoctor },
+      { path: "tables", component: AdminTables },
+      { path: "tables/users", component: AdminTableUsers },
+      { path: "tables/doctors", component: AdminTableDoctors },
+      { path: "tables/schedules", component: AdminTableSchedules },
+      { path: "tables/appointments", component: AdminTableAppointments },
+      { path: "tables/appointment-details", component: AdminTableAppointmentDetails },
     ]
   },
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes,
 });
 
