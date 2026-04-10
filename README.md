@@ -1,60 +1,37 @@
-# Installation
-Clone this repo:
-```bash
-git clone git@github.com:kacperszamborowski/Medical-clinic.git
-```
+<div align="center">
+  
+#### Demo hosted on: https://kacperszamborowski.github.io/Medical-clinic
+Data resets every 6h
 
-Install dependencies:
-```bash
-cd Medical-clinic/backend
-npm install
-cd ../frontend
-npm install
-```
+---
 
-# Preparation
-## Backend (execute in the _backend_ folder)
-Create an ```.env``` file based on  ```.env-example``` and enter a connection string to your database:
-```
-...
-# Database configuration
-DATABASE_URL=[connection_string]
-...
-```
+# Medical-clinic
 
-Generate a Prisma client:
-```bash
-npx prisma generate
-```
+**A straightforward web application for managing medical clinic appointments — built for patients and doctors alike.**
 
-Run a migration:
-```bash
-npx prisma migrate dev
-```
+![Vue](https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![Express](https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
 
-Seed the database:
-```bash
-npx prisma db seed
-```
+</div>
 
-(Optional) Run the tests to check if the backend works properly:
-```bash
-npm test
-```
+---
 
-## Frontend (execute in the _frontend_ folder)
-Create an ```.env``` file based on  ```.env-example``` and enter the backend address:
-```
-VITE_API_URL=http://localhost:3000
-```
+## Overview
 
-# Running
-Run both the backend and the frontend by executing the following command in the corresponding folders:
-```bash
-npm run dev
-```
+Medical-clinic is a lightweight, CRUD-focused web application designed to handle the core operations of a medical clinic. It connects **patients** with **doctors**, covering the full lifecycle of an appointment — from booking to diagnosis.
 
-Open your web browser and type in the following URL: 
-```
-http://localhost:5173/
-```
+---
+
+## Features
+
+### For Patients
+- **Appointment Booking** — Browse doctor availability and schedule visits.
+- **Appointment History** — View both upcoming and past appointments in one place.
+- **Diagnoses & Recommendations** — Access diagnoses and medical recommendations issued by the doctor after a completed visit.
+
+### For Doctors
+- **Schedule Management** — Define a recurring weekly availability schedule.
+- **Complete Appointments** — Mark visits as finished and attach a diagnosis along with any medical recommendations.
+- **Decline Appointments** — Reject appointment requests when necessary.
